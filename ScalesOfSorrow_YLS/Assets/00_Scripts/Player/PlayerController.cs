@@ -38,10 +38,10 @@ public class PlayerController : MonoBehaviour
         if(xAxis > 0) { FlipSprite(true); }
         else if (xAxis < 0) { FlipSprite(false); }
     }
-    void FlipSprite( bool left)
+    void FlipSprite( bool right)
     {
-        if (left) { pTransform.localScale = new Vector3(.25f, pTransform.localScale.y, pTransform.localScale.z); }
-        else if (!left) { pTransform.localScale = new Vector3(-.25f, pTransform.localScale.y, pTransform.localScale.z); }
+        if (right) { pTransform.localScale = new Vector3(.25f, pTransform.localScale.y, pTransform.localScale.z); }
+        else if (!right) { pTransform.localScale = new Vector3(-.25f, pTransform.localScale.y, pTransform.localScale.z); }
     }
 
     #endregion
