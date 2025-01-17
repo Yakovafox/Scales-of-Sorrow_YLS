@@ -9,12 +9,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int pLives;
     //UI Variables
     [Header("Movement")]
-    [SerializeField] private Transform pTransform;
     [SerializeField] private float pSpeed;
+    private Transform pTransform;
+    private float pScale;
     #endregion
     void Start()
     {
         pTransform = transform;
+        pScale = pTransform.localScale.x;
     }
 
     void Update()
@@ -35,13 +37,8 @@ public class PlayerController : MonoBehaviour
         Vector3 axis = new Vector3(xAxis, 0, zAxis);
         pTransform.position += axis;
 
-        if(xAxis > 0) { FlipSprite(true); }
-        else if (xAxis < 0) { FlipSprite(false); }
-    }
-    void FlipSprite( bool right)
-    {
-        if (right) { pTransform.localScale = new Vector3(.25f, pTransform.localScale.y, pTransform.localScale.z); }
-        else if (!right) { pTransform.localScale = new Vector3(-.25f, pTransform.localScale.y, pTransform.localScale.z); }
+        if(xAxis > 0) { pTransform.localScale = new Vector3(pScale, pTransform.localScale.y, pTransform.localScale.z); }
+        else if (xAxis < 0) { pTransform.localScale = new Vector3(-pScale, pTransform.localScale.y, pTransform.localScale.z); }
     }
 
     #endregion
