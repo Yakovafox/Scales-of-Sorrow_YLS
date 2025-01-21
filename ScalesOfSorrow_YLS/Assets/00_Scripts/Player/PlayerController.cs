@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     //UI Variables
     [Header("Movement")]
     [SerializeField] private float pSpeed;
+    [SerializeField] private Vector2 movementInput = Vector2.zero;
     private Transform pTransform;
     private float pScale;
     #endregion
@@ -30,6 +32,13 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Movement
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        
+    }
+
+
     void MoveInput()
     {
         float zAxis = Input.GetAxisRaw("Vertical") * pSpeed * Time.deltaTime;
