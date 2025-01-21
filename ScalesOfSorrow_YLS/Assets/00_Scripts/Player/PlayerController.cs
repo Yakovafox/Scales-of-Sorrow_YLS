@@ -35,19 +35,17 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        
+        movementInput = context.ReadValue<Vector2>();
     }
 
 
     void MoveInput()
     {
-        float zAxis = Input.GetAxisRaw("Vertical") * pSpeed * Time.deltaTime;
-        float xAxis = Input.GetAxisRaw("Horizontal") * pSpeed * Time.deltaTime;
-        Vector3 axis = new Vector3(xAxis, 0, zAxis);
-        pTransform.position += axis;
+        Vector3 axis = new Vector3(movementInput.x, 0, movementInput.y);
+        pTransform.position += (axis.normalized * pSpeed * Time.deltaTime);
 
-        if(xAxis > 0) { pTransform.localScale = new Vector3(pScale, pTransform.localScale.y, pTransform.localScale.z); }
-        else if (xAxis < 0) { pTransform.localScale = new Vector3(-pScale, pTransform.localScale.y, pTransform.localScale.z); }
+        if(axis.x > 0) { pTransform.localScale = new Vector3(pScale, pTransform.localScale.y, pTransform.localScale.z); }
+        else if (axis.x < 0) { pTransform.localScale = new Vector3(-pScale, pTransform.localScale.y, pTransform.localScale.z); }
     }
 
     #endregion
