@@ -171,7 +171,7 @@ MonoBehaviour:
     m_ActionId: 6fa7f105-32ef-41af-8d18-7e4be23abf00
     m_ActionName: 'Player/Aim[/Mouse/position]'
   m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: Keyboard
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
