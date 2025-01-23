@@ -8,6 +8,7 @@ public enum EnemyStates
 {
     Idle,
     Moving,
+    Fly,
     Chase,
     Attack
 }
@@ -68,12 +69,12 @@ public class EnemyStateMachine : MonoBehaviour
 
 
 
-    private void Awake()
+    public virtual void Awake()
     {
         sightPosition = transform.Find("CharacterBillboard/SightPoint");
     }
 
-    void Start()
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
@@ -116,10 +117,11 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyStates.Chase:
                 MoveToChase();
                 Debug.Log("CHASING!!!!");
-                if (ReachedDestination())
+
+                if (ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
                 {
                     ChangeState(EnemyStates.Attack);
-                    //Change state to melee Attack
+                    //Change state to Attack
                 }
                 else if (myData_SO.canSee && SeenTarget())
                 {
@@ -131,17 +133,17 @@ public class EnemyStateMachine : MonoBehaviour
 
                 if (shouldSpecialAttack())
                 {
-                    DecideDragonAttacks(2);
+                    SpecialAttack();
                     //Special Attack
                 }
                 else if (InMeleeRange())
                 {
-                    DecideDragonAttacks(0);
+                    BasicAttack();
                     //Melee Attack
                 }
                 else if (InRangedRange())
                 {
-                    DecideDragonAttacks(1);
+                    RangedAttack();
                     // ShootProjectile
                 }
 
@@ -279,28 +281,34 @@ public class EnemyStateMachine : MonoBehaviour
     }
     #endregion
 
-
+    #region AttackFunctions
     bool shouldSpecialAttack()
     {
         float RandomNum = Random.Range(0, 100);
         return RandomNum >= myData_SO.specialAttackChance;
     }
 
-    void DecideDragonAttacks(int AttackType)
+    protected virtual void BasicAttack()
     {
-        switch (AttackType)
-        {
-            case 0: //Melee Attack = 0
-
-                break;
-            case 1: // Ranged Attack = 1
-                break;
-            case 2: // Special Attack = 3
-                break;
-            default:
-                break;
-        }
+        //RaycastHit hit;
+        //Physics.SphereCast(transform.position, myData_SO.meleeAttackDistance, out hit);
+        Debug.Log("Default Attack");
     }
+
+    protected virtual void RangedAttack()
+    {
+        Debug.Log("Ranged Attack");
+        Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity);
+    }
+
+    protected virtual void SpecialAttack()
+    {
+        Debug.Log("Special Attack");
+        ChangeState(EnemyStates.Moving);
+        return;
+    }
+    #endregion
+
 
     private void OnDrawGizmos()
     {
