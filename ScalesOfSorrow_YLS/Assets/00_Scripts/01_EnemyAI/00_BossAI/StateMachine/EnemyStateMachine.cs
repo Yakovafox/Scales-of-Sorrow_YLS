@@ -42,6 +42,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     #region Local Variables
     //Local Variables
+    public GameObject PlayerRef;
     private NavMeshAgent agent;
     private Vector3 investigationArea;
 
@@ -64,6 +65,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool stunned;
 
+    private bool AttackOnce;
+    private bool shouldSpecial;
+    public bool canActivateDebug = false;
+
     private bool movingRight = false;
     #endregion
 
@@ -71,16 +76,19 @@ public class EnemyStateMachine : MonoBehaviour
 
     public virtual void Awake()
     {
-        sightPosition = transform.Find("CharacterBillboard/SightPoint");
+        sightPosition = transform.Find("SightPoint");
     }
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
+        myData_SO.Target = null;
+        
         if (myData_SO.Target == null || myData_SO.Target.GetType() != typeof(GameObject))
         {
+            //PlayerRef = GameObject.Find("Player");
             myData_SO.Target = GameObject.FindGameObjectWithTag("Player");
+            PlayerRef = myData_SO.Target;
         }
         isAITarget = myData_SO.Target.TryGetComponent(out NavMeshAgent PlayerNav);
     }
@@ -93,35 +101,50 @@ public class EnemyStateMachine : MonoBehaviour
         switch (currentState)
         {
             case EnemyStates.Idle:
-                intialiseMovement = false;
-                ChangeState(EnemyStates.Moving);
+                if (TimeOut())
+                {
+                    intialiseMovement = false;
+                    ChangeState(EnemyStates.Moving);
+                }
                 break;
 
             case EnemyStates.Moving:
-                if (!intialiseMovement)
+                if (!intialiseMovement) // Initialise Movement is only called the first time that the enemy enters the moving state.
                 {
                     intialiseMovement = true;
+                    Debug.Log("Initialised Movement");
+                    
                     RandomisedMovePoint();
                 }
-                else if (ReachedDestination())
+                else if (myData_SO.canSee && SeenTarget()) // AI cannot see player during this state for some reason, need to re look at logic.
+                                                          // I believe this is down to the raycast aiming at the floor instead of straight forward? Seems to be if player hits into the AI then chase is called.
                 {
-                    RandomisedMovePoint();
-                }
-                else if (myData_SO.canSee && SeenTarget())
-                {
-                    Debug.Log("I found the player!");
                     ChangeState(EnemyStates.Chase);
+                }
+                else if (ReachedDestination() && !SeenTarget())
+                {
+                    RandomisedMovePoint();
                 }
                 break;
 
             case EnemyStates.Chase:
                 MoveToChase();
-                Debug.Log("CHASING!!!!");
 
                 if (ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
                 {
+                    AttackOnce = true;
+
+                    shouldSpecial = true;
                     ChangeState(EnemyStates.Attack);
                     //Change state to Attack
+                }
+                else if (InAttackRange(myData_SO.rangedAttackDistance))
+                {
+                    AttackOnce = true;
+
+                    shouldSpecial = true;
+                    ChangeState(EnemyStates.Attack); 
+                    //Change State to attack!
                 }
                 else if (myData_SO.canSee && SeenTarget())
                 {
@@ -129,22 +152,34 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 break;
 
-            case EnemyStates.Attack:
+            case EnemyStates.Attack: // Need a do once check in here to stop the code from being executed multiple times over.
 
-                if (shouldSpecialAttack())
+                if (!AttackOnce)
                 {
-                    SpecialAttack();
-                    //Special Attack
+                    ChangeState(EnemyStates.Chase);
                 }
-                else if (InMeleeRange())
+                else if (AttackOnce)
                 {
-                    BasicAttack();
-                    //Melee Attack
-                }
-                else if (InRangedRange())
-                {
-                    RangedAttack();
-                    // ShootProjectile
+                    /*if (shouldSpecial && shouldSpecialAttack())
+                    {
+                        AttackOnce = false;
+                        SpecialAttack();
+                        //Special Attack 
+                    }
+                    else*/ if (InAttackRange(myData_SO.meleeAttackDistance))
+                    {
+                        AttackOnce = false;
+                        BasicAttack();
+                        //Melee Attack
+                    }
+                    else if (InAttackRange(myData_SO.rangedAttackDistance))
+                    {
+                        AttackOnce = false;
+                        RangedAttack();
+                        // ShootProjectile
+                    }
+
+                    AttackOnce = false;
                 }
 
                 break;
@@ -171,7 +206,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     void RandomisedMovePoint()
     {
-        Debug.Log("Randomising a search point");
         //Randomise x and z point in the world within a sphere starting from current location. Y position must be set to 0.
         float randXPos = Random.Range(1, myData_SO.moveRadius);
         float randZPos = Random.Range(1, myData_SO.moveRadius);
@@ -181,14 +215,11 @@ public class EnemyStateMachine : MonoBehaviour
         Collider[] overlapingCols = Physics.OverlapSphere(randomSearchPos, 1f);
         debugSphere.transform.position = randomSearchPos;
 
-        for(int i = 0; i < overlapingCols.Length; i++)
+        for(int i = 0; i < overlapingCols.Length; i++) // There's a bug with some logic here that means Invalid position log always shows.
         {
             if(overlapingCols[i].gameObject.layer != myData_SO.GroundLayer.value)
             {
-                Debug.Log("Invalid position");
-                Debug.Log(overlapingCols[i].gameObject.name);
-                Debug.Log(overlapingCols[i].gameObject.layer);
-                Debug.Log(myData_SO.GroundLayer.value);
+                Debug.LogWarning("Invalid position");
             }
         }
         MoveToNextPoint(randomSearchPos);
@@ -215,17 +246,25 @@ public class EnemyStateMachine : MonoBehaviour
         //Stopping distance needs to be higher than 0.
         return agent.remainingDistance < agent.stoppingDistance && !agent.pathPending;
     }
-    bool InMeleeRange()
+    bool InAttackRange(float checkDistance) //I think I need to rewrite this to use a sphere cast check instead of agent remaining distance as it just doesnt make sense.
     {
-        //Distance needs to be higher than 0.
-        return agent.remainingDistance < myData_SO.meleeAttackDistance && !agent.pathPending;
-    }
-    bool InRangedRange()
-    {
-        //Distance needs to be higher than 0.
-        return agent.remainingDistance < myData_SO.rangedAttackDistance && !agent.pathPending;
-    }
+        //Raycast a sphere check in area defined by meleeAttackDistance variable. Damage Player if player is in this area.
+        Collider[] hitObjects = Physics.OverlapSphere(transform.position, checkDistance);
+        //This needs to change to be an array
 
+        //Potential further check here to see if within a set distance to do damage or just push back?
+        for (int i = 0; i < hitObjects.Length; i++)
+        {
+            if (hitObjects[i].CompareTag("Player"))
+            {
+                Debug.Log(hitObjects[i].gameObject.name);
+                return true;
+                //Deal Damage to player;
+            }
+        }
+        return false;
+        // Original code: return agent.remainingDistance < myData_SO.meleeAttackDistance && !agent.pathPending;
+    }
     bool GroundCheck()
     {
         Collider[] SphereCastArray = new Collider[3];
@@ -236,6 +275,11 @@ public class EnemyStateMachine : MonoBehaviour
             if (SphereCastArray[i].gameObject.layer == myData_SO.GroundLayer) { return true; }
         }
         return false;
+    }
+
+    private Vector3 GetPlayerDirection()
+    {
+        return (myData_SO.Target.transform.position - sightPosition.position).normalized;
     }
 
     bool TimeOut()
@@ -252,7 +296,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (playerDistance < myData_SO.sightDistance)
         {
-            Vector3 targetDirection = (myData_SO.Target.transform.position - transform.position).normalized;
+            Vector3 targetDirection = (myData_SO.Target.transform.position - sightPosition.position).normalized;
             float angleToPlayer = Vector3.Angle(transform.forward, targetDirection);
 
             if (angleToPlayer < myData_SO.sightAngle / 2)
@@ -273,6 +317,9 @@ public class EnemyStateMachine : MonoBehaviour
                             result = true;
                             targetsLastSeenLocation = myData_SO.Target.transform.position;
                             break;
+                        default:
+                            Debug.Log("I couldn't find player");
+                            break;
                     }
                 }
             }
@@ -284,28 +331,33 @@ public class EnemyStateMachine : MonoBehaviour
     #region AttackFunctions
     bool shouldSpecialAttack()
     {
+        if (!shouldSpecial) { return false; }
+        shouldSpecial = false;
+        
         float RandomNum = Random.Range(0, 100);
-        return RandomNum >= myData_SO.specialAttackChance;
+        Debug.Log(RandomNum);
+        return RandomNum <= myData_SO.specialAttackChance;
     }
 
     protected virtual void BasicAttack()
     {
-        //RaycastHit hit;
-        //Physics.SphereCast(transform.position, myData_SO.meleeAttackDistance, out hit);
+        //Cause Player Damage here or effect that can cause damage.
+        ChangeState(EnemyStates.Idle);
         Debug.Log("Default Attack");
     }
 
     protected virtual void RangedAttack()
-    {
+    { 
         Debug.Log("Ranged Attack");
-        Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity);
+        GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
+        projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection();
+        ChangeState(EnemyStates.Idle);
     }
 
     protected virtual void SpecialAttack()
     {
         Debug.Log("Special Attack");
-        ChangeState(EnemyStates.Moving);
-        return;
+        ChangeState(EnemyStates.Idle);
     }
     #endregion
 
@@ -320,6 +372,13 @@ public class EnemyStateMachine : MonoBehaviour
             //Forward
             Gizmos.color = Color.white;
             Gizmos.DrawLine(sightPosition.position, transform.position + (transform.forward * myData_SO.sightDistance));
+
+            if (Application.isPlaying && canActivateDebug)
+            {
+                Gizmos.color = Color.green;
+                Vector3 tDirection = (myData_SO.Target.transform.position - sightPosition.position).normalized;
+                Gizmos.DrawLine(sightPosition.position, tDirection);
+            }
 
             //Left Sight.
             Quaternion L_rotation = Quaternion.AngleAxis(-myData_SO.sightAngle / 2, Vector3.up);
