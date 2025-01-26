@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2220185807441615960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 780758776825944531}
+  m_Layer: 6
+  m_Name: AttackAim
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &780758776825944531
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2220185807441615960}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7166941391526296494}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5703905168941233314
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +150,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8999256869386577318}
+  - {fileID: 780758776825944531}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!114 &6669472844546632342
@@ -205,13 +237,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pLives: 3
-  pSpeed: 10
+  pSpeed: 20
   movementInput: {x: 0, y: 0}
-  canDash: 0
-  isDashing: 0
-  dashSpeed: 120
+  dashSpeed: 175
   dashTime: 0.2
-  dashCooldown: 1
+  dashCooldown: 2
+  attackDirection: {x: 0, y: 0}
+  upgradeDash: 0
+  upgradeShield: 0
+  upgradeXXX: 0
 --- !u!65 &3726872471648859983
 BoxCollider:
   m_ObjectHideFlags: 0
