@@ -847,8 +847,8 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: ScalesOfSworrow_YLS
-  metroPackageVersion: 
+  metroPackageName: ScalesOfSworrowYLS
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -856,7 +856,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: ScalesOfSworrow_YLS
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: ScalesOfSworrow_YLS
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
