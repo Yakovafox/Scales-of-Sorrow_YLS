@@ -213,7 +213,7 @@ MonoBehaviour:
     m_ActionId: 633ce870-a5e1-4d34-ab13-952cae574219
     m_ActionName: 'Player/Dash[/Keyboard/leftShift,/XInputControllerWindows/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -236,7 +236,6 @@ MonoBehaviour:
   dashSpeed: 180
   dashTime: 0.3
   dashCooldown: 2
-  attackDirection: {x: 0, y: 0}
   attackMask:
     serializedVersion: 2
     m_Bits: 128
@@ -246,9 +245,8 @@ MonoBehaviour:
   aimSpeed: 10
   attackCooldown: 2
   attackDamage: 0
-  upgradeDash: 0
   upgradeShield: 0
-  upgradeXXX: 0
+  upgradeSuper: 0
 --- !u!65 &3726872471648859983
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -24,11 +24,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
-    private bool canDash;
-    private bool isDash;
+    [SerializeField] private bool canDash;
+    [SerializeField] private bool isDash;
 
     [Header("Attack")]
-    [SerializeField] private Vector2 attackDirection = Vector2.zero;
     [SerializeField] private LayerMask attackMask;
     [SerializeField] private bool canAttack;
     [SerializeField] private float attackRange;
@@ -38,9 +37,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDamage;
 
     [Header("Upgrades")]
-    [SerializeField] private bool upgradeDash;
     [SerializeField] private bool upgradeShield;
-    [SerializeField] private bool upgradeXXX;
+    [SerializeField] private bool upgradeSuper;
 
     #endregion
     void Start()
@@ -60,7 +58,7 @@ public class PlayerController : MonoBehaviour
         MoveInput();
     }
 
-    #region Movement
+    #region Movement -----------------------------------------------------------------------------------
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -77,7 +75,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (upgradeDash) { return; } else if (context.started) { StartCoroutine(DefaultDash()); }
+        if (context.started && canDash) { StartCoroutine(DefaultDash()); }
     }
 
     private IEnumerator DefaultDash()
@@ -96,12 +94,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Attack
-
-    public void OnAim(InputAction.CallbackContext context)
-    {
-        attackDirection = context.ReadValue<Vector2>();
-    }
+    #region Attack --------------------------------------------------------------------------------------------------------------------------
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -113,7 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         canAttack = false;
 
-        Vector3 direction = new Vector3(attackDirection.x, 0, attackDirection.y);
+        Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
         Vector3 rotateDirection = (new Vector3(direction.x - transform.position.x, 0, direction.z - transform.position.z)).normalized;
         float angle = Mathf.Atan2(rotateDirection.x, rotateDirection.z) * Mathf.Rad2Deg;
 
