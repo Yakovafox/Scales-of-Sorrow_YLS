@@ -17,7 +17,7 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public GameObject Dragon_Reference;
 
     [Tooltip("What the character should chase")]
-    public GameObject Target;
+    public List<GameObject> Target;
 
     //----------------------------------------------------------------------------------
 

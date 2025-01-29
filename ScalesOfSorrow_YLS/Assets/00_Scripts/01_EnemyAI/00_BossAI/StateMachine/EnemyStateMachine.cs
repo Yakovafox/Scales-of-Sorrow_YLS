@@ -42,7 +42,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     #region Local Variables
     //Local Variables
-    public GameObject PlayerRef;
+    public List<GameObject> PlayerRef;
     private NavMeshAgent agent;
     private Vector3 investigationArea;
 
@@ -69,7 +69,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool AttackOnce;
     private bool shouldSpecial;
-    public bool canActivateDebug = false;
 
     private bool movingRight = false;
     #endregion
@@ -86,17 +85,24 @@ public class EnemyStateMachine : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         myData_SO.Target = null;
         
-        if (myData_SO.Target == null || myData_SO.Target.GetType() != typeof(GameObject))
-        {
-            //PlayerRef = GameObject.Find("Player");
-            myData_SO.Target = GameObject.FindGameObjectWithTag("Player");
-            PlayerRef = myData_SO.Target;
-        }
-        isAITarget = myData_SO.Target.TryGetComponent(out NavMeshAgent PlayerNav);
+        //if (myData_SO.Target[0].GetType() != typeof(GameObject) || myData_SO.Target[0] == null)
+        //{
+             GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
+             for (int i = 0; i < tempPlayerArray.Length; i++)
+             {
+                 print(tempPlayerArray[i]);
+                 PlayerRef.Add(tempPlayerArray[i]);
+                 //Should check ID of the player and should organise this list based on player with lowest ID!!!
+                 
+                 //myData_SO.Target.Add(tempPlayerArray[i]); //Is broken and stops code?
+                 
+             }
+             //PlayerRef = myData_SO.Target;
+        //}
     }
 
 
-    void Update()
+    void Update() //Functions should be called from here where Update holds the logic for what should happen in each state, and the Functions hold the functionality of what happens.
     {
         stateTimer += Time.deltaTime;
         attackTimer += Time.deltaTime;
@@ -130,6 +136,10 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     RandomisedMovePoint();
                 }
+                break;
+            
+            case EnemyStates.Fly:
+                //Functions for flying should go here
                 break;
 
             case EnemyStates.Chase:
@@ -204,6 +214,31 @@ public class EnemyStateMachine : MonoBehaviour
         stateTimer = 0;
     }
 
+    void player2Joined()
+    {
+        
+    }
+    
+    void player2Left()
+    {
+        
+    }
+
+    bool doesP2Exist()
+    {
+        return PlayerRef.Count > 0;
+    }
+
+    GameObject findClosestPlayer()
+    {
+        if (PlayerRef.Count == 1) return PlayerRef[0];
+        float p1Dist = Vector3.Distance(transform.position, PlayerRef[0].transform.position);
+        float p2Dist = Vector3.Distance(transform.position, PlayerRef[1].transform.position);
+        if (p2Dist < p1Dist) return PlayerRef[1];
+        return PlayerRef[0];
+    }
+
+
     #region Movement Functions
     void MoveToChase()
     {
@@ -254,6 +289,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
     bool InAttackRange(float checkDistance) //I think I need to rewrite this to use a sphere cast check instead of agent remaining distance as it just doesnt make sense.
     {
+        //This could change to return distance to closest player?;
         //Raycast a sphere check in area defined by meleeAttackDistance variable. Damage Player if player is in this area.
         Collider[] hitObjects = Physics.OverlapSphere(transform.position, checkDistance);
         //This needs to change to be an array
@@ -282,9 +318,9 @@ public class EnemyStateMachine : MonoBehaviour
         return false;
     }
 
-    private Vector3 GetPlayerDirection()
+    private Vector3 GetPlayerDirection(GameObject playerToUse)
     {
-        return (myData_SO.Target.transform.position - sightPosition.position).normalized;
+        return (playerToUse.transform.position - sightPosition.position).normalized;
     }
 
     bool TimeOut()
@@ -297,11 +333,12 @@ public class EnemyStateMachine : MonoBehaviour
     {
         bool result = false;
 
-        float playerDistance = Vector3.Distance(transform.position, myData_SO.Target.transform.position);
+        GameObject closestPlayer = findClosestPlayer();
+        float playerDistance = Vector3.Distance(transform.position, closestPlayer.transform.position);
 
         if (playerDistance < myData_SO.sightDistance)
         {
-            Vector3 targetDirection = (myData_SO.Target.transform.position - sightPosition.position).normalized;
+            Vector3 targetDirection = (closestPlayer.transform.position - sightPosition.position).normalized;
             float angleToPlayer = Vector3.Angle(transform.forward, targetDirection);
 
             if (angleToPlayer < myData_SO.sightAngle / 2)
@@ -320,7 +357,7 @@ public class EnemyStateMachine : MonoBehaviour
                     {
                         case "Player":
                             result = true;
-                            targetsLastSeenLocation = myData_SO.Target.transform.position;
+                            targetsLastSeenLocation = closestPlayer.transform.position;
                             break;
                         default:
                             Debug.Log("I couldn't find player");
@@ -362,7 +399,7 @@ public class EnemyStateMachine : MonoBehaviour
     { 
         Debug.Log("Ranged Attack");
         GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
-        projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection();
+        projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection(findClosestPlayer());
         agent.isStopped = true;
         ChangeState(EnemyStates.Idle);
 
@@ -387,13 +424,6 @@ public class EnemyStateMachine : MonoBehaviour
             //Forward
             Gizmos.color = Color.white;
             Gizmos.DrawLine(sightPosition.position, transform.position + (transform.forward * myData_SO.sightDistance));
-
-            if (Application.isPlaying && canActivateDebug)
-            {
-                Gizmos.color = Color.green;
-                Vector3 tDirection = (myData_SO.Target.transform.position - sightPosition.position).normalized;
-                Gizmos.DrawLine(sightPosition.position, tDirection);
-            }
 
             //Left Sight.
             Quaternion L_rotation = Quaternion.AngleAxis(-myData_SO.sightAngle / 2, Vector3.up);
