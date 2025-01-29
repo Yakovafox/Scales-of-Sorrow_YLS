@@ -56,6 +56,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float stateTimer = 0.0f;
     private float waitTime = 0.0f;
+    private float attackTimer = 0.0f;
+    private float attackWaitTime = 0.0f;  
 
     private Transform groundChecker;
     private Transform sightPosition;
@@ -97,6 +99,7 @@ public class EnemyStateMachine : MonoBehaviour
     void Update()
     {
         stateTimer += Time.deltaTime;
+        attackTimer += Time.deltaTime;
 
         switch (currentState)
         {
@@ -104,6 +107,7 @@ public class EnemyStateMachine : MonoBehaviour
                 if (TimeOut())
                 {
                     intialiseMovement = false;
+                    agent.isStopped = false;
                     ChangeState(EnemyStates.Moving);
                 }
                 break;
@@ -158,7 +162,7 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     ChangeState(EnemyStates.Chase);
                 }
-                else if (AttackOnce)
+                else if (AttackOnce && AttackCooldown())
                 {
                     /*if (shouldSpecial && shouldSpecialAttack())
                     {
@@ -257,7 +261,6 @@ public class EnemyStateMachine : MonoBehaviour
         {
             if (hitObjects[i].CompareTag("Player"))
             {
-                Debug.Log(hitObjects[i].gameObject.name);
                 return true;
                 //Deal Damage to player;
             }
@@ -329,6 +332,12 @@ public class EnemyStateMachine : MonoBehaviour
     #endregion
 
     #region AttackFunctions
+    bool AttackCooldown()
+    {
+        print("Attack Cooldown: " + attackWaitTime);
+        attackWaitTime = myData_SO.attackCooldown;
+        return attackTimer > attackWaitTime;
+    }
     bool shouldSpecialAttack()
     {
         if (!shouldSpecial) { return false; }
@@ -351,6 +360,7 @@ public class EnemyStateMachine : MonoBehaviour
         Debug.Log("Ranged Attack");
         GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection();
+        agent.isStopped = true;
         ChangeState(EnemyStates.Idle);
     }
 

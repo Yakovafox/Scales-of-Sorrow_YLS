@@ -22,7 +22,7 @@ MonoBehaviour:
   flySpeed: 5
   flying: 0
   moveRadius: 30
-  timeToWait: 2.5
+  timeToWait: 0.5
   GroundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -31,6 +31,7 @@ MonoBehaviour:
   sightAngle: 120
   MaxHealth: 150
   Stages: 1
+  attackCooldown: 2
   meleeAttackDistance: 3
   meleeDamage: 10
   rangedAttackDistance: 9

@@ -75,6 +75,11 @@ public class EnemyData_ScriptableObj : ScriptableObject
     //---------------------------------------------------------------------------------
 
     [Header("------ Attack Variables ------")]
+    [Header("General Attack Variables")]
+    
+    [Tooltip("Cooldown before Range attack can be performed again.")]
+    public float attackCooldown = 2.5f;
+    
     [Header("Default Attack")]
 
     [Tooltip("The maximum distance that the player can be for a melee attack. NOTE: MUST be a value greater than 0!")]
