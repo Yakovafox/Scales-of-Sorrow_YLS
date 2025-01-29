@@ -106,6 +106,7 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyStates.Idle:
                 if (TimeOut())
                 {
+                    attackWaitTime = 0;
                     intialiseMovement = false;
                     agent.isStopped = false;
                     ChangeState(EnemyStates.Moving);
@@ -142,7 +143,7 @@ public class EnemyStateMachine : MonoBehaviour
                     ChangeState(EnemyStates.Attack);
                     //Change state to Attack
                 }
-                else if (InAttackRange(myData_SO.rangedAttackDistance))
+                else if (AttackCooldown() && InAttackRange(myData_SO.rangedAttackDistance))
                 {
                     AttackOnce = true;
 
@@ -157,12 +158,12 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Attack: // Need a do once check in here to stop the code from being executed multiple times over.
-
+                print("Attack Once: " + AttackOnce);
                 if (!AttackOnce)
                 {
                     ChangeState(EnemyStates.Chase);
                 }
-                else if (AttackOnce && AttackCooldown())
+                else if (AttackOnce)
                 {
                     /*if (shouldSpecial && shouldSpecialAttack())
                     {
@@ -184,6 +185,7 @@ public class EnemyStateMachine : MonoBehaviour
                     }
 
                     AttackOnce = false;
+                    attackTimer = 0;
                 }
 
                 break;
@@ -352,6 +354,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         //Cause Player Damage here or effect that can cause damage.
         ChangeState(EnemyStates.Idle);
+
         Debug.Log("Default Attack");
     }
 
@@ -362,12 +365,14 @@ public class EnemyStateMachine : MonoBehaviour
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection();
         agent.isStopped = true;
         ChangeState(EnemyStates.Idle);
+
     }
 
     protected virtual void SpecialAttack()
     {
         Debug.Log("Special Attack");
         ChangeState(EnemyStates.Idle);
+
     }
     #endregion
 
