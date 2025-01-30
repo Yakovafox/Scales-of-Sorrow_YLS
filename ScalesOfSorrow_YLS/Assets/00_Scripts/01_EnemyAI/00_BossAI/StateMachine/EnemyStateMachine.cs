@@ -216,12 +216,21 @@ public class EnemyStateMachine : MonoBehaviour
 
     void player2Joined()
     {
-        
+        if (PlayerRef.Count > 1) { return; }
+        GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < tempPlayerArray.Length; i++)
+        {
+            if (PlayerRef.Contains(tempPlayerArray[i])) { continue; }
+            PlayerRef.Add(tempPlayerArray[i]);
+        }
+        //Code to adjust Health here or attack damage etc.
     }
     
     void player2Left()
     {
-        
+        if (PlayerRef.Count <= 1) { return; }
+        PlayerRef.RemoveAt(1);
+        //Code to adjust Health here or attack damage etc.
     }
 
     bool doesP2Exist()
