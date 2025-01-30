@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036709faa20fee34a8b05fd705e33f8a, type: 3}
+  m_Name: newEnemyData
+  m_EditorClassIdentifier: 
+  ID: 0
+  dragonName: 
+  Dragon_Reference: {fileID: 0}
+  Target: {fileID: 0}
+  walkSpeed: 2
+  canFly: 0
+  flySpeed: 4
+  flying: 0
+  moveRadius: 5
+  timeToWait: 0
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  canSee: 1
+  sightDistance: 10
+  sightAngle: 120
+  MaxHealth: 100
+  Stages: 1
+  meleeAttackDistance: 0
+  meleeDamage: 10
+  rangedAttackDistance: 0
+  rangedDamage: 10
+  rangedProjectile: {fileID: 0}
+  specialAttackChance: 33.33
+  SpecialDamage: 0
