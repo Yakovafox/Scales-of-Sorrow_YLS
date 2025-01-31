@@ -54,10 +54,21 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool shouldWait;
 
-    private float stateTimer = 0.0f;
-    private float waitTime = 0.0f;
-    private float attackTimer = 0.0f;
-    private float attackWaitTime = 0.0f;  
+    [Header("Timer Variables")]
+    private float state_Timer = 0.0f;
+    private float _waitTime = 0.0f;
+
+    private float attack_Timer = 0.0f;
+    private float attack_WaitTime = 0.0f;
+
+    private float flying_Timer = 0.0f;
+    private float flying_WaitTime = 0.0f;
+
+    private float flyCooldown_Timer = 0.0f;
+    private float flyCooldown_WaitTime = 0.0f;
+
+    private float stun_Timer = 0.0f;
+    private float stun_WaitTime = 0.0f;
 
     private Transform groundChecker;
     private Transform sightPosition;
@@ -104,15 +115,18 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Update() //Functions should be called from here where Update holds the logic for what should happen in each state, and the Functions hold the functionality of what happens.
     {
-        stateTimer += Time.deltaTime;
-        attackTimer += Time.deltaTime;
+        state_Timer += Time.deltaTime;
+        attack_Timer += Time.deltaTime;
+        flying_Timer += Time.deltaTime;
+        flyCooldown_Timer += Time.deltaTime;
+        stun_Timer += Time.deltaTime;
 
         switch (currentState)
         {
             case EnemyStates.Idle:
                 if (TimeOut())
                 {
-                    attackWaitTime = 0;
+                    attack_WaitTime = 0;
                     intialiseMovement = false;
                     agent.isStopped = false;
                     ChangeState(EnemyStates.Moving);
@@ -139,7 +153,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
             
             case EnemyStates.Fly:
-                //Functions for flying should go here
+                //Functions for flying should go here.
+
+                //Breakdown of what should happen in this state:
+                //
                 break;
 
             case EnemyStates.Chase:
@@ -195,7 +212,7 @@ public class EnemyStateMachine : MonoBehaviour
                     }
 
                     AttackOnce = false;
-                    attackTimer = 0;
+                    attack_Timer = 0;
                 }
 
                 break;
@@ -211,9 +228,10 @@ public class EnemyStateMachine : MonoBehaviour
     void ChangeState(EnemyStates newState)
     {
         currentState = newState;
-        stateTimer = 0;
+        state_Timer = 0;
     }
 
+    #region Player2Functions
     void player2Joined()
     {
         if (PlayerRef.Count > 1) { return; }
@@ -246,14 +264,9 @@ public class EnemyStateMachine : MonoBehaviour
         if (p2Dist < p1Dist) return PlayerRef[1];
         return PlayerRef[0];
     }
-
+    #endregion
 
     #region Movement Functions
-    void MoveToChase()
-    {
-        agent.destination = targetsLastSeenLocation;
-    }
-
     void RandomisedMovePoint()
     {
         //Randomise x and z point in the world within a sphere starting from current location. Y position must be set to 0.
@@ -267,6 +280,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         for(int i = 0; i < overlapingCols.Length; i++) // There's a bug with some logic here that means Invalid position log always shows.
         {
+            if (overlapingCols[i] == null) { continue; }
             if(overlapingCols[i].gameObject.layer != myData_SO.GroundLayer.value)
             {
                 Debug.LogWarning("Invalid position");
@@ -296,25 +310,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Stopping distance needs to be higher than 0.
         return agent.remainingDistance < agent.stoppingDistance && !agent.pathPending;
     }
-    bool InAttackRange(float checkDistance) //I think I need to rewrite this to use a sphere cast check instead of agent remaining distance as it just doesnt make sense.
-    {
-        //This could change to return distance to closest player?;
-        //Raycast a sphere check in area defined by meleeAttackDistance variable. Damage Player if player is in this area.
-        Collider[] hitObjects = Physics.OverlapSphere(transform.position, checkDistance);
-        //This needs to change to be an array
-
-        //Potential further check here to see if within a set distance to do damage or just push back?
-        for (int i = 0; i < hitObjects.Length; i++)
-        {
-            if (hitObjects[i].CompareTag("Player"))
-            {
-                return true;
-                //Deal Damage to player;
-            }
-        }
-        return false;
-        // Original code: return agent.remainingDistance < myData_SO.meleeAttackDistance && !agent.pathPending;
-    }
+  
     bool GroundCheck()
     {
         Collider[] SphereCastArray = new Collider[3];
@@ -327,15 +323,18 @@ public class EnemyStateMachine : MonoBehaviour
         return false;
     }
 
+
+    #endregion
+
+    #region Chase Functions
+    void MoveToChase()
+    {
+        agent.destination = targetsLastSeenLocation;
+    }
+
     private Vector3 GetPlayerDirection(GameObject playerToUse)
     {
         return (playerToUse.transform.position - sightPosition.position).normalized;
-    }
-
-    bool TimeOut()
-    {
-        waitTime = myData_SO.timeToWait;
-        return stateTimer > waitTime;
     }
 
     bool SeenTarget()
@@ -377,15 +376,85 @@ public class EnemyStateMachine : MonoBehaviour
         }
         return result;
     }
+
+
+    bool InAttackRange(float checkDistance) //I think I need to rewrite this to use a sphere cast check instead of agent remaining distance as it just doesnt make sense.
+    {
+        //This could change to return distance to closest player?;
+        //Raycast a sphere check in area defined by meleeAttackDistance variable. Damage Player if player is in this area.
+        Collider[] hitObjects = Physics.OverlapSphere(transform.position, checkDistance);
+        //This needs to change to be an array
+
+        //Potential further check here to see if within a set distance to do damage or just push back?
+        for (int i = 0; i < hitObjects.Length; i++)
+        {
+            if (hitObjects[i].CompareTag("Player"))
+            {
+                return true;
+                //Deal Damage to player;
+            }
+        }
+        return false;
+        // Original code: return agent.remainingDistance < myData_SO.meleeAttackDistance && !agent.pathPending;
+    }
+
+    #endregion
+
+    #region Flight Functions
+
+    void TakeOff()
+    {
+        //PLay dragon lifting off animation here.
+        //Set Dragon sprite rendered to disabled.
+        //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
+        //Potentially move the sprite higher out of view as well?
+        //Change State to flying.
+    }
+
+    void Land()
+    {
+        //Grow Shadow Over time as animation draws to end.
+        //Potentially move the sprite back into view if deciding to keep sprite out of view
+        //PLay dragon landing animation here.
+        //Set Dragon sprite rendered to disabled.
+        //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
+    }
+
+    #endregion
+
+    #region Timer Functions
+    bool TimeOut()
+    {
+        _waitTime = myData_SO.timeToWait;
+        return state_Timer > _waitTime;
+    }
+
+    bool flyTimeOut()
+    {
+        flying_WaitTime = myData_SO.timeToWait;
+        return flying_Timer > flying_WaitTime;
+    }
+    bool flyCooldown()
+    {
+        flyCooldown_WaitTime = myData_SO.timeToWait;
+        return flyCooldown_Timer > flyCooldown_WaitTime;
+    }
+
+    bool stunTimeOut()
+    {
+        stun_WaitTime = myData_SO.timeToWait;
+        return stun_Timer > stun_WaitTime;
+    }
+
+    bool AttackCooldown()
+    {
+        attack_WaitTime = myData_SO.attackCooldown;
+        return attack_Timer > attack_WaitTime;
+    }
     #endregion
 
     #region AttackFunctions
-    bool AttackCooldown()
-    {
-        print("Attack Cooldown: " + attackWaitTime);
-        attackWaitTime = myData_SO.attackCooldown;
-        return attackTimer > attackWaitTime;
-    }
+
     bool shouldSpecialAttack()
     {
         if (!shouldSpecial) { return false; }
