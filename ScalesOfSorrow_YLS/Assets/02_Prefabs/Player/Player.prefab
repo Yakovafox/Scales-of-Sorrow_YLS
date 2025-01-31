@@ -196,6 +196,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 633ce870-a5e1-4d34-ab13-952cae574219
     m_ActionName: 'Player/Dash[/Keyboard/leftShift,/XInputControllerWindows/buttonEast]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eeb4f1fb-edcb-4809-a936-83786ea3fe9b
+    m_ActionName: 'Player/Shield[/XInputControllerWindows/rightTrigger,/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fcef18e4-0604-4839-af61-e1221ee498c2
+    m_ActionName: 'Player/Fired Up[/XInputControllerWindows/leftTrigger,/Keyboard/t]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player
@@ -213,15 +221,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af10db5c0df6734281ff285a7114c8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pLives: 3
+  health: 0
+  maxHealth: 0
   pSpeed: 20
   movementInput: {x: 0, y: 0}
   pSR: {fileID: 4227494370109511080}
   dashSpeed: 180
   dashTime: 0.3
   dashCooldown: 1
-  canDash: 1
-  isDash: 0
   attackMask:
     serializedVersion: 2
     m_Bits: 64
@@ -234,7 +241,8 @@ MonoBehaviour:
   attackCharges: 10
   maxCharges: 10
   upgradeShield: 0
-  upgradeSuper: 0
+  upgradeFiredUp: 0
+  upgradeDash: 0
 --- !u!65 &3726872471648859983
 BoxCollider:
   m_ObjectHideFlags: 0

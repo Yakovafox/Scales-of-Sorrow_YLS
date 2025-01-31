@@ -11,42 +11,60 @@ public class PlayerController : MonoBehaviour
 {
     #region Varriables
     [Header("Lives")]
-    [SerializeField] private int pLives;
+    [SerializeField] private float health;
+
     //UI Variables
     [Header("Movement")]
     [SerializeField] private float pSpeed;
     [SerializeField] private Vector2 movementInput = Vector2.zero;
     private Transform pTransform;
     private Rigidbody pRB;
-    [SerializeField] private SpriteRenderer pSR;
-
+    private SpriteRenderer pSR;
+  
     [Header("Dash")]
+    [Tooltip("dashSpeed controls how fast with the player moves during the dash. This can be used to control the distance")]
     [SerializeField] private float dashSpeed;
+    private Collider pCollider;
+    private bool canDash;
+    private bool isDash;
+
+    [Tooltip("dashTime controls how long the dash las")]
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
-    [SerializeField] private bool canDash;
-    [SerializeField] private bool isDash;
 
     [Header("Attack")]
+    [Tooltip ("Controls which layers can take damage")]
     [SerializeField] private LayerMask attackMask;
-    [SerializeField] private bool canAttack;
+
+    [Tooltip("Controls how far the attack boxCast goes - keep low")]
     [SerializeField] private float attackRange;
+    [Tooltip("Controls how the size of the box cast - value is halved ")] 
     [SerializeField] private float attackSize;
-    [SerializeField] private float aimSpeed;
+
+    [Tooltip("Controls time between attacks")]
     [SerializeField] private float attackCooldown;
+
+    [Tooltip("Controls amount of damage dealt")]
     [SerializeField] private float attackDamage;
-    [SerializeField] private int attackCharges;
+
+    [Tooltip("Controls amount of attack charges")]
     [SerializeField] private int maxCharges;
+                     private int attackCharges;
+
+    private bool canAttack;
 
     [Header("Upgrades")]
     [SerializeField] private bool upgradeShield;
-    [SerializeField] private bool upgradeSuper;
+    [SerializeField] private bool upgradeFiredUp;
+    [SerializeField] private bool upgradeDash;
 
     #endregion
     void Start()
     {
         pTransform = transform;
         pRB = GetComponent<Rigidbody>();
+        pCollider = GetComponent<Collider>();
+        pSR = GetComponentInChildren<SpriteRenderer>();
 
         attackCharges = maxCharges;
     }
@@ -77,33 +95,44 @@ public class PlayerController : MonoBehaviour
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
     }
+    #endregion
+
+    #region Dash
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (context.started && canDash) { StartCoroutine(DefaultDash()); }
+        /*if (context.started && canDash && upgradeDash ) {  Upgraded Dash }
+        else if (context.started && canDash  ) { StartCoroutine(DefaultDash()); }*/
+
+        if (!canDash || !context.started) { return; }
+        else if (upgradeDash) { /* Upgraded Dash */ }
+        else { StartCoroutine(DefaultDash()); }
+
     }
 
     private IEnumerator DefaultDash()
     {
+        pCollider.enabled = false;
         canDash = false;
         isDash = true;
 
         pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
 
         yield return new WaitForSeconds(dashTime);
+        pCollider.enabled = true;
         isDash = false;
         pRB.velocity = new Vector3(0, 0, 0);
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
     #endregion
 
     #region Attack --------------------------------------------------------------------------------------------------------------------------
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!canAttack) { return; }
-        else if (attackCharges <= 0) { return; }
+        if (!canAttack || attackCharges <= 0) { return; }
         else { StartCoroutine(Attack()); }
         Debug.Log("Attack");
     }
@@ -134,4 +163,17 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Collision -----------------------------------------------------------------------------------------------------------------
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health >= 0) { /*reload current scene*/ }
+    }
+
+    public void RechargeMelee()
+    {
+        attackCharges++;
+    }
+
+    #endregion 
 }
