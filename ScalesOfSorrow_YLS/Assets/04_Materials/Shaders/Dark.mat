@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Toon
+  m_Name: Dark
   m_Shader: {fileID: -6465566751694194690, guid: 603910fb43dfe674ab6344529a90ed51,
     type: 3}
   m_Parent: {fileID: 0}
@@ -71,8 +71,8 @@ Material:
     - _UIMaskSoftnessY: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Dark_Color: {r: 0.4195536, g: 0.4339623, b: 0.33775365, a: 0}
-    - _Lit_Color: {r: 0.6933962, g: 1, b: 0.7885257, a: 0}
+    - _Dark_Color: {r: 0.39810583, g: 0.41509432, b: 0.2995728, a: 0}
+    - _Lit_Color: {r: 0.26900142, g: 0.3679245, b: 0.297854, a: 0}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
