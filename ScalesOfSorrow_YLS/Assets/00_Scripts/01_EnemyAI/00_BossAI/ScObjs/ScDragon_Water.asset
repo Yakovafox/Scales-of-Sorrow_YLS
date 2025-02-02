@@ -16,7 +16,7 @@ MonoBehaviour:
   dragonName: SlipNSlide
   Dragon_Reference: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
     type: 3}
-  Target: {fileID: 0}
+  Target: []
   walkSpeed: 4
   canFly: 0
   flySpeed: 5
@@ -31,6 +31,12 @@ MonoBehaviour:
   sightAngle: 120
   MaxHealth: 150
   Stages: 1
+  flightTime: 5
+  flightCooldownTime: 10
+  stunTime: 5
+  chanceToFly: 33.33
+  shadow_DefaultSize: 1
+  shadow_MaxSize: 3
   attackCooldown: 2
   meleeAttackDistance: 3
   meleeDamage: 10
@@ -38,5 +44,5 @@ MonoBehaviour:
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
-  specialAttackChance: 0
+  specialAttackChance: 15
   SpecialDamage: 0

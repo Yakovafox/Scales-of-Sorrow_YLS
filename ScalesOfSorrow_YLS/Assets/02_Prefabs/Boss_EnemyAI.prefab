@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 962289359636681910}
   - component: {fileID: 1649452171316668222}
   m_Layer: 1
-  m_Name: shadow caster
+  m_Name: shadowCaster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,7 +285,8 @@ MonoBehaviour:
   myData_SO: {fileID: 0}
   Toggle_Sight_Debug: 0
   debugSphere: {fileID: 0}
-  PlayerRef: {fileID: 0}
+  PlayerRef:
+  - {fileID: 0}
 --- !u!1 &8654009113601364493
 GameObject:
   m_ObjectHideFlags: 0

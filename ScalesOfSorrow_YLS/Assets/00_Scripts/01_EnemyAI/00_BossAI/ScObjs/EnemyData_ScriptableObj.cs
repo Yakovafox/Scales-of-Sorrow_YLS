@@ -72,6 +72,23 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Range(0, 3)]
     public int Stages = 1;
 
+    [Header("Flying Variables")] [Tooltip("The desired amount of time that the dragon should spend in the air.")]
+    public float flightTime = 5f;
+    [Tooltip("The cooldown time that determines how long the before the dragon can fly again.")]
+    public float flightCooldownTime = 10f;
+    [Tooltip("Time to wait when being stunned/Time that dragon will spend before moving after landing.")]
+    public float stunTime = 5f;
+    
+    [Tooltip("The chance at which the dragon will take flight.")]
+    [Range(0,100)]
+    public float chanceToFly = 33.33f;
+    
+    [Tooltip("The default size of the dragon's shadow when on the floor.")]
+    public float shadow_DefaultSize = 1f;
+    
+    [Tooltip("The maximum size of the dragon's shadow when off the floor.")]
+    public float shadow_MaxSize = 3f;
+
     //---------------------------------------------------------------------------------
 
     [Header("------ Attack Variables ------")]

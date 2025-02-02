@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -73,12 +72,19 @@ public class EnemyStateMachine : MonoBehaviour
     private Transform groundChecker;
     private Transform sightPosition;
 
+    private float defaultYPos;
+
+    private GameObject GO_shadowCaster;
+    private SpriteRenderer spriteRenderer;
+
     private Ray ray;
     private RaycastHit rayResult;
 
     private bool stunned;
 
-    private bool AttackOnce;
+    private bool flyingToRandomPoint;
+
+    private bool doOnce;
     private bool shouldSpecial;
 
     private bool movingRight = false;
@@ -94,6 +100,8 @@ public class EnemyStateMachine : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        GO_shadowCaster = gameObject.transform.Find("shadowCaster").gameObject;
+        spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
         myData_SO.Target = null;
         
         //if (myData_SO.Target[0].GetType() != typeof(GameObject) || myData_SO.Target[0] == null)
@@ -117,14 +125,24 @@ public class EnemyStateMachine : MonoBehaviour
     {
         state_Timer += Time.deltaTime;
         attack_Timer += Time.deltaTime;
-        flying_Timer += Time.deltaTime;
         flyCooldown_Timer += Time.deltaTime;
         stun_Timer += Time.deltaTime;
 
         switch (currentState)
         {
             case EnemyStates.Idle:
-                if (TimeOut())
+                if (stunned)
+                {
+                    if (TimeOut(myData_SO.stunTime))
+                    {
+                        attack_WaitTime = 0;
+                        intialiseMovement = false;
+                        agent.isStopped = false;
+                        ChangeState(EnemyStates.Moving);
+                        stunned = false;
+                    }
+                }
+                else if (TimeOut(myData_SO.timeToWait))
                 {
                     attack_WaitTime = 0;
                     intialiseMovement = false;
@@ -141,10 +159,15 @@ public class EnemyStateMachine : MonoBehaviour
                     
                     RandomisedMovePoint();
                 }
-                else if (myData_SO.canSee && SeenTarget()) // AI cannot see player during this state for some reason, need to re look at logic.
-                                                          // I believe this is down to the raycast aiming at the floor instead of straight forward? Seems to be if player hits into the AI then chase is called.
+                else if (myData_SO.canSee && SeenTarget()) 
                 {
                     ChangeState(EnemyStates.Chase);
+                }
+                else if (ReachedDestination() && flyCooldown() && randomShouldFly())
+                {
+                    doOnce = true;
+                    flying_Timer = 0;
+                    TakeOff();
                 }
                 else if (ReachedDestination() && !SeenTarget())
                 {
@@ -153,18 +176,39 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
             
             case EnemyStates.Fly:
+                flying_Timer += Time.deltaTime;
+
                 //Functions for flying should go here.
+                if (!flyTimeOut() && !flyingToRandomPoint)
+                {
+                    flightChase();
+                }
+                else if (flyTimeOut() && !flyingToRandomPoint)
+                {
+                    RandomisedMovePoint();
+                    flyingToRandomPoint = true;
+                }
+                else if (flyTimeOut() && flyingToRandomPoint)
+                {
+                    if (ReachedDestination())
+                    {
+                        doOnce = true;
+                        Land();
+                    }
+                }
 
                 //Breakdown of what should happen in this state:
+                //Chase the player around
+                //if the times out, land.
                 //
                 break;
 
             case EnemyStates.Chase:
                 MoveToChase();
 
-                if (ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
+                if (AttackCooldown() && ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
                 {
-                    AttackOnce = true;
+                    doOnce = true;
 
                     shouldSpecial = true;
                     ChangeState(EnemyStates.Attack);
@@ -172,7 +216,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (AttackCooldown() && InAttackRange(myData_SO.rangedAttackDistance))
                 {
-                    AttackOnce = true;
+                    doOnce = true;
 
                     shouldSpecial = true;
                     ChangeState(EnemyStates.Attack); 
@@ -185,33 +229,32 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Attack: // Need a do once check in here to stop the code from being executed multiple times over.
-                print("Attack Once: " + AttackOnce);
-                if (!AttackOnce)
+                if (!doOnce)
                 {
                     ChangeState(EnemyStates.Chase);
                 }
-                else if (AttackOnce)
+                else if (doOnce)
                 {
-                    /*if (shouldSpecial && shouldSpecialAttack())
+                    if (shouldSpecial && shouldSpecialAttack())
                     {
-                        AttackOnce = false;
+                        doOnce = false;
                         SpecialAttack();
                         //Special Attack 
                     }
-                    else*/ if (InAttackRange(myData_SO.meleeAttackDistance))
+                    else if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
-                        AttackOnce = false;
+                        doOnce = false;
                         BasicAttack();
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
                     {
-                        AttackOnce = false;
+                        doOnce = false;
                         RangedAttack();
                         // ShootProjectile
                     }
 
-                    AttackOnce = false;
+                    doOnce = false;
                     attack_Timer = 0;
                 }
 
@@ -293,6 +336,11 @@ public class EnemyStateMachine : MonoBehaviour
     {
         agent.SetDestination(randomPos);
     }
+
+    void MoveToSetPoint(Vector3 position)
+    {
+        agent.SetDestination(position); 
+    }
     void UpdateSprite()
     {
         float xScale = 1;
@@ -303,6 +351,11 @@ public class EnemyStateMachine : MonoBehaviour
             xScale = -1;
         }
         transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+    }
+
+    bool randomShouldFly()
+    {
+        return myData_SO.chanceToFly > Random.Range(0f, 100f);
     }
 
     bool ReachedDestination()
@@ -335,6 +388,12 @@ public class EnemyStateMachine : MonoBehaviour
     private Vector3 GetPlayerDirection(GameObject playerToUse)
     {
         return (playerToUse.transform.position - sightPosition.position).normalized;
+    }
+
+    void flightChase()
+    {
+        targetsLastSeenLocation = findClosestPlayer().transform.position;
+        agent.destination = targetsLastSeenLocation;
     }
 
     bool SeenTarget()
@@ -404,39 +463,71 @@ public class EnemyStateMachine : MonoBehaviour
 
     void TakeOff()
     {
-        //PLay dragon lifting off animation here.
-        //Set Dragon sprite rendered to disabled.
-        //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
-        //Potentially move the sprite higher out of view as well?
-        //Change State to flying.
+        if (GO_shadowCaster.transform.localScale.x > myData_SO.shadow_MaxSize)
+        {
+            GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
+        }
+        if (doOnce)
+        {
+            doOnce = false;
+            Debug.Log("Im Taking Flight!");
+            flyingToRandomPoint = false;
+            ChangeState(EnemyStates.Fly);
+            //Change State to flying.
+            //Play dragon lifting off animation here.
+
+            //Set Dragon sprite rendered to disabled.
+            spriteRenderer.enabled = false;
+            //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
+            //Potentially move the sprite higher out of view as well?
+            defaultYPos = transform.position.y;
+            spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, 15f,
+                spriteRenderer.transform.position.z);
+        }
     }
 
     void Land()
     {
+        if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
+        {
+            GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
+        }
+        if (doOnce)
+        {
+            doOnce = false;
+            Debug.Log("Im landing!");
+            //Potentially move the sprite back into view if deciding to keep sprite out of view
+            spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z );
+            //PLay dragon landing animation here.
+            
+            //Set Dragon sprite rendered to disabled.
+            spriteRenderer.enabled = true;
+            //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
+            flyCooldown_Timer = 0;
+            stunned = true;
+            ChangeState(EnemyStates.Idle);
+        }
         //Grow Shadow Over time as animation draws to end.
-        //Potentially move the sprite back into view if deciding to keep sprite out of view
-        //PLay dragon landing animation here.
-        //Set Dragon sprite rendered to disabled.
-        //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
+
     }
 
     #endregion
 
     #region Timer Functions
-    bool TimeOut()
+    bool TimeOut(float timeToUse)
     {
-        _waitTime = myData_SO.timeToWait;
+        _waitTime = timeToUse;
         return state_Timer > _waitTime;
     }
 
     bool flyTimeOut()
     {
-        flying_WaitTime = myData_SO.timeToWait;
+        flying_WaitTime = myData_SO.flightTime;
         return flying_Timer > flying_WaitTime;
     }
     bool flyCooldown()
     {
-        flyCooldown_WaitTime = myData_SO.timeToWait;
+        flyCooldown_WaitTime = myData_SO.flightCooldownTime;
         return flyCooldown_Timer > flyCooldown_WaitTime;
     }
 
@@ -460,9 +551,7 @@ public class EnemyStateMachine : MonoBehaviour
         if (!shouldSpecial) { return false; }
         shouldSpecial = false;
         
-        float RandomNum = Random.Range(0, 100);
-        Debug.Log(RandomNum);
-        return RandomNum <= myData_SO.specialAttackChance;
+        return myData_SO.specialAttackChance > Random.Range(0,100);
     }
 
     protected virtual void BasicAttack()
