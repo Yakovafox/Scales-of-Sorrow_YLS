@@ -26,11 +26,13 @@ public class PlayerController : MonoBehaviour
     [Tooltip("dashSpeed controls how fast with the player moves during the dash. This can be used to control the distance")]
     [SerializeField] private float dashSpeed;
     private Collider pCollider;
-    private bool canDash;
-    private bool isDash;
+    private bool canDash = true;
+    private bool isDash = false;
 
-    [Tooltip("dashTime controls how long the dash las")]
+    [Tooltip("dashTime controls how long the dash lasts")]
     [SerializeField] private float dashTime;
+
+    [Tooltip("dashTime controls how often the player can dash")]
     [SerializeField] private float dashCooldown;
 
     [Header("------- Attack -------")]
@@ -52,7 +54,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Controls amount of attack charges")]
     [SerializeField] private int maxCharges;
                      private int attackCharges;
-                     private bool canAttack;
+                     private bool canAttack = true;
 
     [Header("------- Fired Up -------")]
     [Tooltip("Controls the extra damage for the fired up ability")]
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("Controls fired up's cooldown")]
     [SerializeField] private float firedUpCooldown;
-    private bool isFiredUp;
+    private bool isFiredUp = false;
 
     [Header("------- Shield -------")]
     [SerializeField] private GameObject shieldPrefab;  
@@ -71,9 +73,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shieldDuration;
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
-    private bool isShield;
-    private bool shieldExists;
-    private bool shieldMove;
+    private bool isShield = false;
+    private bool shieldExists = false;
+    private bool shieldMove = false;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -167,7 +169,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!canAttack || attackCharges <= 0) { return; }
         else { StartCoroutine(Attack()); }
-        Debug.Log("Attack");
     }
 
     private IEnumerator Attack()
@@ -242,10 +243,12 @@ public class PlayerController : MonoBehaviour
         if (isShield && !shieldExists)
         {
             Vector3 spawn = pTransform.position + (new Vector3(movementInput.x, 0, movementInput.y) * shieldDistance);
-            shieldReference = Instantiate(shieldPrefab, spawn, Quaternion.Euler(GetRotate()), transform);
+            shieldReference = Instantiate(shieldPrefab, spawn, quaternion.identity, transform);
+            shieldReference.transform.LookAt(pTransform.position);
             shieldExists = true;
         }
         if (shieldExists == true) { shieldMove = true; }
+
         yield return new WaitForSeconds(shieldDuration);
 
         shieldMove = false;
@@ -253,7 +256,6 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(shieldCooldown);
         isShield = false;
-
     }
 
     #endregion

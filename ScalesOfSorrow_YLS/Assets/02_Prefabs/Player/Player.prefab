@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8999256869386577318}
   - component: {fileID: 4227494370109511080}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,9 +99,9 @@ GameObject:
   - component: {fileID: 3482386218576071935}
   - component: {fileID: 3726872471648859983}
   - component: {fileID: -2063167306699465868}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -197,11 +197,35 @@ MonoBehaviour:
     m_ActionId: 633ce870-a5e1-4d34-ab13-952cae574219
     m_ActionName: 'Player/Dash[/Keyboard/leftShift,/XInputControllerWindows/buttonEast]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3482386218576071935}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnShield
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: eeb4f1fb-edcb-4809-a936-83786ea3fe9b
     m_ActionName: 'Player/Shield[/XInputControllerWindows/rightTrigger,/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3482386218576071935}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnFiredUp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: fcef18e4-0604-4839-af61-e1221ee498c2
     m_ActionName: 'Player/Fired Up[/XInputControllerWindows/leftTrigger,/Keyboard/t]'
   m_NeverAutoSwitchControlSchemes: 1
@@ -222,26 +246,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 0
   pSpeed: 20
-  movementInput: {x: 0, y: 0}
-  pSR: {fileID: 4227494370109511080}
   dashSpeed: 180
   dashTime: 0.3
   dashCooldown: 1
   attackMask:
     serializedVersion: 2
     m_Bits: 64
-  canAttack: 1
   attackRange: 2.5
   attackSize: 2.5
-  aimSpeed: 10
   attackCooldown: 1
   attackDamage: 0
-  attackCharges: 10
   maxCharges: 10
-  upgradeShield: 0
-  upgradeFiredUp: 0
+  extraDamage: 0
+  firedUpDuration: 3
+  firedUpCooldown: 3
+  shieldPrefab: {fileID: 7784897229181676396, guid: 848d0e9f66479db478d68f38252460a9,
+    type: 3}
+  shieldDuration: 3
+  shieldCooldown: 5
+  shieldDistance: 2
+  upgradeShield: 1
+  upgradeFiredUp: 1
   upgradeDash: 0
 --- !u!65 &3726872471648859983
 BoxCollider:
