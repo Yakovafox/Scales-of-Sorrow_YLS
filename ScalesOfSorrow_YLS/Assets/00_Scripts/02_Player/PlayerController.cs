@@ -15,9 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float health;
 
     [Header("------- Movement -------")]
-    [SerializeField] private float pSpeed; 
-    private Vector2 movementInput = Vector2.zero;
-    private Vector3 rotation;
+    [SerializeField] private float pSpeed;
+    [SerializeField] private Vector2 movementInput = Vector2.zero;
     private Transform pTransform;
     private Rigidbody pRB;
     private SpriteRenderer pSR;
@@ -242,11 +241,14 @@ public class PlayerController : MonoBehaviour
 
         if (isShield && !shieldExists)
         {
-            Vector3 spawn = pTransform.position + (new Vector3(movementInput.x, 0, movementInput.y) * shieldDistance);
+            Vector3 spawn = pTransform.position + (new Vector3(movementInput.x, 0, movementInput.y) *shieldDistance );
+           
             shieldReference = Instantiate(shieldPrefab, spawn, quaternion.identity, transform);
+            
             shieldReference.transform.LookAt(pTransform.position);
             shieldExists = true;
         }
+
         if (shieldExists == true) { shieldMove = true; }
 
         yield return new WaitForSeconds(shieldDuration);
@@ -256,6 +258,25 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(shieldCooldown);
         isShield = false;
+    }
+
+    public void ShieldDestroyed()
+    {
+        shieldExists = false;
+    }
+
+    private float ShieldDirection(float axis)
+    {
+        if (Mathf.Sign(axis) == 1)
+        {
+            if( 0.707107f < axis) { return 1f * shieldDistance; }
+                             else { return 0f;}
+        }
+        else 
+        {
+            if (-0.707107f >  axis) { return -1f * shieldDistance; }
+                               else { return  0f;}
+        }
     }
 
     #endregion
