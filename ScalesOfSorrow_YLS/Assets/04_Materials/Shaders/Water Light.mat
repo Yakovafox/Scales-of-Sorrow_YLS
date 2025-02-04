@@ -41,9 +41,9 @@ Material:
     m_Floats:
     - _1: 1
     - _2: 2
-    - _Alpha: 0.1
+    - _Alpha: 0.05
     - _Cell_Softness: 0.45
-    - _Frame_Jump: 0.75
+    - _Frame_Jump: 0.5
     - _Frame_Speed: 2
     - _QueueControl: 0
     - _QueueOffset: 0
