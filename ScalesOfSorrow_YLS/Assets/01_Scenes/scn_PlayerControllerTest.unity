@@ -575,10 +575,25 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3482386218576071935, guid: b1394901c2af92c4ca64a5a4ffd42e71,
         type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3482386218576071935, guid: b1394901c2af92c4ca64a5a4ffd42e71,
+        type: 3}
+      propertyPath: upgradeDash
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3482386218576071935, guid: b1394901c2af92c4ca64a5a4ffd42e71,
+        type: 3}
       propertyPath: shieldPrefab
       value: 
       objectReference: {fileID: 2845581692884492778, guid: 848d0e9f66479db478d68f38252460a9,
         type: 3}
+    - target: {fileID: 3482386218576071935, guid: b1394901c2af92c4ca64a5a4ffd42e71,
+        type: 3}
+      propertyPath: upgradeFiredUp
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3775859717602040275, guid: b1394901c2af92c4ca64a5a4ffd42e71,
         type: 3}
       propertyPath: m_IsActive

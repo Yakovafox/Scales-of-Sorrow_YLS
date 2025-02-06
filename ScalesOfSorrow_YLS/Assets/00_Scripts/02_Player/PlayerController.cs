@@ -264,21 +264,6 @@ public class PlayerController : MonoBehaviour
     {
         shieldExists = false;
     }
-
-    private float ShieldDirection(float axis)
-    {
-        if (Mathf.Sign(axis) == 1)
-        {
-            if( 0.707107f < axis) { return 1f * shieldDistance; }
-                             else { return 0f;}
-        }
-        else 
-        {
-            if (-0.707107f >  axis) { return -1f * shieldDistance; }
-                               else { return  0f;}
-        }
-    }
-
     #endregion
 
     #region Collision -----------------------------------------------------------------------------------------------------------------
