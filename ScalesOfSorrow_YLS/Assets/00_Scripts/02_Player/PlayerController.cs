@@ -10,7 +10,7 @@ using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 
 public class PlayerController : MonoBehaviour
 {
-    #region Varriables
+    #region ------------------------    Variables    ------------------------
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool upgradeFiredUp;
     [SerializeField] private bool upgradeDash;
 
-    #endregion
+    #endregion ------------------------    Variables    ------------------------
     void Start()
     {
         pTransform = transform;
@@ -103,8 +103,7 @@ public class PlayerController : MonoBehaviour
         if (!shieldMove) { MoveInput(); }
     }
 
-    #region Movement -----------------------------------------------------------------------------------
-
+    #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
@@ -129,9 +128,9 @@ public class PlayerController : MonoBehaviour
         Vector3 rotate = new Vector3(0, angle, 0);
         return rotate;
     }
-    #endregion
+    #endregion ------------------------    Movement    ------------------------
 
-    #region Dash -------------------------------------------------------------------------------
+    #region ------------------------    Dash    ------------------------
     public void OnDash(InputAction.CallbackContext context)
     {
         /*if (context.started && canDash && upgradeDash ) {  Upgraded Dash }
@@ -160,9 +159,9 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
-    #endregion
+    #endregion ------------------------    Dash    ------------------------
 
-    #region Attack --------------------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Attack    ------------------------
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -196,9 +195,9 @@ public class PlayerController : MonoBehaviour
         canAttack = true;
     }
 
-    #endregion
+    #endregion ------------------------    Attack    ------------------------
 
-    #region Fired Up ----------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Fired Up    ------------------------
     public void OnFiredUp(InputAction.CallbackContext context)
     {
         if (upgradeFiredUp && context.started) 
@@ -222,9 +221,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    #endregion
+    #endregion ------------------------    Fired Up    ------------------------
 
-    #region Shield --------------------------------------------------------------------------------------------------
+    #region ------------------------    Shield    ------------------------
 
     public void OnShield(InputAction.CallbackContext context)
     {
@@ -264,9 +263,9 @@ public class PlayerController : MonoBehaviour
     {
         shieldExists = false;
     }
-    #endregion
+    #endregion ------------------------    Shield    ------------------------
 
-    #region Collision -----------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -278,5 +277,5 @@ public class PlayerController : MonoBehaviour
         attackCharges++;
     }
 
-    #endregion 
+    #endregion ------------------------    Collision    ------------------------
 }
