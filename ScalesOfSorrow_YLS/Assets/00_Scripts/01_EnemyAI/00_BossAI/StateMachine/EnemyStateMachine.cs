@@ -41,6 +41,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     #region Local Variables
     //Local Variables
+
+    private float currentHealth = 150f;
+    private int stagesLeft;
+
     public List<GameObject> PlayerRef;
     private NavMeshAgent agent;
     private Vector3 investigationArea;
@@ -116,8 +120,11 @@ public class EnemyStateMachine : MonoBehaviour
                  //myData_SO.Target.Add(tempPlayerArray[i]); //Is broken and stops code?
                  
              }
-             //PlayerRef = myData_SO.Target;
+        //PlayerRef = myData_SO.Target;
         //}
+
+        currentHealth = myData_SO.MaxHealth;
+        stagesLeft = myData_SO.Stages;
     }
 
 
@@ -307,6 +314,36 @@ public class EnemyStateMachine : MonoBehaviour
         if (p2Dist < p1Dist) return PlayerRef[1];
         return PlayerRef[0];
     }
+    #endregion
+
+    #region Health Functions
+
+    public void RecieveDamage(float incomingDamage)
+    {
+        if(NHS_HealthCheckup(incomingDamage) > 0)
+        {
+            currentHealth -= incomingDamage;
+            return;
+        }
+        healthReachedZero();
+    }
+
+    private float NHS_HealthCheckup(float incomingDamage)
+    {
+        return currentHealth - incomingDamage;
+    }
+
+    private void healthReachedZero()
+    {
+        //Double check that health is below zero.
+        if(stagesLeft <= 0)
+        {
+            //DefeatOfDragon
+        }
+        stagesLeft -= 1;
+        currentHeatlh = myData_SO.MaxHealth;
+    }
+
     #endregion
 
     #region Movement Functions
