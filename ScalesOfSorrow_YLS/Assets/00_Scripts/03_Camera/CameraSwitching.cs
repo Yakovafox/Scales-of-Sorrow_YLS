@@ -6,14 +6,13 @@ using Cinemachine;
 public class CameraSwitching : MonoBehaviour
 {
     [SerializeField] private CameraManager cameraManager;
-    [SerializeField] private CinemachineFreeLook centralCamera;
-    [SerializeField] private CinemachineFreeLook switchCamera;
+    [SerializeField] private string sectionInital;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            cameraManager.SwitchCamera(switchCamera);
+            cameraManager.InPosition(sectionInital);
         }
         
     }
@@ -22,7 +21,7 @@ public class CameraSwitching : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            cameraManager.SwitchCamera(centralCamera);
+            cameraManager.OutPosition(sectionInital);
         }
     }
 }
