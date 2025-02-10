@@ -10,14 +10,13 @@ using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 
 public class PlayerController : MonoBehaviour
 {
-    #region Varriables
+    #region ------------------------    Variables    ------------------------
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
     [Header("------- Movement -------")]
-    [SerializeField] private float pSpeed; 
-    private Vector2 movementInput = Vector2.zero;
-    private Vector3 rotation;
+    [SerializeField] private float pSpeed;
+    [SerializeField] private Vector2 movementInput = Vector2.zero;
     private Transform pTransform;
     private Rigidbody pRB;
     private SpriteRenderer pSR;
@@ -68,21 +67,24 @@ public class PlayerController : MonoBehaviour
     private bool isFiredUp = false;
 
     [Header("------- Shield -------")]
-    [SerializeField] private GameObject shieldPrefab;  
-                     private GameObject shieldReference;
+    [SerializeField] private GameObject shieldPrefab; 
+    [SerializeField] private GameObject shieldReference;
     [SerializeField] private float shieldDuration;
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
-    private bool isShield = false;
-    private bool shieldExists = false;
-    private bool shieldMove = false;
+
+    [SerializeField] private bool isShield = false;
+
+    [SerializeField] private bool shieldExists = false;
+
+    [SerializeField] private bool shieldMove = false;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
     [SerializeField] private bool upgradeFiredUp;
     [SerializeField] private bool upgradeDash;
 
-    #endregion
+    #endregion ------------------------    Variables    ------------------------
     void Start()
     {
         pTransform = transform;
@@ -104,8 +106,7 @@ public class PlayerController : MonoBehaviour
         if (!shieldMove) { MoveInput(); }
     }
 
-    #region Movement -----------------------------------------------------------------------------------
-
+    #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour
     private void MoveInput()
     {
         Vector3 axis = new Vector3(movementInput.x, 0, movementInput.y);
-        pTransform.position += (axis.normalized * pSpeed * Time.deltaTime);
+        pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
@@ -130,18 +131,14 @@ public class PlayerController : MonoBehaviour
         Vector3 rotate = new Vector3(0, angle, 0);
         return rotate;
     }
-    #endregion
+    #endregion ------------------------    Movement    ------------------------
 
-    #region Dash -------------------------------------------------------------------------------
+    #region ------------------------    Dash    ------------------------
     public void OnDash(InputAction.CallbackContext context)
     {
-        /*if (context.started && canDash && upgradeDash ) {  Upgraded Dash }
-        else if (context.started && canDash  ) { StartCoroutine(DefaultDash()); }*/
-
         if (!canDash || !context.started) { return; }
         else if (upgradeDash) { /* Upgraded Dash */ }
         else { StartCoroutine(DefaultDash()); }
-
     }
 
     private IEnumerator DefaultDash()
@@ -161,9 +158,9 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
-    #endregion
+    #endregion ------------------------    Dash    ------------------------
 
-    #region Attack --------------------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Attack    ------------------------
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -197,9 +194,9 @@ public class PlayerController : MonoBehaviour
         canAttack = true;
     }
 
-    #endregion
+    #endregion ------------------------    Attack    ------------------------
 
-    #region Fired Up ----------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Fired Up    ------------------------
     public void OnFiredUp(InputAction.CallbackContext context)
     {
         if (upgradeFiredUp && context.started) 
@@ -223,9 +220,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    #endregion
+    #endregion ------------------------    Fired Up    ------------------------
 
-    #region Shield --------------------------------------------------------------------------------------------------
+    #region ------------------------    Shield    ------------------------
 
     public void OnShield(InputAction.CallbackContext context)
     {
@@ -242,25 +239,36 @@ public class PlayerController : MonoBehaviour
 
         if (isShield && !shieldExists)
         {
-            Vector3 spawn = pTransform.position + (new Vector3(movementInput.x, 0, movementInput.y) * shieldDistance);
-            shieldReference = Instantiate(shieldPrefab, spawn, quaternion.identity, transform);
+            shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
+            
             shieldReference.transform.LookAt(pTransform.position);
             shieldExists = true;
+        } 
+        else if (!isShield && shieldExists)
+        {
+            Destroy(shieldReference);
+            shieldMove = false;
+            StopCoroutine(Shield());
         }
+
         if (shieldExists == true) { shieldMove = true; }
 
         yield return new WaitForSeconds(shieldDuration);
 
         shieldMove = false;
-        if(shieldReference != null) { Destroy(shieldReference); shieldExists = false; }
+        if (shieldReference != null) { Destroy(shieldReference); shieldExists = false; }
 
         yield return new WaitForSeconds(shieldCooldown);
         isShield = false;
     }
 
-    #endregion
+    public void ShieldDestroyed()
+    {
+        shieldExists = false;
+    }
+    #endregion ------------------------    Shield    ------------------------
 
-    #region Collision -----------------------------------------------------------------------------------------------------------------
+    #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -272,5 +280,5 @@ public class PlayerController : MonoBehaviour
         attackCharges++;
     }
 
-    #endregion 
+    #endregion ------------------------    Collision    ------------------------
 }
