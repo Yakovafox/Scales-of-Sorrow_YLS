@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     private void MoveInput()
     {
         Vector3 axis = new Vector3(movementInput.x, 0, movementInput.y);
-        pTransform.position += (axis.normalized * pSpeed * Time.deltaTime);
+        pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
@@ -133,13 +133,9 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Dash    ------------------------
     public void OnDash(InputAction.CallbackContext context)
     {
-        /*if (context.started && canDash && upgradeDash ) {  Upgraded Dash }
-        else if (context.started && canDash  ) { StartCoroutine(DefaultDash()); }*/
-
         if (!canDash || !context.started) { return; }
         else if (upgradeDash) { /* Upgraded Dash */ }
         else { StartCoroutine(DefaultDash()); }
-
     }
 
     private IEnumerator DefaultDash()

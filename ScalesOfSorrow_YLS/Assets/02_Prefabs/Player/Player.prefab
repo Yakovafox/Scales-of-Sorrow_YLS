@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  pSpeed: 20
+  pSpeed: 1000
   movementInput: {x: 0, y: 0}
   dashSpeed: 180
   dashTime: 0.3
