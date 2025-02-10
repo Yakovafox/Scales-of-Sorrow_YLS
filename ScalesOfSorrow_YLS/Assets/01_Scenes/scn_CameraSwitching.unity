@@ -29485,21 +29485,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -2063167306699465868, guid: b1394901c2af92c4ca64a5a4ffd42e71,
-        type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -2063167306699465868, guid: b1394901c2af92c4ca64a5a4ffd42e71,
-        type: 3}
-      propertyPath: m_CollisionDetection
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3482386218576071935, guid: b1394901c2af92c4ca64a5a4ffd42e71,
-        type: 3}
-      propertyPath: pSpeed
-      value: 1000
-      objectReference: {fileID: 0}
     - target: {fileID: 5866699517902324792, guid: b1394901c2af92c4ca64a5a4ffd42e71,
         type: 3}
       propertyPath: m_Name
@@ -36807,7 +36792,16 @@ MonoBehaviour:
     m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

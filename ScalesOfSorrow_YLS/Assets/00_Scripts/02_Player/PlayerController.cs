@@ -67,14 +67,17 @@ public class PlayerController : MonoBehaviour
     private bool isFiredUp = false;
 
     [Header("------- Shield -------")]
-    [SerializeField] private GameObject shieldPrefab;  
-                     private GameObject shieldReference;
+    [SerializeField] private GameObject shieldPrefab; 
+    [SerializeField] private GameObject shieldReference;
     [SerializeField] private float shieldDuration;
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
-    private bool isShield = false;
-    private bool shieldExists = false;
-    private bool shieldMove = false;
+
+    [SerializeField] private bool isShield = false;
+
+    [SerializeField] private bool shieldExists = false;
+
+    [SerializeField] private bool shieldMove = false;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -236,12 +239,16 @@ public class PlayerController : MonoBehaviour
 
         if (isShield && !shieldExists)
         {
-            Vector3 spawn = pTransform.position + (new Vector3(movementInput.x, 0, movementInput.y) *shieldDistance );
-           
-            shieldReference = Instantiate(shieldPrefab, spawn, quaternion.identity, transform);
+            shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
             
             shieldReference.transform.LookAt(pTransform.position);
             shieldExists = true;
+        } 
+        else if (!isShield && shieldExists)
+        {
+            Destroy(shieldReference);
+            shieldMove = false;
+            StopCoroutine(Shield());
         }
 
         if (shieldExists == true) { shieldMove = true; }
@@ -249,7 +256,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(shieldDuration);
 
         shieldMove = false;
-        if(shieldReference != null) { Destroy(shieldReference); shieldExists = false; }
+        if (shieldReference != null) { Destroy(shieldReference); shieldExists = false; }
 
         yield return new WaitForSeconds(shieldCooldown);
         isShield = false;
