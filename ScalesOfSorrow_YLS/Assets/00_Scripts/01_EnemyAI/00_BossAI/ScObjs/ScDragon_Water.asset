@@ -17,11 +17,11 @@ MonoBehaviour:
   Dragon_Reference: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
     type: 3}
   Target: []
-  walkSpeed: 4
+  walkSpeed: 2
   canFly: 0
-  flySpeed: 5
+  flySpeed: 4
   flying: 0
-  moveRadius: 30
+  moveRadius: 3
   timeToWait: 0.5
   GroundLayer:
     serializedVersion: 2
@@ -37,7 +37,7 @@ MonoBehaviour:
   chanceToFly: 33.33
   shadow_DefaultSize: 1
   shadow_MaxSize: 3
-  attackCooldown: 2
+  attackCooldown: 0.1
   meleeAttackDistance: 3
   meleeDamage: 10
   rangedAttackDistance: 9
