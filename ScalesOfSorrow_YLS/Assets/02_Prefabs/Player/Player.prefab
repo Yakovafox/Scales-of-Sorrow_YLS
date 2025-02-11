@@ -202,11 +202,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7166941391526296494}
-  - component: {fileID: 6669472844546632342}
-  - component: {fileID: 3287068806468022101}
   - component: {fileID: 3482386218576071935}
+  - component: {fileID: 6669472844546632342}
   - component: {fileID: 3726872471648859983}
   - component: {fileID: -2063167306699465868}
+  - component: {fileID: 3287068806468022101}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -231,6 +231,53 @@ Transform:
   - {fileID: 3272692226260714306}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3482386218576071935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866699517902324792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af10db5c0df6734281ff285a7114c8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  pSpeed: 1000
+  movementInput: {x: 0, y: 0}
+  dashSpeed: 180
+  dashTime: 0.3
+  dashCooldown: 1
+  excludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  includeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  attackMask:
+    serializedVersion: 2
+    m_Bits: 64
+  attackRange: 2.5
+  attackSize: 2.5
+  attackCooldown: 1
+  attackDamage: 0
+  maxCharges: 10
+  extraDamage: 0
+  firedUpDuration: 3
+  firedUpCooldown: 3
+  shieldPrefab: {fileID: 2845581692884492778, guid: 848d0e9f66479db478d68f38252460a9,
+    type: 3}
+  shieldReference: {fileID: 0}
+  shieldDuration: 3
+  shieldCooldown: 5
+  shieldDistance: 2
+  isShield: 0
+  shieldExists: 0
+  shieldMove: 0
+  upgradeShield: 1
+  upgradeFiredUp: 1
+  upgradeDash: 0
 --- !u!114 &6669472844546632342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,59 +389,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3287068806468022101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5866699517902324792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fda2a7d352e36f4aad86d23abbf936a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentMode: 0
-  xLock: 0
-  yLock: 0
-  zLock: 0
---- !u!114 &3482386218576071935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5866699517902324792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7af10db5c0df6734281ff285a7114c8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 0
-  pSpeed: 1000
-  movementInput: {x: 0, y: 0}
-  dashSpeed: 180
-  dashTime: 0.3
-  dashCooldown: 1
-  attackMask:
-    serializedVersion: 2
-    m_Bits: 64
-  attackRange: 2.5
-  attackSize: 2.5
-  attackCooldown: 1
-  attackDamage: 0
-  maxCharges: 10
-  extraDamage: 0
-  firedUpDuration: 3
-  firedUpCooldown: 3
-  shieldPrefab: {fileID: 2845581692884492778, guid: 848d0e9f66479db478d68f38252460a9,
-    type: 3}
-  shieldDuration: 3
-  shieldCooldown: 5
-  shieldDistance: 2
-  upgradeShield: 1
-  upgradeFiredUp: 1
-  upgradeDash: 0
 --- !u!65 &3726872471648859983
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -443,3 +437,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &3287068806468022101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866699517902324792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fda2a7d352e36f4aad86d23abbf936a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMode: 0
+  xLock: 0
+  yLock: 0
+  zLock: 0
