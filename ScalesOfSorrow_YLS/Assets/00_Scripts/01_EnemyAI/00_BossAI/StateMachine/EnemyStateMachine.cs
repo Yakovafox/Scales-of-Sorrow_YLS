@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -55,6 +56,7 @@ public class EnemyStateMachine : MonoBehaviour
     private bool intialiseMovement = false;
 
     private Vector3 targetsLastSeenLocation;
+
 
     private bool shouldWait;
 
@@ -118,6 +120,8 @@ public class EnemyStateMachine : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = myData_SO.walkSpeed;
+
         GO_shadowCaster = gameObject.transform.Find("shadowCaster").gameObject;
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
         myData_SO.Target = null;
@@ -184,7 +188,7 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     ChangeState(EnemyStates.Chase);
                 }
-                else if (ReachedDestination() && flyCooldown() && randomShouldFly())
+                else if (ReachedDestination() && myData_SO.canFly && flyCooldown() && randomShouldFly())
                 {
                     doOnce = true;
                     flying_Timer = 0;
@@ -538,7 +542,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     void TakeOff()
     {
-        if (GO_shadowCaster.transform.localScale.x > myData_SO.shadow_MaxSize)
+        //StartCoroutine(TakingOffSpriteRise());
+        if(GO_shadowCaster.transform.localScale.x > myData_SO.shadow_MaxSize)
         {
             GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
         }
@@ -546,22 +551,22 @@ public class EnemyStateMachine : MonoBehaviour
         {
             doOnce = false;
             flyingToRandomPoint = false;
-            ChangeState(EnemyStates.Fly);
+            agent.speed = myData_SO.flySpeed;
             //Change State to flying.
             //Play dragon lifting off animation here.
 
             //Set Dragon sprite rendered to disabled.
-            spriteRenderer.enabled = false;
+            //spriteRenderer.enabled = false;
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
             //Potentially move the sprite higher out of view as well?
-            defaultYPos = transform.position.y;
-            spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, 15f,
-                spriteRenderer.transform.position.z);
+            defaultYPos = spriteRenderer.gameObject.transform.position.y;
+            ChangeState(EnemyStates.Fly);
         }
     }
 
     void Land()
     {
+        //StartCoroutine(LandingSpriteLand());
         if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
         {
             GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
@@ -570,11 +575,12 @@ public class EnemyStateMachine : MonoBehaviour
         {
             doOnce = false;
             //Potentially move the sprite back into view if deciding to keep sprite out of view
+            agent.speed = myData_SO.walkSpeed;
             spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z );
             //PLay dragon landing animation here.
             
             //Set Dragon sprite rendered to disabled.
-            spriteRenderer.enabled = true;
+            //spriteRenderer.enabled = true;
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
             flyCooldown_Timer = 0;
             stunned = true;
@@ -582,6 +588,30 @@ public class EnemyStateMachine : MonoBehaviour
             ChangeState(EnemyStates.Idle);
         }
         //Grow Shadow Over time as animation draws to end.
+
+    }
+    IEnumerator TakingOffSpriteRise()
+    {
+        while (spriteRenderer.transform.position.y <= 15f)
+        {
+            Debug.Log("Sprite renderer is TakingOff!");
+            float step = 0.1f * Time.deltaTime;
+            Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
+            spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
+        }
+        yield return null;
+    }
+
+    IEnumerator LandingSpriteLand()
+    {
+        while (spriteRenderer.transform.position.y >= defaultYPos)
+        {
+            Debug.Log("Sprite renderer is landing!");
+            float step = 0.1f * Time.deltaTime;
+            Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
+            spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
+        }
+        yield return null;
 
     }
 
