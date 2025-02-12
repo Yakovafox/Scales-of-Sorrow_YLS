@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SettingBehaviour : MonoBehaviour
 {
     public static SettingBehaviour settingBehaviourInstance;
+
+    [SerializeField] private Input Controls; 
+    [SerializeField] private PlayerControls playerControls; 
 
     [SerializeField] private Canvas settingsMenu;
     [SerializeField] private bool menuEnabled = false;
@@ -21,11 +25,10 @@ public class SettingBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+
             menuEnabled = !menuEnabled;
             SettingsMenu(menuEnabled);
-        }
+        
     }
 
     public void SettingsMenu(bool menuEnabled)
