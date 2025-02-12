@@ -542,7 +542,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     void TakeOff()
     {
-        //StartCoroutine(TakingOffSpriteRise());
+        StartCoroutine(TakingOffSpriteRise());
         if(GO_shadowCaster.transform.localScale.x > myData_SO.shadow_MaxSize)
         {
             GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
@@ -566,7 +566,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Land()
     {
-        //StartCoroutine(LandingSpriteLand());
+        StartCoroutine(LandingSpriteLand());
         if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
         {
             GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
@@ -595,11 +595,11 @@ public class EnemyStateMachine : MonoBehaviour
         while (spriteRenderer.transform.position.y <= 15f)
         {
             Debug.Log("Sprite renderer is TakingOff!");
-            float step = 0.1f * Time.deltaTime;
+            float step = 5f * Time.deltaTime;
             Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
             spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
+            yield return null;
         }
-        yield return null;
     }
 
     IEnumerator LandingSpriteLand()
@@ -607,12 +607,11 @@ public class EnemyStateMachine : MonoBehaviour
         while (spriteRenderer.transform.position.y >= defaultYPos)
         {
             Debug.Log("Sprite renderer is landing!");
-            float step = 0.1f * Time.deltaTime;
+            float step = 5f * Time.deltaTime;
             Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
             spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
+            yield return null;
         }
-        yield return null;
-
     }
 
     #endregion
