@@ -14,9 +14,9 @@ public class ESM_WaterDragon : EnemyStateMachine
         base.RangedAttack();
     }
 
-    protected override void SpecialAttack()
+    protected override void initialiseSpecialAbility()
     {
-        base.SpecialAttack();
+        base.initialiseSpecialAbility();
     }
 
 }

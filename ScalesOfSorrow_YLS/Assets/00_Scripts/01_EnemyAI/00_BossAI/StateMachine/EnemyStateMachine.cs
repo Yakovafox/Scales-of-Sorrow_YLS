@@ -9,7 +9,8 @@ public enum EnemyStates
     Moving,
     Fly,
     Chase,
-    Attack
+    Attack,
+    Special
 }
 
 public class EnemyStateMachine : MonoBehaviour
@@ -41,6 +42,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     #region Local Variables
     //Local Variables
+
+    private float currentHealth = 150f;
+    private int stagesLeft;
+
     public List<GameObject> PlayerRef;
     private NavMeshAgent agent;
     private Vector3 investigationArea;
@@ -65,6 +70,12 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float flyCooldown_Timer = 0.0f;
     private float flyCooldown_WaitTime = 0.0f;
+    
+    private float ability_Timer = 0.0f;
+    private float ability_WaitTime = 0.0f;
+
+    private float abilityCooldown_Timer = 0.0f;
+    private float abilityCooldown_WaitTime = 0.0f;
 
     private float stun_Timer = 0.0f;
     private float stun_WaitTime = 0.0f;
@@ -86,10 +97,17 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool doOnce;
     private bool shouldSpecial;
+    private bool specialActive;
 
     private bool movingRight = false;
     #endregion
+    
 
+    #region DragonEvents
+    public delegate void delegate_dragonLanded();
+    public static event delegate_dragonLanded OnDragonLanded;
+    
+    #endregion
 
 
     public virtual void Awake()
@@ -109,15 +127,18 @@ public class EnemyStateMachine : MonoBehaviour
              GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
              for (int i = 0; i < tempPlayerArray.Length; i++)
              {
-                 print(tempPlayerArray[i]);
                  PlayerRef.Add(tempPlayerArray[i]);
                  //Should check ID of the player and should organise this list based on player with lowest ID!!!
                  
                  //myData_SO.Target.Add(tempPlayerArray[i]); //Is broken and stops code?
                  
              }
-             //PlayerRef = myData_SO.Target;
+        //PlayerRef = myData_SO.Target;
         //}
+
+        //Functionality for setting the Dragon health on startup.
+        currentHealth = myData_SO.MaxHealth;
+        stagesLeft = myData_SO.Stages;
     }
 
 
@@ -126,6 +147,7 @@ public class EnemyStateMachine : MonoBehaviour
         state_Timer += Time.deltaTime;
         attack_Timer += Time.deltaTime;
         flyCooldown_Timer += Time.deltaTime;
+        abilityCooldown_Timer += Time.deltaTime;
         stun_Timer += Time.deltaTime;
 
         switch (currentState)
@@ -155,7 +177,6 @@ public class EnemyStateMachine : MonoBehaviour
                 if (!intialiseMovement) // Initialise Movement is only called the first time that the enemy enters the moving state.
                 {
                     intialiseMovement = true;
-                    Debug.Log("Initialised Movement");
                     
                     RandomisedMovePoint();
                 }
@@ -200,7 +221,6 @@ public class EnemyStateMachine : MonoBehaviour
                 //Breakdown of what should happen in this state:
                 //Chase the player around
                 //if the times out, land.
-                //
                 break;
 
             case EnemyStates.Chase:
@@ -238,7 +258,6 @@ public class EnemyStateMachine : MonoBehaviour
                     if (shouldSpecial && shouldSpecialAttack())
                     {
                         doOnce = false;
-                        SpecialAttack();
                         //Special Attack 
                     }
                     else if (InAttackRange(myData_SO.meleeAttackDistance))
@@ -258,6 +277,30 @@ public class EnemyStateMachine : MonoBehaviour
                     attack_Timer = 0;
                 }
 
+                break;
+            
+            case EnemyStates.Special:
+                ability_Timer += Time.deltaTime;
+                specialActive = true;
+                
+                // Initialise special ability.
+                if (doOnce)
+                {
+                    initialiseSpecialAbility();
+                }
+                else if (!abilityTimeOut())
+                {
+                    // Consistently chase down player into range and attack them.
+                }
+                // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
+                //Enter attack state and loop back to hear after attack?
+                else if (abilityTimeOut())
+                {
+                    //Reset timer when leaving this state.
+                    ChangeState(EnemyStates.Idle);
+                    specialActive = false;
+                    abilityCooldown_Timer = 0;
+                }
                 break;
         }
 
@@ -307,6 +350,36 @@ public class EnemyStateMachine : MonoBehaviour
         if (p2Dist < p1Dist) return PlayerRef[1];
         return PlayerRef[0];
     }
+    #endregion
+
+    #region Health Functions
+
+    public void RecieveDamage(float incomingDamage)
+    {
+        if(NHS_HealthCheckup(incomingDamage) > 0)
+        {
+            currentHealth -= incomingDamage;
+            return;
+        }
+        healthReachedZero();
+    }
+
+    private float NHS_HealthCheckup(float incomingDamage)
+    {
+        return currentHealth - incomingDamage;
+    }
+
+    private void healthReachedZero()
+    {
+        //Double check that health is below zero.
+        if(stagesLeft <= 0)
+        {
+            //DefeatOfDragon
+        }
+        stagesLeft -= 1;
+        currentHealth = myData_SO.MaxHealth;
+    }
+
     #endregion
 
     #region Movement Functions
@@ -378,8 +451,9 @@ public class EnemyStateMachine : MonoBehaviour
 
 
     #endregion
-
-    #region Chase Functions
+    
+    #region chase Functions
+    
     void MoveToChase()
     {
         agent.destination = targetsLastSeenLocation;
@@ -456,8 +530,9 @@ public class EnemyStateMachine : MonoBehaviour
         return false;
         // Original code: return agent.remainingDistance < myData_SO.meleeAttackDistance && !agent.pathPending;
     }
-
+    
     #endregion
+
 
     #region Flight Functions
 
@@ -470,7 +545,6 @@ public class EnemyStateMachine : MonoBehaviour
         if (doOnce)
         {
             doOnce = false;
-            Debug.Log("Im Taking Flight!");
             flyingToRandomPoint = false;
             ChangeState(EnemyStates.Fly);
             //Change State to flying.
@@ -495,7 +569,6 @@ public class EnemyStateMachine : MonoBehaviour
         if (doOnce)
         {
             doOnce = false;
-            Debug.Log("Im landing!");
             //Potentially move the sprite back into view if deciding to keep sprite out of view
             spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z );
             //PLay dragon landing animation here.
@@ -505,6 +578,7 @@ public class EnemyStateMachine : MonoBehaviour
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
             flyCooldown_Timer = 0;
             stunned = true;
+            OnDragonLanded?.Invoke();
             ChangeState(EnemyStates.Idle);
         }
         //Grow Shadow Over time as animation draws to end.
@@ -529,6 +603,18 @@ public class EnemyStateMachine : MonoBehaviour
     {
         flyCooldown_WaitTime = myData_SO.flightCooldownTime;
         return flyCooldown_Timer > flyCooldown_WaitTime;
+    }
+
+    bool abilityTimeOut()
+    {
+        ability_WaitTime = myData_SO.flightTime;
+        return ability_Timer > ability_WaitTime;
+    }
+
+    bool abilityCooldown()
+    {
+        abilityCooldown_WaitTime = myData_SO.flightCooldownTime;
+        return abilityCooldown_Timer > abilityCooldown_WaitTime;
     }
 
     bool stunTimeOut()
@@ -572,10 +658,11 @@ public class EnemyStateMachine : MonoBehaviour
 
     }
 
-    protected virtual void SpecialAttack()
+    protected virtual void initialiseSpecialAbility()
     {
-        Debug.Log("Special Attack");
-        ChangeState(EnemyStates.Idle);
+        Debug.Log("Initialising Special Ability");
+        //Setup any functionality for the ability here, spawn in shield etc.
+        //In base machine setup all abilities at once 
 
     }
     #endregion

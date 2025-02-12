@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using RotaryHeart.Lib.PhysicsExtension;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -33,6 +34,9 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("dashTime controls how often the player can dash")]
     [SerializeField] private float dashCooldown;
+
+    [SerializeField] private LayerMask excludeLayers;
+    [SerializeField] private LayerMask includeLayers;
 
     [Header("------- Attack -------")]
     [Tooltip ("Controls which layers can take damage")]
@@ -68,16 +72,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("------- Shield -------")]
     [SerializeField] private GameObject shieldPrefab; 
-    [SerializeField] private GameObject shieldReference;
+    private GameObject shieldReference;
     [SerializeField] private float shieldDuration;
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
-
-    [SerializeField] private bool isShield = false;
-
-    [SerializeField] private bool shieldExists = false;
-
-    [SerializeField] private bool shieldMove = false;
+    private bool isShield = false;
+    private bool shieldExists = false;
+    private bool shieldMove = false;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -143,14 +144,14 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DefaultDash()
     {
-        pCollider.enabled = false;
+        pCollider.excludeLayers = excludeLayers;
         canDash = false;
         isDash = true;
 
         pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
 
         yield return new WaitForSeconds(dashTime);
-        pCollider.enabled = true;
+        pCollider.excludeLayers = includeLayers;
         isDash = false;
         pRB.velocity = new Vector3(0, 0, 0);
 
@@ -175,7 +176,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
-        RaycastHit[] hits = Physics.BoxCastAll(pTransform.position, new Vector3(attackSize, attackSize, attackSize), direction, quaternion.Euler(GetRotate()), attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
+        RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
 
         //play particle effect
         //SoundEffect
@@ -187,7 +188,10 @@ public class PlayerController : MonoBehaviour
                 //damage uses extra damaage
             }
 
-            //Damage Enemies
+            if (hits[i].transform.CompareTag("Enemy"))
+            {
+
+            }
         }
 
         yield return new WaitForSeconds(attackCooldown);
