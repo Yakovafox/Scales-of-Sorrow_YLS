@@ -41,7 +41,7 @@ Material:
     m_Floats:
     - _1: 1
     - _2: 2
-    - _Alpha: -0.025
+    - _Alpha: -0.035
     - _Cell_Softness: 0.45
     - _Frame_Jump: 0.5
     - _Frame_Speed: 2

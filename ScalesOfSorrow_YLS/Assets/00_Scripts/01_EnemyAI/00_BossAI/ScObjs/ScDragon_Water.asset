@@ -21,7 +21,7 @@ MonoBehaviour:
   canFly: 0
   flySpeed: 4
   flying: 0
-  moveRadius: 3
+  moveRadius: 15
   timeToWait: 0.5
   GroundLayer:
     serializedVersion: 2
