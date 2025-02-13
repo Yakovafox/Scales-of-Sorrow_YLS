@@ -595,10 +595,11 @@ public class EnemyStateMachine : MonoBehaviour
         while (spriteRenderer.transform.position.y <= 15f)
         {
             Debug.Log("Sprite renderer is TakingOff!");
-            float step = 5f * Time.deltaTime;
-            Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
-            spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
-            yield return null;
+            //float step = 1f * Time.deltaTime;
+            float step = Mathf.Lerp(spriteRenderer.transform.position.y, 15f, Time.deltaTime * 2);
+            Vector3 lerpPos = new Vector3(spriteRenderer.gameObject.transform.position.x, 15f, spriteRenderer.gameObject.transform.position.z);
+            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, lerpPos, step);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -607,10 +608,11 @@ public class EnemyStateMachine : MonoBehaviour
         while (spriteRenderer.transform.position.y >= defaultYPos)
         {
             Debug.Log("Sprite renderer is landing!");
-            float step = 5f * Time.deltaTime;
-            Vector3 lerpPos = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
-            spriteRenderer.transform.position = Vector3.MoveTowards(spriteRenderer.transform.position, lerpPos, step);
-            yield return null;
+            //float step = 1f * Time.deltaTime;
+            float step = Mathf.Lerp(spriteRenderer.transform.position.y, defaultYPos, Time.deltaTime * 2);
+            Vector3 lerpPos = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
+            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, lerpPos, step);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
