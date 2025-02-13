@@ -34,8 +34,8 @@ MonoBehaviour:
   flightCooldownTime: 15
   stunTime: 5
   chanceToFly: 90
-  shadow_DefaultSize: 1
-  shadow_MaxSize: 3
+  shadow_DefaultSize: 3
+  shadow_MinSize: 1
   attackCooldown: 2.5
   meleeAttackDistance: 1
   meleeDamage: 10

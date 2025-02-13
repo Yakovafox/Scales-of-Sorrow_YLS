@@ -98,6 +98,7 @@ public class EnemyStateMachine : MonoBehaviour
     private bool flyingToRandomPoint;
 
     private bool doOnce;
+    private bool doOneCamShake;
     private bool shouldSpecial;
     private bool specialActive;
 
@@ -543,10 +544,6 @@ public class EnemyStateMachine : MonoBehaviour
     void TakeOff()
     {
         StartCoroutine(TakingOffSpriteRise());
-        if(GO_shadowCaster.transform.localScale.x > myData_SO.shadow_MaxSize)
-        {
-            GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
-        }
         if (doOnce)
         {
             doOnce = false;
@@ -566,17 +563,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Land()
     {
+        doOneCamShake = true;
         StartCoroutine(LandingSpriteLand());
-        if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
-        {
-            GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (0.1f * Time.deltaTime);
-        }
         if (doOnce)
         {
             doOnce = false;
             //Potentially move the sprite back into view if deciding to keep sprite out of view
             agent.speed = myData_SO.walkSpeed;
-            spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z );
             //PLay dragon landing animation here.
             
             //Set Dragon sprite rendered to disabled.
@@ -584,7 +577,6 @@ public class EnemyStateMachine : MonoBehaviour
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
             flyCooldown_Timer = 0;
             stunned = true;
-            OnDragonLanded?.Invoke();
             ChangeState(EnemyStates.Idle);
         }
         //Grow Shadow Over time as animation draws to end.
@@ -594,26 +586,41 @@ public class EnemyStateMachine : MonoBehaviour
     {
         while (spriteRenderer.transform.position.y <= 15f)
         {
-            Debug.Log("Sprite renderer is TakingOff!");
-            //float step = 1f * Time.deltaTime;
-            float step = Mathf.Lerp(spriteRenderer.transform.position.y, 15f, Time.deltaTime * 2);
-            Vector3 lerpPos = new Vector3(spriteRenderer.gameObject.transform.position.x, 15f, spriteRenderer.gameObject.transform.position.z);
-            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, lerpPos, step);
-            yield return new WaitForSeconds(0.1f);
+            float step = 50f * Time.deltaTime;
+            Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, 15f, spriteRenderer.gameObject.transform.position.z);
+            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, targetHeight, step);
+
+            if (GO_shadowCaster.transform.localScale.x >= myData_SO.shadow_MinSize)
+            {
+                GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (2f * Time.deltaTime);
+            }
+            yield return new WaitForSeconds(0.03f);
         }
+        spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, 15f, spriteRenderer.transform.position.z);
+        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_MinSize, myData_SO.shadow_MinSize, myData_SO.shadow_MinSize);
     }
 
     IEnumerator LandingSpriteLand()
     {
         while (spriteRenderer.transform.position.y >= defaultYPos)
         {
-            Debug.Log("Sprite renderer is landing!");
-            //float step = 1f * Time.deltaTime;
-            float step = Mathf.Lerp(spriteRenderer.transform.position.y, defaultYPos, Time.deltaTime * 2);
-            Vector3 lerpPos = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
-            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, lerpPos, step);
-            yield return new WaitForSeconds(0.1f);
+            float step = 50f * Time.deltaTime;
+            Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
+            spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, targetHeight, step);
+
+            if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
+            {
+                GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (2f * Time.deltaTime);
+            }
+            if(spriteRenderer.transform.position.y <= defaultYPos + 1 && doOneCamShake)
+            {
+                doOneCamShake = false;
+                OnDragonLanded?.Invoke();
+            }
+            yield return new WaitForSeconds(0.03f);
         }
+        spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
+        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
     }
 
     #endregion

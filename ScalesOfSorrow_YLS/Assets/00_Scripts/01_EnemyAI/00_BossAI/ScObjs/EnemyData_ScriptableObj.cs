@@ -84,10 +84,10 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float chanceToFly = 33.33f;
     
     [Tooltip("The default size of the dragon's shadow when on the floor.")]
-    public float shadow_DefaultSize = 1f;
+    public float shadow_DefaultSize = 3f;
     
     [Tooltip("The maximum size of the dragon's shadow when off the floor.")]
-    public float shadow_MaxSize = 3f;
+    public float shadow_MinSize = 1f;
 
     //---------------------------------------------------------------------------------
 
