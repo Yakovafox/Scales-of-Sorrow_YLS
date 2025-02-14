@@ -121,5 +121,9 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("Damage that the special attack should deal.")]
     [Range(0, 150)]
     public float SpecialDamage;
+    [Tooltip("Time that the Dragon stays in the ability.")]
+    public float ability_Timer = 10f;
+    [Tooltip("Cooldown time before the Dragon can enter the special ability again.")]
+    public float ability_cooldownTime = 15f;
 
 }

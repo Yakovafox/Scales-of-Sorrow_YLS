@@ -11,6 +11,7 @@ public enum EnemyStates
     Fly,
     Chase,
     Attack,
+    ThreatenedAttack,
     Special
 }
 
@@ -99,8 +100,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool doOnce;
     private bool doOneCamShake;
+    private bool initialiseSpecial;
     private bool shouldSpecial;
     private bool specialActive;
+    private bool water_specialActive;
 
     private bool movingRight = false;
     #endregion
@@ -207,7 +210,7 @@ public class EnemyStateMachine : MonoBehaviour
                 //Functions for flying should go here.
                 if (!flyTimeOut() && !flyingToRandomPoint)
                 {
-                    flightChase();
+                    aggresiveChase();
                 }
                 else if (flyTimeOut() && !flyingToRandomPoint)
                 {
@@ -247,6 +250,14 @@ public class EnemyStateMachine : MonoBehaviour
                     ChangeState(EnemyStates.Attack); 
                     //Change State to attack!
                 }
+                else if (shouldSpecial && shouldSpecialAttack() && abilityCooldown())
+                {
+                    initialiseSpecial = true;
+                    ability_Timer = 0;
+                    ChangeState(EnemyStates.Special);
+                    break;
+                    //Special Attack 
+                }
                 else if (myData_SO.canSee && SeenTarget())
                 {
                     ChangeState(EnemyStates.Chase);
@@ -260,12 +271,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
-                    if (shouldSpecial && shouldSpecialAttack())
-                    {
-                        doOnce = false;
-                        //Special Attack 
-                    }
-                    else if (InAttackRange(myData_SO.meleeAttackDistance))
+                    if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
                         BasicAttack();
@@ -283,24 +289,82 @@ public class EnemyStateMachine : MonoBehaviour
                 }
 
                 break;
+
+            case EnemyStates.ThreatenedAttack: //Used by special ability attacking.
+
+                if (!doOnce)
+                {
+                    doOnce = false;
+                    ChangeState(EnemyStates.Special);
+                }
+                else if (doOnce)
+                {
+                    if (TimeOut(2f))
+                    {
+                        ChangeState(EnemyStates.Special);
+                    }
+                    else if (InAttackRange(myData_SO.meleeAttackDistance))
+                    {
+                        doOnce = false;
+                        print("Threatened Melee Attack");
+                        BasicAttack();
+                        //Melee Attack
+                    }
+                    else if (InAttackRange(myData_SO.rangedAttackDistance))
+                    {
+                        print("Threatened Ranged Attack");
+                        doOnce = false;
+                        RangedAttack();
+                        // ShootProjectile
+                    }
+
+                    doOnce = false;
+                    attack_Timer = 0;
+                }
+                break;
             
             case EnemyStates.Special:
                 ability_Timer += Time.deltaTime;
                 specialActive = true;
-                
+
+                // Consistently chase down player into range and attack them.
+                aggresiveChase();
+                print("Aggressively chasing the player!");
+
                 // Initialise special ability.
-                if (doOnce)
+                if (initialiseSpecial)
                 {
+                    initialiseSpecial = false;
                     initialiseSpecialAbility();
                 }
                 else if (!abilityTimeOut())
                 {
-                    // Consistently chase down player into range and attack them.
+
+
+                    if (AttackCooldown() && ReachedDestination())
+                    {
+                        doOnce = true;
+
+                        shouldSpecial = true;
+                        ChangeState(EnemyStates.ThreatenedAttack);
+                        //Change state to Threatened Attack (Special version of attacking)
+                    }
+                    else if (AttackCooldown() && InAttackRange(myData_SO.rangedAttackDistance))
+                    {
+                        doOnce = true;
+
+                        shouldSpecial = true;
+                        ChangeState(EnemyStates.ThreatenedAttack);
+                        //Change State to Threatened attack! (Special version of attacking.)
+                    }
+                    //Execute any special functionality that the dragon has. (Example: Dashing toward the player.)
+                    specialFunctionality();
                 }
                 // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
                 //Enter attack state and loop back to hear after attack?
                 else if (abilityTimeOut())
                 {
+                    print("ability timed out!");
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
                     specialActive = false;
@@ -469,7 +533,7 @@ public class EnemyStateMachine : MonoBehaviour
         return (playerToUse.transform.position - sightPosition.position).normalized;
     }
 
-    void flightChase()
+    void aggresiveChase()
     {
         targetsLastSeenLocation = findClosestPlayer().transform.position;
         agent.destination = targetsLastSeenLocation;
@@ -645,13 +709,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     bool abilityTimeOut()
     {
-        ability_WaitTime = myData_SO.flightTime;
+        ability_WaitTime = myData_SO.ability_Timer;
         return ability_Timer > ability_WaitTime;
     }
 
     bool abilityCooldown()
     {
-        abilityCooldown_WaitTime = myData_SO.flightCooldownTime;
+        abilityCooldown_WaitTime = myData_SO.ability_cooldownTime;
         return abilityCooldown_Timer > abilityCooldown_WaitTime;
     }
 
@@ -681,17 +745,28 @@ public class EnemyStateMachine : MonoBehaviour
     protected virtual void BasicAttack()
     {
         //Cause Player Damage here or effect that can cause damage.
-        ChangeState(EnemyStates.Idle);
+        if (specialActive)
+        {
+            print("special is active and returning to special state.");
+            ChangeState(EnemyStates.Special); return;
+        }
 
-        Debug.Log("Default Attack");
+        ChangeState(EnemyStates.Idle);
     }
 
     protected virtual void RangedAttack()
     { 
-        Debug.Log("Ranged Attack");
         GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection(findClosestPlayer());
         agent.isStopped = true;
+
+        if (specialActive) 
+        {
+            print("special is active and returning to special state.");
+            ChangeState(EnemyStates.Special); 
+            return; 
+        }
+
         ChangeState(EnemyStates.Idle);
 
     }
@@ -701,6 +776,11 @@ public class EnemyStateMachine : MonoBehaviour
         Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
+
+    }
+
+    protected virtual void specialFunctionality()
+    {
 
     }
     #endregion
@@ -728,6 +808,7 @@ public class EnemyStateMachine : MonoBehaviour
             Vector3 DebugSightCone_R = R_rotation * transform.forward;
             Gizmos.color = Color.red;
             Gizmos.DrawLine(sightPosition.position, transform.position + (DebugSightCone_R * myData_SO.sightDistance));
+            
         }
     }
 }

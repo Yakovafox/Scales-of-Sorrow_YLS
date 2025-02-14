@@ -33,7 +33,7 @@ MonoBehaviour:
   flightTime: 5
   flightCooldownTime: 15
   stunTime: 5
-  chanceToFly: 90
+  chanceToFly: 0
   shadow_DefaultSize: 3
   shadow_MinSize: 1
   attackCooldown: 2.5
@@ -41,7 +41,9 @@ MonoBehaviour:
   meleeDamage: 10
   rangedAttackDistance: 5
   rangedDamage: 10
-  rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
+  rangedProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
     type: 3}
-  specialAttackChance: 33.33
+  specialAttackChance: 90
   SpecialDamage: 0
+  ability_Timer: 10
+  ability_cooldownTime: 15
