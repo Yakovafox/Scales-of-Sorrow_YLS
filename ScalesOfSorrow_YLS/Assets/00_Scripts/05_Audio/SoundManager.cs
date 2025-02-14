@@ -6,7 +6,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instanceSM;
 
-    [SerializeField] private AudioSource soundObject;
+    [SerializeField] private GameObject soundObject;
     private void Awake()
     {
         if (instanceSM == null) { instanceSM = this; }
@@ -15,7 +15,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(AudioClip audioClip, Vector3 spawnPosition, bool loops)
     {
-        AudioSource audioSource = Instantiate(soundObject, spawnPosition, Quaternion.identity);
+        AudioSource audioSource = Instantiate(soundObject, spawnPosition, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.clip = audioClip;
         audioSource.volume = 1;
         audioSource.loop = loops;
