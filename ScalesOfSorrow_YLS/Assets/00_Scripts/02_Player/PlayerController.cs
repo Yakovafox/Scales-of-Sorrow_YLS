@@ -86,15 +86,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool upgradeDash;
 
     [Header("------- Audio -------")]
-    [SerializeField] private AudioClip movementClip;
-    [SerializeField] private AudioClip attackClip;
-    [SerializeField] private AudioClip rechargeClip;
-    [SerializeField] private AudioClip noChargeClip;
-    [SerializeField] private AudioClip dashClip;
-    [SerializeField] private AudioClip firedUpClip;
-    [SerializeField] private AudioClip firedDownClip;
-    [SerializeField] private AudioClip hitClip;
-    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private Sound movementClip;
+    [SerializeField] private Sound attackClip;
+    [SerializeField] private Sound rechargeClip;
+    [SerializeField] private Sound noChargeClip;
+    [SerializeField] private Sound dashClip;
+    [SerializeField] private Sound firedUpClip;
+    [SerializeField] private Sound firedDownClip;
+    [SerializeField] private Sound playerHitClip;
+    [SerializeField] private Sound deathClip;
 
 
     #endregion ------------------------    Variables    ------------------------
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
     {
         movementInput = context.ReadValue<Vector2>();
 
-        if (movementClip != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position, false); }
+        if (movementClip != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position); }
 
     }
     
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
         { 
             StartCoroutine(DefaultDash());
 
-            if (dashClip != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position, false); }
+            if (dashClip != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
         }
     }
 
@@ -177,12 +177,12 @@ public class PlayerController : MonoBehaviour
         if (!canAttack || attackCharges <= 0) 
         {
 
-            if (noChargeClip != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position, false); }
+            if (noChargeClip != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position); }
             return; 
         }
         else
         {
-            if (attackClip != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position, false); }
+            if (attackClip != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position); }
             StartCoroutine(Attack()); 
         }
     }
@@ -234,11 +234,11 @@ public class PlayerController : MonoBehaviour
 
         if (isFiredUp)
         {
-            if (firedUpClip != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position, false); }
+            if (firedUpClip != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position); }
         }
         else
         {
-            if (firedDownClip != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position, false); }
+            if (firedDownClip != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position); }
         }
 
         yield return new WaitForSeconds(firedUpDuration);
@@ -302,17 +302,17 @@ public class PlayerController : MonoBehaviour
     {
         health -= damage;
 
-        if (hitClip != null) { SoundManager.instanceSM.PlaySound(hitClip, transform.position, false); }
+        if (playerHitClip != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
         if (health >= 0) 
         {
-            if (deathClip != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position, false); }
+            if (deathClip != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
         }
     }
 
     public void RechargeMelee()
     {
-        if (rechargeClip != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position, false); }
+        if (rechargeClip != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
     }
 

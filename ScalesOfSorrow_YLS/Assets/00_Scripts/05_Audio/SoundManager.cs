@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public class SoundManager : MonoBehaviour
 {
@@ -13,17 +14,21 @@ public class SoundManager : MonoBehaviour
         else { Destroy(instanceSM); }
     }
 
-    public void PlaySound(AudioClip audioClip, Vector3 spawnPosition, bool loops)
+    public void PlaySound(Sound sound, Vector3 spawnPos)
     {
-        AudioSource audioSource = Instantiate(soundObject, spawnPosition, Quaternion.identity).GetComponent<AudioSource>();
-        audioSource.clip = audioClip;
-        audioSource.volume = 1;
-        audioSource.loop = loops;
+        AudioSource audioSource = Instantiate(soundObject, spawnPos, Quaternion.identity).GetComponent<AudioSource>();
+        audioSource.clip = sound.sound;
+        audioSource.priority = sound.priority;
+        audioSource.volume = sound.volume;
+        audioSource.pitch = sound.pitch;
+        audioSource.outputAudioMixerGroup = sound.mixer;
+        audioSource.loop = sound.loop;
+        audioSource.mute = sound.mute;
         audioSource.Play();
         
         float clipLength = audioSource.clip.length;
 
-        if (!loops){ Destroy(audioSource, clipLength); }
+        if (!sound.loop){ Destroy(gameObject, clipLength); }
     }
 
 }
