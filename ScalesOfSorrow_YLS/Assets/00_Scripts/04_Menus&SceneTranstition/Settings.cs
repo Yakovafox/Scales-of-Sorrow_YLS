@@ -16,8 +16,8 @@ public class Settings : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SetMasterVolume(float volume) { audioMixer.SetFloat("Master", volume); }
-    public void SetSoundEffectVolume(float volume) { audioMixer.SetFloat("SFX", volume); }
-    public void SetMusicVolume(float volume) { audioMixer.SetFloat("Music", volume); }
+    public void SetMasterVolume(float volume) { audioMixer.SetFloat("Master", Mathf.Log10(volume) * 20); }
+    public void SetSoundEffectVolume(float volume) { audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20); }
+    public void SetMusicVolume(float volume) { audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20); }
     public void Quit() { SceneManager.LoadScene(0); }
 }
