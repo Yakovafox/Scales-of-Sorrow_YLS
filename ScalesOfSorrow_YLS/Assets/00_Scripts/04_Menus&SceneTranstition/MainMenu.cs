@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+
+    [SerializeField] private SettingBehaviour settingBehaviour;
+    [SerializeField] private Canvas creditsCanvas;
+    private bool creditsEnabled = false;
     public void PlayButton()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -16,13 +20,14 @@ public class MainMenu : MonoBehaviour
     {
 
         Debug.Log("Shwo Settings");
-        //load or show settings menu
+        settingBehaviour.SettingsMenu(enabled);
+
     }
 
     public void CreditsButton()
-    {
-
+    { 
         Debug.Log("SHow Credits");
+        creditsCanvas.enabled = !creditsEnabled;
         //load or show credits menu
     }
 
