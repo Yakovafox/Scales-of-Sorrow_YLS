@@ -77,7 +77,7 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The cooldown time that determines how long the before the dragon can fly again.")]
     public float flightCooldownTime = 10f;
     [Tooltip("Time to wait when being stunned/Time that dragon will spend before moving after landing.")]
-    public float stunTime = 5f;
+    public float stunTime = 1f;
     
     [Tooltip("The chance at which the dragon will take flight.")]
     [Range(0,100)]

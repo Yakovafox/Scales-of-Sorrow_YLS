@@ -32,7 +32,7 @@ MonoBehaviour:
   Stages: 1
   flightTime: 5
   flightCooldownTime: 5
-  stunTime: 5
+  stunTime: 1
   chanceToFly: 90
   pushBackDistance: 15
   pushBackAmount: 5

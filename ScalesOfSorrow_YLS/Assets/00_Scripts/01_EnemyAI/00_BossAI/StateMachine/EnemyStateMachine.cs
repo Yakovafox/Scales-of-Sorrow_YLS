@@ -83,8 +83,8 @@ public class EnemyStateMachine : MonoBehaviour
     private float abilityCooldown_Timer = 0.0f;
     private float abilityCooldown_WaitTime = 0.0f;
 
-    private float stun_Timer = 0.0f;
-    private float stun_WaitTime = 0.0f;
+    private float debug_Timer = 0.0f;
+    private float debug_WaitTime = 0.0f;
 
     private Transform groundChecker;
     private Transform sightPosition;
@@ -133,19 +133,7 @@ public class EnemyStateMachine : MonoBehaviour
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
         myData_SO.Target = null;
         
-        //if (myData_SO.Target[0].GetType() != typeof(GameObject) || myData_SO.Target[0] == null)
-        //{
-             GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
-             for (int i = 0; i < tempPlayerArray.Length; i++)
-             {
-                 PlayerRef.Add(tempPlayerArray[i]);
-                 //Should check ID of the player and should organise this list based on player with lowest ID!!!
-                 
-                 //myData_SO.Target.Add(tempPlayerArray[i]); //Is broken and stops code?
-                 
-             }
-        //PlayerRef = myData_SO.Target;
-        //}
+        StartCoroutine(searchForPlayerInScene());
 
         //Functionality for setting the Dragon health on startup.
         currentHealth = myData_SO.MaxHealth;
@@ -155,11 +143,12 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Update() //Functions should be called from here where Update holds the logic for what should happen in each state, and the Functions hold the functionality of what happens.
     {
+        if (PlayerRef.Count == 0) { return;}
         state_Timer += Time.deltaTime;
         attack_Timer += Time.deltaTime;
         flyCooldown_Timer += Time.deltaTime;
         abilityCooldown_Timer += Time.deltaTime;
-        stun_Timer += Time.deltaTime;
+        debug_Timer += Time.deltaTime;
 
         switch (currentState)
         {
@@ -237,7 +226,14 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyStates.Chase:
                 MoveToChase();
 
-                if (AttackCooldown(myData_SO.attackCooldown) && ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
+                
+                if (debugTimeOut(1f) && movementStuck())
+                {
+                    Debug.LogWarning("I got stuck!");
+                    ChangeState(EnemyStates.Idle);
+                    //Refresh This state or move to another state.
+                }
+                else if (AttackCooldown(myData_SO.attackCooldown) && ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
                 {
                     doOnce = true;
 
@@ -379,6 +375,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         currentState = newState;
         state_Timer = 0;
+        debug_Timer = 0;
     }
 
     #region Player2Functions
@@ -403,7 +400,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     bool doesP2Exist()
     {
-        return PlayerRef.Count > 0;
+        return PlayerRef.Count > 1;
     }
 
     GameObject findClosestPlayer()
@@ -478,6 +475,12 @@ public class EnemyStateMachine : MonoBehaviour
     {
         agent.SetDestination(position); 
     }
+
+    bool movementStuck()
+    {
+        if (ReachedDestination() && agent.velocity == Vector3.zero) return true;
+        return false;
+    }
     void UpdateSprite()
     {
         float xScale = 1;
@@ -497,6 +500,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     bool ReachedDestination()
     {
+        if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
+        {
+            debug_Timer = 0;
+        }
         //Stopping distance needs to be higher than 0.
         return agent.remainingDistance < agent.stoppingDistance && !agent.pathPending;
     }
@@ -601,8 +608,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
     
     #endregion
-
-
+    
     #region Flight Functions
 
     void TakeOff()
@@ -721,10 +727,10 @@ public class EnemyStateMachine : MonoBehaviour
         return abilityCooldown_Timer > abilityCooldown_WaitTime;
     }
 
-    bool stunTimeOut()
+    bool debugTimeOut(float timeToUse)
     {
-        stun_WaitTime = myData_SO.timeToWait;
-        return stun_Timer > stun_WaitTime;
+        debug_WaitTime = timeToUse;
+        return debug_Timer > debug_WaitTime;
     }
 
     bool AttackCooldown(float TimeToUse)
@@ -817,6 +823,28 @@ public class EnemyStateMachine : MonoBehaviour
     }
     #endregion
 
+
+    IEnumerator searchForPlayerInScene()
+    {
+        while (PlayerRef.Count == 0)
+        {
+            GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
+            if (tempPlayerArray.Length > 0 && tempPlayerArray.Length <= 1)
+            {
+                PlayerRef.Add(tempPlayerArray[0]);
+                yield return new WaitForSeconds(0.03f);
+            }
+            for (int i = 0; i < tempPlayerArray.Length; i++)
+            {
+                PlayerRef.Add(tempPlayerArray[i]);
+                //Should check ID of the player and should organise this list based on player with lowest ID!!!
+                 
+                //myData_SO.Target.Add(tempPlayerArray[i]); //Is broken and stops code?
+                 
+            }
+            yield return new WaitForSeconds(0.03f);
+        }
+    }
 
     private void OnDrawGizmos()
     {
