@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 
 public enum EnemyStates
@@ -234,7 +237,7 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyStates.Chase:
                 MoveToChase();
 
-                if (AttackCooldown() && ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
+                if (AttackCooldown(myData_SO.attackCooldown) && ReachedDestination()) // Need some more code here to define what to do with attack as its missing a bit to define if it should attack.
                 {
                     doOnce = true;
 
@@ -242,21 +245,13 @@ public class EnemyStateMachine : MonoBehaviour
                     ChangeState(EnemyStates.Attack);
                     //Change state to Attack
                 }
-                else if (AttackCooldown() && InAttackRange(myData_SO.rangedAttackDistance))
+                else if (AttackCooldown(myData_SO.attackCooldown) && InAttackRange(myData_SO.rangedAttackDistance))
                 {
                     doOnce = true;
 
                     shouldSpecial = true;
                     ChangeState(EnemyStates.Attack); 
                     //Change State to attack!
-                }
-                else if (shouldSpecial && shouldSpecialAttack() && abilityCooldown())
-                {
-                    initialiseSpecial = true;
-                    ability_Timer = 0;
-                    ChangeState(EnemyStates.Special);
-                    break;
-                    //Special Attack 
                 }
                 else if (myData_SO.canSee && SeenTarget())
                 {
@@ -271,6 +266,15 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
+                    /*if (shouldSpecial && shouldSpecialAttack() && abilityCooldown())
+                    {
+                        doOnce = false;
+                        initialiseSpecial = true;
+                        ability_Timer = 0;
+                        ChangeState(EnemyStates.Special);
+                        break;
+                        //Special Attack 
+                    }*/
                     if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
@@ -299,20 +303,15 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
-                    if (TimeOut(2f))
-                    {
-                        ChangeState(EnemyStates.Special);
-                    }
-                    else if (InAttackRange(myData_SO.meleeAttackDistance))
+
+                    if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        print("Threatened Melee Attack");
                         BasicAttack();
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
                     {
-                        print("Threatened Ranged Attack");
                         doOnce = false;
                         RangedAttack();
                         // ShootProjectile
@@ -326,50 +325,46 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyStates.Special:
                 ability_Timer += Time.deltaTime;
                 specialActive = true;
-
-                // Consistently chase down player into range and attack them.
-                aggresiveChase();
-                print("Aggressively chasing the player!");
-
+                
                 // Initialise special ability.
                 if (initialiseSpecial)
                 {
                     initialiseSpecial = false;
                     initialiseSpecialAbility();
                 }
-                else if (!abilityTimeOut())
-                {
-
-
-                    if (AttackCooldown() && ReachedDestination())
-                    {
-                        doOnce = true;
-
-                        shouldSpecial = true;
-                        ChangeState(EnemyStates.ThreatenedAttack);
-                        //Change state to Threatened Attack (Special version of attacking)
-                    }
-                    else if (AttackCooldown() && InAttackRange(myData_SO.rangedAttackDistance))
-                    {
-                        doOnce = true;
-
-                        shouldSpecial = true;
-                        ChangeState(EnemyStates.ThreatenedAttack);
-                        //Change State to Threatened attack! (Special version of attacking.)
-                    }
-                    //Execute any special functionality that the dragon has. (Example: Dashing toward the player.)
-                    specialFunctionality();
-                }
-                // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
-                //Enter attack state and loop back to hear after attack?
-                else if (abilityTimeOut())
+                /*if (abilityTimeOut())
                 {
                     print("ability timed out!");
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
                     specialActive = false;
                     abilityCooldown_Timer = 0;
+                } */
+                
+                // Consistently chase down player into range and attack them.
+                aggresiveChase();
+
+                if (AttackCooldown(3f) && ReachedDestination())
+                {
+                    doOnce = true;
+
+                    shouldSpecial = true;
+                    ChangeState(EnemyStates.ThreatenedAttack);
+                    //Change state to Threatened Attack (Special version of attacking)
                 }
+                else if (AttackCooldown(3f) && InAttackRange(myData_SO.rangedAttackDistance))
+                {
+                    doOnce = true;
+
+                    shouldSpecial = true;
+                    ChangeState(EnemyStates.ThreatenedAttack);
+                    //Change State to Threatened attack! (Special version of attacking.)
+                }
+                //Execute any special functionality that the dragon has. (Example: Dashing toward the player.)
+                specialFunctionality();
+                
+                // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
+                //Enter attack state and loop back to hear after attack?
                 break;
         }
 
@@ -413,17 +408,17 @@ public class EnemyStateMachine : MonoBehaviour
 
     GameObject findClosestPlayer()
     {
-        if (PlayerRef.Count == 1) return PlayerRef[0];
+        if (!doesP2Exist()) return PlayerRef[0];
         float p1Dist = Vector3.Distance(transform.position, PlayerRef[0].transform.position);
         float p2Dist = Vector3.Distance(transform.position, PlayerRef[1].transform.position);
-        if (p2Dist < p1Dist) return PlayerRef[1];
+        if (p2Dist < p1Dist){return PlayerRef[1]; }
         return PlayerRef[0];
     }
     #endregion
 
     #region Health Functions
 
-    public void RecieveDamage(float incomingDamage)
+    public void ReceiveDamage(float incomingDamage)
     {
         if(NHS_HealthCheckup(incomingDamage) > 0)
         {
@@ -535,8 +530,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     void aggresiveChase()
     {
-        targetsLastSeenLocation = findClosestPlayer().transform.position;
+        if (TimeOut(1f))
+        {
+            targetsLastSeenLocation = findClosestPlayer().transform.position;
+        }
+        
         agent.destination = targetsLastSeenLocation;
+        print("Aggressively chasing the player!");
     }
 
     bool SeenTarget()
@@ -634,6 +634,7 @@ public class EnemyStateMachine : MonoBehaviour
             doOnce = false;
             //Potentially move the sprite back into view if deciding to keep sprite out of view
             agent.speed = myData_SO.walkSpeed;
+            landingPushBack();
             //PLay dragon landing animation here.
             
             //Set Dragon sprite rendered to disabled.
@@ -685,6 +686,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
         spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
         GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
+
     }
 
     #endregion
@@ -725,9 +727,9 @@ public class EnemyStateMachine : MonoBehaviour
         return stun_Timer > stun_WaitTime;
     }
 
-    bool AttackCooldown()
+    bool AttackCooldown(float TimeToUse)
     {
-        attack_WaitTime = myData_SO.attackCooldown;
+        attack_WaitTime = TimeToUse;
         return attack_Timer > attack_WaitTime;
     }
     #endregion
@@ -747,7 +749,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Cause Player Damage here or effect that can cause damage.
         if (specialActive)
         {
-            print("special is active and returning to special state.");
+            print("From MELEE: special is active and returning to special state.");
             ChangeState(EnemyStates.Special); return;
         }
 
@@ -762,13 +764,43 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (specialActive) 
         {
-            print("special is active and returning to special state.");
+            print("From RANGED: special is active and returning to special state.");
             ChangeState(EnemyStates.Special); 
             return; 
         }
 
         ChangeState(EnemyStates.Idle);
 
+    }
+
+    private List<GameObject> checkPlayersDistance()
+    {
+        //Check if Player2 exists.
+        int activePlayers = 1;
+        List<GameObject> playersToPushBack = new List<GameObject>();
+        if (doesP2Exist()){ activePlayers = 2; }
+        
+        for (int i = 0; i < activePlayers -1; i++)
+        {
+            if (Vector3.Distance(transform.position, PlayerRef[i].transform.position) <= myData_SO.pushBackDistance)// this line is the reason only one player gets pushed back
+            {
+                playersToPushBack.Add(PlayerRef[i].gameObject);
+            }
+        }
+        
+        return playersToPushBack;
+    }
+
+    private void landingPushBack()
+    {
+        //Call function that check to see if players are in range.
+        List<GameObject> playersImPushingBack = checkPlayersDistance();
+
+        for (int i = 0; i < playersImPushingBack.Count; i++)
+        {
+            //Push back player
+            Debug.Log("Pushing back player: " + playersImPushingBack[i].name);
+        }
     }
 
     protected virtual void initialiseSpecialAbility()

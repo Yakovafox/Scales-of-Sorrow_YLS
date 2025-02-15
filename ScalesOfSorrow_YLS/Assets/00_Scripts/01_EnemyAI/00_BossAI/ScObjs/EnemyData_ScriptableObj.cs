@@ -82,6 +82,11 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The chance at which the dragon will take flight.")]
     [Range(0,100)]
     public float chanceToFly = 33.33f;
+
+    [Tooltip("The distance at which the push back will search for a player, when dragon is landing.")]
+    public float pushBackDistance = 5f;
+    [Tooltip("The amount of force applied to the player on a dragons landing pushback function.")]
+    public float pushBackAmount = 5f;
     
     [Tooltip("The default size of the dragon's shadow when on the floor.")]
     public float shadow_DefaultSize = 3f;

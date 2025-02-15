@@ -31,9 +31,11 @@ MonoBehaviour:
   MaxHealth: 150
   Stages: 1
   flightTime: 5
-  flightCooldownTime: 15
+  flightCooldownTime: 5
   stunTime: 5
-  chanceToFly: 0
+  chanceToFly: 90
+  pushBackDistance: 15
+  pushBackAmount: 5
   shadow_DefaultSize: 3
   shadow_MinSize: 1
   attackCooldown: 2.5

@@ -29,6 +29,7 @@ public class Scr_Projectile : MonoBehaviour
             //Deal Damage to player;
         }
 
+        if (collision.gameObject.CompareTag("Enemy")) return;
         Destroy(gameObject);
     }
 }
