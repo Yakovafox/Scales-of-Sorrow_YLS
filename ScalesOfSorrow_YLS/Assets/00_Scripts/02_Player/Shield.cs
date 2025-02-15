@@ -23,7 +23,7 @@ public class Shield : MonoBehaviour
         parentPlayer = transform.parent.gameObject;
         shieldCollider = GetComponent<SphereCollider>();
 
-        if(shieldUpClip != null) { SoundManager.instanceSM.PlaySound(shieldUpClip, transform.position); }
+        if(shieldUpClip.sound != null) { SoundManager.instanceSM.PlaySound(shieldUpClip, transform.position); }
         
     }
 
@@ -37,14 +37,14 @@ public class Shield : MonoBehaviour
             //informs player that shield is destroyed
             parentPlayer.GetComponent<PlayerController>().ShieldDestroyed();
 
-            if (breakClip != null) { SoundManager.instanceSM.PlaySound(breakClip, transform.position); }
+            if (breakClip.sound != null) { SoundManager.instanceSM.PlaySound(breakClip, transform.position); }
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("DMG-Projectile"))
         {
-            if (blockClip != null) { SoundManager.instanceSM.PlaySound(blockClip, transform.position); }
+            if (blockClip.sound != null) { SoundManager.instanceSM.PlaySound(blockClip, transform.position); }
             Destroy(collision.gameObject);
             shieldHealth--;
         }

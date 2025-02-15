@@ -12,6 +12,9 @@ using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 public class PlayerController : MonoBehaviour
 {
     #region ------------------------    Variables    ------------------------
+    [Header("------- ID -------")]
+    public int playerID;
+
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
@@ -119,12 +122,14 @@ public class PlayerController : MonoBehaviour
         if (!shieldMove) { MoveInput(); }
     }
 
+    public void SetPlayerID(int ID) { playerID = ID; }
+
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
 
-        if (movementClip != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position); }
+        if (movementClip.sound != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position); }
 
     }
     
@@ -147,7 +152,7 @@ public class PlayerController : MonoBehaviour
         { 
             StartCoroutine(DefaultDash());
 
-            if (dashClip != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
+            if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
         }
     }
 
@@ -177,12 +182,12 @@ public class PlayerController : MonoBehaviour
         if (!canAttack || attackCharges <= 0) 
         {
 
-            if (noChargeClip != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position); }
+            if (noChargeClip.sound != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position); }
             return; 
         }
         else
         {
-            if (attackClip != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position); }
+            if (attackClip.sound != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position); }
             StartCoroutine(Attack()); 
         }
     }
@@ -234,11 +239,11 @@ public class PlayerController : MonoBehaviour
 
         if (isFiredUp)
         {
-            if (firedUpClip != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position); }
+            if (firedUpClip.sound != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position); }
         }
         else
         {
-            if (firedDownClip != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position); }
+            if (firedDownClip.sound != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position); }
         }
 
         yield return new WaitForSeconds(firedUpDuration);
@@ -302,17 +307,17 @@ public class PlayerController : MonoBehaviour
     {
         health -= damage;
 
-        if (playerHitClip != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
+        if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
         if (health >= 0) 
         {
-            if (deathClip != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+            if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
         }
     }
 
     public void RechargeMelee()
     {
-        if (rechargeClip != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
+        if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
     }
 
