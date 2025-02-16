@@ -119,6 +119,10 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The projectile for a ranged attack.")]
     public GameObject rangedProjectile;
 
+    //-------------------------------------------------------------------------------
+    
+    [Header("----- Special Variables -----")]
+    
     [Header("Special Attack")]
     [Tooltip("The chance that a special attack will happen.")]
     [Range(0, 100)]
@@ -130,5 +134,20 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float ability_Timer = 10f;
     [Tooltip("Cooldown time before the Dragon can enter the special ability again.")]
     public float ability_cooldownTime = 15f;
+
+    [Header("-- Individual Special Variables --")]
+
+    [Tooltip("Shield prefab that the dragon can put up in the Special State.")]
+    public GameObject Shield;
+    
+    [Tooltip("Time before dragon can Dash again.")]
+    public float dashCooldownTime = 2.25f;
+    [Tooltip("Trap prefab that the dragon can deploy in the Special State.")]
+    public GameObject Trap;
+
+    [Tooltip("Multiplied by default damage, used when in dragons special ability.")]
+    public float fireup_DamageMultiplier = 1.5f;
+    [Tooltip("Time it takes for the dragon to gain damage buff.")]
+    public float fireup_ChargeTime = 3f;
 
 }

@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using WaitForSeconds = UnityEngine.WaitForSeconds;
 
 
 public enum EnemyStates
@@ -52,7 +53,9 @@ public class EnemyStateMachine : MonoBehaviour
     private int stagesLeft;
 
     public List<GameObject> PlayerRef;
+    
     private NavMeshAgent agent;
+    private float defaultAgentRadius;
     private Vector3 investigationArea;
 
     private bool isAITarget;
@@ -107,6 +110,10 @@ public class EnemyStateMachine : MonoBehaviour
     private bool shouldSpecial;
     private bool specialActive;
     private bool water_specialActive;
+    private bool firedUp = false;
+
+    private GameObject InstantiatePosition;
+    private GameObject shieldRef;
 
     private bool movingRight = false;
     #endregion
@@ -128,9 +135,11 @@ public class EnemyStateMachine : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = myData_SO.walkSpeed;
+        defaultAgentRadius = agent.radius;
 
         GO_shadowCaster = gameObject.transform.Find("shadowCaster").gameObject;
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
+        InstantiatePosition = sightPosition.transform.Find("InstantiatePoint").gameObject;
         myData_SO.Target = null;
         
         StartCoroutine(searchForPlayerInScene());
@@ -262,7 +271,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
-                    /*if (shouldSpecial && shouldSpecialAttack() && abilityCooldown())
+                    if (shouldSpecial && shouldSpecialAttack() && abilityCooldown())
                     {
                         doOnce = false;
                         initialiseSpecial = true;
@@ -270,7 +279,7 @@ public class EnemyStateMachine : MonoBehaviour
                         ChangeState(EnemyStates.Special);
                         break;
                         //Special Attack 
-                    }*/
+                    }
                     if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
@@ -328,19 +337,20 @@ public class EnemyStateMachine : MonoBehaviour
                     initialiseSpecial = false;
                     initialiseSpecialAbility();
                 }
-                /*if (abilityTimeOut())
+                if (abilityTimeOut())
                 {
                     print("ability timed out!");
+                    exitSpecialAbility();
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
                     specialActive = false;
                     abilityCooldown_Timer = 0;
-                } */
+                }
                 
                 // Consistently chase down player into range and attack them.
                 aggresiveChase();
 
-                if (AttackCooldown(3f) && ReachedDestination())
+                if (AttackCooldown(5f) && ReachedDestination())
                 {
                     doOnce = true;
 
@@ -348,7 +358,7 @@ public class EnemyStateMachine : MonoBehaviour
                     ChangeState(EnemyStates.ThreatenedAttack);
                     //Change state to Threatened Attack (Special version of attacking)
                 }
-                else if (AttackCooldown(3f) && InAttackRange(myData_SO.rangedAttackDistance))
+                else if (AttackCooldown(5f) && InAttackRange(myData_SO.rangedAttackDistance))
                 {
                     doOnce = true;
 
@@ -357,7 +367,7 @@ public class EnemyStateMachine : MonoBehaviour
                     //Change State to Threatened attack! (Special version of attacking.)
                 }
                 //Execute any special functionality that the dragon has. (Example: Dashing toward the player.)
-                specialFunctionality();
+                StartCoroutine(specialFunctionality());
                 
                 // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
                 //Enter attack state and loop back to hear after attack?
@@ -537,13 +547,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     void aggresiveChase()
     {
-        if (TimeOut(1f))
-        {
-            targetsLastSeenLocation = findClosestPlayer().transform.position;
-        }
+        targetsLastSeenLocation = findClosestPlayer().transform.position;
         
         agent.destination = targetsLastSeenLocation;
-        print("Aggressively chasing the player!");
     }
 
     bool SeenTarget()
@@ -577,7 +583,6 @@ public class EnemyStateMachine : MonoBehaviour
                             targetsLastSeenLocation = closestPlayer.transform.position;
                             break;
                         default:
-                            Debug.Log("I couldn't find player");
                             break;
                     }
                 }
@@ -633,14 +638,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Land()
     {
+        StartCoroutine(LandingLerp());
         doOneCamShake = true;
-        StartCoroutine(LandingSpriteLand());
         if (doOnce)
         {
             doOnce = false;
             //Potentially move the sprite back into view if deciding to keep sprite out of view
             agent.speed = myData_SO.walkSpeed;
-            landingPushBack();
             //PLay dragon landing animation here.
             
             //Set Dragon sprite rendered to disabled.
@@ -663,7 +667,7 @@ public class EnemyStateMachine : MonoBehaviour
 
             if (GO_shadowCaster.transform.localScale.x >= myData_SO.shadow_MinSize)
             {
-                GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (2f * Time.deltaTime);
+                GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
             yield return new WaitForSeconds(0.03f);
         }
@@ -671,28 +675,34 @@ public class EnemyStateMachine : MonoBehaviour
         GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_MinSize, myData_SO.shadow_MinSize, myData_SO.shadow_MinSize);
     }
 
-    IEnumerator LandingSpriteLand()
+    IEnumerator LandingSpriteLand(Vector3 targetHeight)
     {
         while (spriteRenderer.transform.position.y >= defaultYPos)
         {
             float step = 50f * Time.deltaTime;
-            Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
             spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, targetHeight, step);
 
             if (GO_shadowCaster.transform.localScale.x < myData_SO.shadow_DefaultSize)
             {
-                GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (2f * Time.deltaTime);
-            }
-            if(spriteRenderer.transform.position.y <= defaultYPos + 1 && doOneCamShake)
-            {
-                doOneCamShake = false;
-                OnDragonLanded?.Invoke();
+                GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
             yield return new WaitForSeconds(0.03f);
         }
         spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
         GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
+    }
 
+    IEnumerator LandingLerp()
+    {
+        Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
+        float distance = Vector3.Distance(targetHeight, spriteRenderer.gameObject.transform.position);
+        float waitTime = distance / 6f;
+        print("This is the time to wait" + waitTime);
+        StartCoroutine(LandingSpriteLand(targetHeight));
+        yield return new WaitForSeconds(waitTime);
+        doOneCamShake = false;
+        OnDragonLanded?.Invoke();
+        landingPushBack();
     }
 
     #endregion
@@ -752,6 +762,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void BasicAttack()
     {
+        float damageToDeal = 20f;
+        if (firedUp)
+        { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
         //Cause Player Damage here or effect that can cause damage.
         if (specialActive)
         {
@@ -764,8 +777,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void RangedAttack()
     { 
+        float damageToDeal = 10f;
+        if (firedUp)
+        { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
+        
         GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection(findClosestPlayer());
+        projectileInstance.GetComponent<Scr_Projectile>().Accessor_damageToDeal = damageToDeal;
         agent.isStopped = true;
 
         if (specialActive) 
@@ -786,7 +804,7 @@ public class EnemyStateMachine : MonoBehaviour
         List<GameObject> playersToPushBack = new List<GameObject>();
         if (doesP2Exist()){ activePlayers = 2; }
         
-        for (int i = 0; i < activePlayers -1; i++)
+        for (int i = 0; i < activePlayers; i++)
         {
             if (Vector3.Distance(transform.position, PlayerRef[i].transform.position) <= myData_SO.pushBackDistance)// this line is the reason only one player gets pushed back
             {
@@ -805,6 +823,11 @@ public class EnemyStateMachine : MonoBehaviour
         for (int i = 0; i < playersImPushingBack.Count; i++)
         {
             //Push back player
+            Rigidbody rb = playersImPushingBack[i].GetComponent<Rigidbody>();
+            Vector3 dir = playersImPushingBack[i].transform.position - transform.position;
+            Vector3 dirAndForce = new Vector3(dir.x * myData_SO.pushBackAmount, 0, dir.z * myData_SO.pushBackAmount);
+            rb.velocity = Vector3.zero;
+            rb.AddForce(dirAndForce, ForceMode.Impulse);
             Debug.Log("Pushing back player: " + playersImPushingBack[i].name);
         }
     }
@@ -814,11 +837,32 @@ public class EnemyStateMachine : MonoBehaviour
         Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
+        if (!myData_SO.Shield.IsUnityNull())
+        {
+            shieldRef = Instantiate(myData_SO.Shield, InstantiatePosition.transform.position, Quaternion.identity);
+            shieldRef.transform.parent = InstantiatePosition.transform;
+        }
 
+        if (!firedUp) StartCoroutine(specialFunctionality());
     }
 
-    protected virtual void specialFunctionality()
+    protected virtual void exitSpecialAbility()
     {
+        Debug.Log("Exiting Special Ability");
+        if (!shieldRef.IsUnityNull())
+        {
+            Destroy(shieldRef);
+        }
+        if(firedUp) firedUp = false;
+    }
+
+    protected virtual IEnumerator specialFunctionality()
+    {
+        if (!firedUp)
+        {
+            yield return new WaitForSeconds(myData_SO.fireup_ChargeTime);
+            firedUp = true;
+        }
 
     }
     #endregion
@@ -836,6 +880,7 @@ public class EnemyStateMachine : MonoBehaviour
             }
             for (int i = 0; i < tempPlayerArray.Length; i++)
             {
+                if(PlayerRef.Contains(tempPlayerArray[i])) continue;
                 PlayerRef.Add(tempPlayerArray[i]);
                 //Should check ID of the player and should organise this list based on player with lowest ID!!!
                  

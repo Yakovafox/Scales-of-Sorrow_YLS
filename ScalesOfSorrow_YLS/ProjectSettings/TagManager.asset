@@ -7,6 +7,7 @@ TagManager:
   - DMG-Projectile
   - AMO-Projectile
   - Enemy
+  - Enm_Shield
   layers:
   - Default
   - TransparentFX
