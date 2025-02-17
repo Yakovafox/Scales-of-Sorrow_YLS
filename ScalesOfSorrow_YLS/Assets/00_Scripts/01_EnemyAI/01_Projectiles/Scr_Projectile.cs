@@ -7,9 +7,15 @@ public class Scr_Projectile : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 playerDir;
+    [SerializeField] private float damageToDeal;
     public Vector3 Accessor_dir
     {
         set { playerDir = value; }
+    }
+
+    public float Accessor_damageToDeal
+    {
+        set { damageToDeal = value; }
     }
 
     [SerializeField] private float launchForce = 25f;
@@ -26,9 +32,11 @@ public class Scr_Projectile : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            //Deal Damage to player;
+            collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
         }
 
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+        
         Destroy(gameObject);
     }
 }

@@ -12,6 +12,9 @@ using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 public class PlayerController : MonoBehaviour
 {
     #region ------------------------    Variables    ------------------------
+    [Header("------- ID -------")]
+    public int playerID;
+
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
@@ -85,6 +88,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool upgradeFiredUp;
     [SerializeField] private bool upgradeDash;
 
+    [Header("------- Audio -------")]
+    [SerializeField] private Sound movementClip;
+    [SerializeField] private Sound attackClip;
+    [SerializeField] private Sound rechargeClip;
+    [SerializeField] private Sound noChargeClip;
+    [SerializeField] private Sound dashClip;
+    [SerializeField] private Sound firedUpClip;
+    [SerializeField] private Sound firedDownClip;
+    [SerializeField] private Sound playerHitClip;
+    [SerializeField] private Sound deathClip;
+
+
     #endregion ------------------------    Variables    ------------------------
     void Start()
     {
@@ -107,10 +122,15 @@ public class PlayerController : MonoBehaviour
         if (!shieldMove) { MoveInput(); }
     }
 
+    public void SetPlayerID(int ID) { playerID = ID; }
+
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
+
+        if (movementClip.sound != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position); }
+
     }
     
     private void MoveInput()
@@ -122,24 +142,18 @@ public class PlayerController : MonoBehaviour
         else if (axis.x < 0) {pSR.flipX = true; }
     }
 
-    private Vector3 GetRotate()
-    {
-
-        Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
-        Vector3 rotateDirection = (new Vector3(direction.x - transform.position.x, 0, direction.z - transform.position.z)).normalized;
-        float angle = Mathf.Atan2(rotateDirection.x, rotateDirection.z) * Mathf.Rad2Deg;
-
-        Vector3 rotate = new Vector3(0, angle, 0);
-        return rotate;
-    }
     #endregion ------------------------    Movement    ------------------------
 
     #region ------------------------    Dash    ------------------------
     public void OnDash(InputAction.CallbackContext context)
     {
         if (!canDash || !context.started) { return; }
-        else if (upgradeDash) { /* Upgraded Dash */ }
-        else { StartCoroutine(DefaultDash()); }
+        else 
+        { 
+            StartCoroutine(DefaultDash());
+
+            if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
+        }
     }
 
     private IEnumerator DefaultDash()
@@ -165,8 +179,17 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!canAttack || attackCharges <= 0) { return; }
-        else { StartCoroutine(Attack()); }
+        if (!canAttack || attackCharges <= 0) 
+        {
+
+            if (noChargeClip.sound != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position); }
+            return; 
+        }
+        else
+        {
+            if (attackClip.sound != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position); }
+            StartCoroutine(Attack()); 
+        }
     }
 
     private IEnumerator Attack()
@@ -177,20 +200,23 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
-
+        Debug.Log(hits.Length);
         //play particle effect
         //SoundEffect
+        float totalDamage = attackDamage;
 
         for (int i = 0; i < hits.Length; i++) 
         {
+
             if (isFiredUp)
             {
-                //damage uses extra damaage
+                totalDamage += extraDamage;
             }
 
             if (hits[i].transform.CompareTag("Enemy"))
             {
-
+                Debug.Log("hit enemy pew pew");
+                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage);
             }
         }
 
@@ -212,9 +238,16 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator fireUp()
     {
-        Debug.Log("Pre Fired Up: " + isFiredUp);
         isFiredUp = !isFiredUp;
-        Debug.Log("post Fired Up: " + isFiredUp);
+
+        if (isFiredUp)
+        {
+            if (firedUpClip.sound != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position); }
+        }
+        else
+        {
+            if (firedDownClip.sound != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position); }
+        }
 
         yield return new WaitForSeconds(firedUpDuration);
 
@@ -276,11 +309,18 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health >= 0) { /*reload current scene*/ }
+
+        if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
+
+        if (health >= 0) 
+        {
+            if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+        }
     }
 
     public void RechargeMelee()
     {
+        if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
     }
 

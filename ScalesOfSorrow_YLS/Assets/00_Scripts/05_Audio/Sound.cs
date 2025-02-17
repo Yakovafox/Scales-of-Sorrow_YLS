@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class Sound : MonoBehaviour
-{
+    [System.Serializable]
+    public class Sound
+    {
+        public AudioClip sound;
 
-    public string soundName;
+        [Tooltip("Lower number = higher priority")] 
+        [Range(0f, 256)] public int priority;
+        [Range(0f, 1)] public float volume;
+        [Range(0.1f, 3f)] public float pitch;
+        public bool loop;
+        public bool mute;
+        public AudioMixerGroup mixer;
+        private bool isPlaying;
 
-    public AudioClip sound;
+        [HideInInspector] public AudioSource source;
+    }
 
-    [Range(0f, 1)] public float volume;
-    [Range(0.1f, 3f)] public float pitch;
-    public bool loop;
-    public AudioMixerGroup mixer;
-    private bool isPlaying;
-
-    [HideInInspector] public AudioSource source;
-}
