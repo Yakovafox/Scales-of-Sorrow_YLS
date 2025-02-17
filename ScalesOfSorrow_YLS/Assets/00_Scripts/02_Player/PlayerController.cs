@@ -200,20 +200,23 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
-
+        Debug.Log(hits.Length);
         //play particle effect
         //SoundEffect
+        float totalDamage = attackDamage;
 
         for (int i = 0; i < hits.Length; i++) 
         {
+
             if (isFiredUp)
             {
-                //damage uses extra damaage
+                totalDamage += extraDamage;
             }
 
             if (hits[i].transform.CompareTag("Enemy"))
             {
-
+                Debug.Log("hit enemy pew pew");
+                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage);
             }
         }
 

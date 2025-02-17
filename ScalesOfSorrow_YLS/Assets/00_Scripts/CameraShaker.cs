@@ -1,20 +1,45 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[CustomEditor(typeof(CameraShaker)), CanEditMultipleObjects]
+public class TestShakeButton : Editor
+{
+    public delegate void TestShake_Delegate();
+    public static event TestShake_Delegate TestShake;
+
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        
+        if (GUILayout.Button("Test Shake Amount    (Game must be Running!!!!)"))
+            TestShake?.Invoke();
+    }
+}
+
 public class CameraShaker : MonoBehaviour
 {
-    
+    [Tooltip("Set the Default time that the screen shakes for. (Called by events)")]
+    [SerializeField]
+    private float defaultShake_Time = 0.25f;
+
+    [Tooltip("Set the Default strength for the amount that the screen shakes. (Called by events)")]
+    [SerializeField]
+    private float defaultShake_Strength = 0.5f;
+
     //Event Triggers go below here in OnEnable and OnDisable.
     //Shake from event will be a small shake burst that is a default, The cameraShake function can be accessed publicly to create your own level of camera shake.
 
     private void OnEnable()
     {
+        TestShakeButton.TestShake += cameraShakeFromEvent;
         EnemyStateMachine.OnDragonLanded += cameraShakeFromEvent;
     }
 
     private void OnDisable()
     {
+        TestShakeButton.TestShake -= cameraShakeFromEvent;
         EnemyStateMachine.OnDragonLanded -= cameraShakeFromEvent;
     }
     
@@ -26,7 +51,7 @@ public class CameraShaker : MonoBehaviour
 
     void cameraShakeFromEvent() //Default cameraShake, called from event.
     {
-        StartCoroutine(Shake(0.25f, 0.5f));
+        StartCoroutine(Shake(defaultShake_Time, defaultShake_Strength));
     }
 
     IEnumerator Shake(float duration, float strength) //Coroutine for actually shaking the camera, picks random point within a unit of the current position and moves there over time.
