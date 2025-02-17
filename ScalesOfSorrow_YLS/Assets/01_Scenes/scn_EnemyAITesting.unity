@@ -119,6 +119,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &24742620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2615119454795870053, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+    type: 3}
+  m_PrefabInstance: {fileID: 606541849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 909ff85dd932d7c4bb2daf2942690dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &223932138
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +594,106 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1232435409}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 24742620}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1232435409}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: player2Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPlayerJoined
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: player2Joined
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: EnemyStateMachine, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerJoining, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: EnemyStateMachine, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerLeftEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -694,6 +806,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1232435409 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3725505975057662396}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b589c7f7ce4eb4b48ad44298f3e7f072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1961761246
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,6 +1140,11 @@ PrefabInstance:
       propertyPath: debugSphere
       value: 
       objectReference: {fileID: 1993295270}
+    - target: {fileID: 4275151382573882524, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
         type: 3}
       propertyPath: m_Name

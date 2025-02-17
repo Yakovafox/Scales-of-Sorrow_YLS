@@ -32,7 +32,7 @@ public class Scr_Projectile : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            //Deal Damage to player;
+            collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
         }
 
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;

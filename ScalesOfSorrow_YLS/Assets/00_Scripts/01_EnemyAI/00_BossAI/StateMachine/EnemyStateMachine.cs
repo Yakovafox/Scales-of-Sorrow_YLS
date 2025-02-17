@@ -111,6 +111,7 @@ public class EnemyStateMachine : MonoBehaviour
     private bool specialActive;
     private bool water_specialActive;
     private bool firedUp = false;
+    private bool pushback_VelocityShouldReset = false;
 
     private GameObject InstantiatePosition;
     private GameObject shieldRef;
@@ -122,6 +123,7 @@ public class EnemyStateMachine : MonoBehaviour
     #region DragonEvents
     public delegate void delegate_dragonLanded();
     public static event delegate_dragonLanded OnDragonLanded;
+
     
     #endregion
 
@@ -166,6 +168,7 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     if (TimeOut(myData_SO.stunTime))
                     {
+                        spriteRenderer.transform.position = new Vector3(0, spriteRenderer.transform.position.y, 0);
                         attack_WaitTime = 0;
                         intialiseMovement = false;
                         agent.isStopped = false;
@@ -389,7 +392,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     #region Player2Functions
-    void player2Joined()
+    public void player2Joined()
     {
         if (PlayerRef.Count > 1) { return; }
         GameObject[] tempPlayerArray = GameObject.FindGameObjectsWithTag("Player");
@@ -401,7 +404,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Code to adjust Health here or attack damage etc.
     }
     
-    void player2Left()
+    public void player2Left()
     {
         if (PlayerRef.Count <= 1) { return; }
         PlayerRef.RemoveAt(1);
@@ -445,6 +448,8 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
+            Debug.Log("Dragon has been defeated!!!!");
+            return;
             //DefeatOfDragon
         }
         stagesLeft -= 1;
@@ -548,8 +553,10 @@ public class EnemyStateMachine : MonoBehaviour
     void aggresiveChase()
     {
         targetsLastSeenLocation = findClosestPlayer().transform.position;
+        Debug.Log(targetsLastSeenLocation);
         
         agent.destination = targetsLastSeenLocation;
+        Debug.Log("Aggressively chasoing!!!!");
     }
 
     bool SeenTarget()
@@ -696,7 +703,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
         float distance = Vector3.Distance(targetHeight, spriteRenderer.gameObject.transform.position);
-        float waitTime = distance / 6f;
+        float waitTime = distance / 5f;
         print("This is the time to wait" + waitTime);
         StartCoroutine(LandingSpriteLand(targetHeight));
         yield return new WaitForSeconds(waitTime);
@@ -772,6 +779,14 @@ public class EnemyStateMachine : MonoBehaviour
             ChangeState(EnemyStates.Special); return;
         }
 
+        Collider[] tempHitArray = Physics.OverlapSphere(transform.position, myData_SO.meleeAttackDistance);
+        for(int i = 0; i < tempHitArray.Length; i++)
+        {
+            if (tempHitArray[i].gameObject.CompareTag("Player"))
+            {
+                tempHitArray[i].gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
+            }
+        }
         ChangeState(EnemyStates.Idle);
     }
 
@@ -824,11 +839,23 @@ public class EnemyStateMachine : MonoBehaviour
         {
             //Push back player
             Rigidbody rb = playersImPushingBack[i].GetComponent<Rigidbody>();
+
             Vector3 dir = playersImPushingBack[i].transform.position - transform.position;
             Vector3 dirAndForce = new Vector3(dir.x * myData_SO.pushBackAmount, 0, dir.z * myData_SO.pushBackAmount);
-            rb.velocity = Vector3.zero;
+            pushback_VelocityShouldReset = true;
+            StartCoroutine(UpdatePlayerVelocityZero(rb));
             rb.AddForce(dirAndForce, ForceMode.Impulse);
+            pushback_VelocityShouldReset = false;
             Debug.Log("Pushing back player: " + playersImPushingBack[i].name);
+        }
+    }
+
+    private IEnumerator UpdatePlayerVelocityZero(Rigidbody rb)
+    {
+        while (pushback_VelocityShouldReset)
+        {
+            rb.velocity = Vector3.zero;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
@@ -863,6 +890,7 @@ public class EnemyStateMachine : MonoBehaviour
             yield return new WaitForSeconds(myData_SO.fireup_ChargeTime);
             firedUp = true;
         }
+        yield return null;
 
     }
     #endregion
