@@ -22,10 +22,9 @@ public class SettingBehaviour : MonoBehaviour
 
         SettingsMenu(false);
     }
-    // Update is called once per frame
+
     void Update()
     {
-            menuEnabled = !menuEnabled;
             SettingsMenu(menuEnabled);
         
     }

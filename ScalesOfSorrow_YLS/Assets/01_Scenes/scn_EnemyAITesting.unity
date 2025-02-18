@@ -1140,11 +1140,6 @@ PrefabInstance:
       propertyPath: debugSphere
       value: 
       objectReference: {fileID: 1993295270}
-    - target: {fileID: 4275151382573882524, guid: 4688c53db7cb1b54ebe290e75276ed0a,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
         type: 3}
       propertyPath: m_Name

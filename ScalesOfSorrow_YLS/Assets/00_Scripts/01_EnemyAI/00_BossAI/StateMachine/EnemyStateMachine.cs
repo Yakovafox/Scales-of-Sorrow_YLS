@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.Jobs;
 using Random = UnityEngine.Random;
 using WaitForSeconds = UnityEngine.WaitForSeconds;
 
@@ -64,8 +65,15 @@ public class EnemyStateMachine : MonoBehaviour
 
     private Vector3 targetsLastSeenLocation;
 
+    private GameObject GO_shadowCaster;
+    private SpriteRenderer spriteRenderer;
+    private Collider hitCollider;
 
-    private bool shouldWait;
+    private GameObject InstantiatePosition;
+    private GameObject shieldRef;
+
+
+
 
     [Header("Timer Variables")]
     private float state_Timer = 0.0f;
@@ -94,11 +102,15 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float defaultYPos;
 
-    private GameObject GO_shadowCaster;
-    private SpriteRenderer spriteRenderer;
-
     private Ray ray;
     private RaycastHit rayResult;
+    private RaycastHit colHit;
+
+
+
+    [Header("Boolean Variables")]
+
+    private bool shouldWait;
 
     private bool stunned;
 
@@ -106,17 +118,17 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool doOnce;
     private bool doOneCamShake;
+
     private bool initialiseSpecial;
     private bool shouldSpecial;
     private bool specialActive;
     private bool water_specialActive;
     private bool firedUp = false;
+
     private bool pushback_VelocityShouldReset = false;
 
-    private GameObject InstantiatePosition;
-    private GameObject shieldRef;
-
     private bool movingRight = false;
+
     #endregion
     
 
@@ -138,6 +150,7 @@ public class EnemyStateMachine : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = myData_SO.walkSpeed;
         defaultAgentRadius = agent.radius;
+        hitCollider = gameObject.GetComponent<Collider>();
 
         GO_shadowCaster = gameObject.transform.Find("shadowCaster").gameObject;
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
@@ -424,12 +437,27 @@ public class EnemyStateMachine : MonoBehaviour
         if (p2Dist < p1Dist){return PlayerRef[1]; }
         return PlayerRef[0];
     }
+
+    GameObject returnPlayerWithID(int playerID)
+    {
+        if (PlayerRef.Count <= 1) { return PlayerRef[0].gameObject; }
+        for (int i = 0; i < PlayerRef.Count; i++)
+        {
+            if(PlayerRef[i].GetComponent<PlayerController>().playerID == playerID)
+            {
+                return PlayerRef[i].gameObject;
+            }
+            continue;
+        }
+        return PlayerRef[0].gameObject;
+    }
     #endregion
 
     #region Health Functions
 
-    public void ReceiveDamage(float incomingDamage)
+    public void ReceiveDamage(float incomingDamage, int playerID)
     {
+        if(specialActive && dirOverlapsWithShield(playerID)) { return; }
         if(NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
@@ -441,6 +469,25 @@ public class EnemyStateMachine : MonoBehaviour
     private float NHS_HealthCheckup(float incomingDamage)
     {
         return currentHealth - incomingDamage;
+    }
+
+    private bool dirOverlapsWithShield(int playerID)
+    {
+
+        bool result = false;
+        GameObject playerContext = returnPlayerWithID(playerID);
+
+        Vector3 playerDir = playerContext.transform.position - transform.position;
+        ray = new Ray(sightPosition.position, playerDir);
+        if(Physics.Raycast(ray, out colHit))
+        {
+            if (colHit.transform.gameObject == shieldRef)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void healthReachedZero()
@@ -553,7 +600,6 @@ public class EnemyStateMachine : MonoBehaviour
     void aggresiveChase()
     {
         targetsLastSeenLocation = findClosestPlayer().transform.position;
-        Debug.Log(targetsLastSeenLocation);
         
         agent.destination = targetsLastSeenLocation;
         Debug.Log("Aggressively chasoing!!!!");
@@ -631,6 +677,7 @@ public class EnemyStateMachine : MonoBehaviour
             doOnce = false;
             flyingToRandomPoint = false;
             agent.speed = myData_SO.flySpeed;
+            hitCollider.enabled = false;
             //Change State to flying.
             //Play dragon lifting off animation here.
 
@@ -652,8 +699,9 @@ public class EnemyStateMachine : MonoBehaviour
             doOnce = false;
             //Potentially move the sprite back into view if deciding to keep sprite out of view
             agent.speed = myData_SO.walkSpeed;
+            hitCollider.enabled = true;
             //PLay dragon landing animation here.
-            
+
             //Set Dragon sprite rendered to disabled.
             //spriteRenderer.enabled = true;
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
@@ -693,6 +741,12 @@ public class EnemyStateMachine : MonoBehaviour
             {
                 GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
+            if(spriteRenderer.transform.position.y <= defaultYPos + 0.75f && spriteRenderer.transform.position.y >= defaultYPos && doOneCamShake)
+            {
+                doOneCamShake = false;
+                OnDragonLanded?.Invoke();
+                landingPushBack();
+            }
             yield return new WaitForSeconds(0.03f);
         }
         spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
@@ -703,13 +757,10 @@ public class EnemyStateMachine : MonoBehaviour
     {
         Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
         float distance = Vector3.Distance(targetHeight, spriteRenderer.gameObject.transform.position);
-        float waitTime = distance / 5f;
+        float waitTime = distance / (655f * Time.deltaTime);
         print("This is the time to wait" + waitTime);
         StartCoroutine(LandingSpriteLand(targetHeight));
         yield return new WaitForSeconds(waitTime);
-        doOneCamShake = false;
-        OnDragonLanded?.Invoke();
-        landingPushBack();
     }
 
     #endregion
