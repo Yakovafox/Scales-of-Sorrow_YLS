@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Canvas creditsCanvas;
     [Header("Loading")]
     [SerializeField] private Slider progressBar;
+    [SerializeField] private Animation animationBar;
     [SerializeField] private string sceneName;
     [Header("Settings")]
     [SerializeField] private SettingBehaviour settingBehaviour;
@@ -19,6 +20,12 @@ public class MainMenu : MonoBehaviour
     //is enabled
     private bool creditsEnabled = false;
     private bool mainEnabled = true;
+    private void Start()
+    {
+        animationBar.Play("anime-loading");
+        animationBar["anime-loading"].speed = 0;
+    }
+
     public void PlayButton()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -36,6 +43,8 @@ public class MainMenu : MonoBehaviour
         {
             float progress = Mathf.Clamp01(operation.progress/.9f);
             progressBar.value = progress;
+            progressBar.value += progress;
+            animationBar["anime-loading"].normalizedTime = progressBar.value ;
         }
 
         yield return null;

@@ -7606,6 +7606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 515925532}
   - component: {fileID: 515925533}
+  - component: {fileID: 515925534}
   m_Layer: 0
   m_Name: LoadingBar
   m_TagString: Untagged
@@ -7685,6 +7686,23 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!111 &515925534
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515925531}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: 9f9d110dbbfda0f40910d7c2d180b986, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 9f9d110dbbfda0f40910d7c2d180b986, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1001 &517554376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18519,7 +18537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+  m_Color: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -25658,8 +25676,9 @@ MonoBehaviour:
   mainMenu: {fileID: 997980071}
   creditsCanvas: {fileID: 1508280238}
   progressBar: {fileID: 515925533}
-  sceneName: 
-  settingBehaviour: {fileID: 0}
+  animationBar: {fileID: 515925534}
+  sceneName: scn_CameraSwitching
+  settingBehaviour: {fileID: 1925244018}
 --- !u!4 &1830313512
 Transform:
   m_ObjectHideFlags: 0
@@ -32766,17 +32785,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1830313511}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: SettingsButton
-        m_Mode: 1
+      - m_Target: {fileID: 1925244018}
+        m_TargetAssemblyTypeName: SettingBehaviour, Assembly-CSharp
+        m_MethodName: SettingsMenu
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1959351961
 MonoBehaviour:
