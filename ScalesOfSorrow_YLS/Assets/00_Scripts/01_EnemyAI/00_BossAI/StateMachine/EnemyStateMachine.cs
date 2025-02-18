@@ -718,7 +718,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
     IEnumerator TakingOffSpriteRise()
     {
-        while (spriteRenderer.transform.position.y <= 15f)
+        while (spriteRenderer.transform.position.y <= 15f && spriteRenderer.transform.position.y <= 14f)
         {
             float step = 50f * Time.deltaTime;
             Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, 15f, spriteRenderer.gameObject.transform.position.z);
@@ -737,7 +737,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     IEnumerator LandingSpriteLand(Vector3 targetHeight)
     {
-        while (spriteRenderer.transform.position.y >= defaultYPos)
+        while (spriteRenderer.transform.position.y >= defaultYPos && spriteRenderer.transform.position.y >= defaultYPos + 1f)
         {
             float step = 50f * Time.deltaTime;
             spriteRenderer.gameObject.transform.position = Vector3.MoveTowards(spriteRenderer.gameObject.transform.position, targetHeight, step);
@@ -746,13 +746,13 @@ public class EnemyStateMachine : MonoBehaviour
             {
                 GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
-            if(spriteRenderer.transform.position.y <= defaultYPos + 0.75f && spriteRenderer.transform.position.y >= defaultYPos && doOneCamShake)
+            if(spriteRenderer.transform.position.y <= defaultYPos  && spriteRenderer.transform.position.y <= defaultYPos + 0.75f && doOneCamShake)
             {
                 doOneCamShake = false;
                 OnDragonLanded?.Invoke();
                 landingPushBack();
             }
-            if(spriteRenderer.transform.position.y >= defaultYPos) { StopCoroutine(LandingSpriteLand(targetHeight)); }
+            if(spriteRenderer.transform.position.y >= defaultYPos && spriteRenderer.transform.position.y >= defaultYPos +1) { StopCoroutine(LandingSpriteLand(targetHeight)); }
             yield return new WaitForSeconds(0.03f);
         }
         spriteRenderer.transform.position = defaultWorldPos;
