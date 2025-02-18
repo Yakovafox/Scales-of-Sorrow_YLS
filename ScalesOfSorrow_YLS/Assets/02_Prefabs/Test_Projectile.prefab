@@ -240,6 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5107072df7845814bbc0f0a36dc7c154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageToDeal: 0
   launchForce: 5
 --- !u!54 &600375132331268558
 Rigidbody:
@@ -260,7 +261,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

@@ -18,7 +18,7 @@ MonoBehaviour:
     type: 3}
   Target: []
   walkSpeed: 2
-  canFly: 1
+  canFly: 0
   flySpeed: 4
   flying: 0
   moveRadius: 15
@@ -42,7 +42,7 @@ MonoBehaviour:
   attackCooldown: 0.1
   meleeAttackDistance: 3
   meleeDamage: 10
-  rangedAttackDistance: 10
+  rangedAttackDistance: 5
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
