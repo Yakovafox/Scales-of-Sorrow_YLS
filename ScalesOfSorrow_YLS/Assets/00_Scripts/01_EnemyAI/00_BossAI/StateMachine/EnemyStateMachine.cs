@@ -101,6 +101,8 @@ public class EnemyStateMachine : MonoBehaviour
     private Transform sightPosition;
 
     private float defaultYPos;
+    private Vector3 defaultWorldPos;
+    private Vector3 defaultLocalPos;
 
     private Ray ray;
     private RaycastHit rayResult;
@@ -181,7 +183,7 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     if (TimeOut(myData_SO.stunTime))
                     {
-                        spriteRenderer.transform.position = new Vector3(0, spriteRenderer.transform.position.y, 0);
+                        spriteRenderer.transform.localPosition = new Vector3(0, 1.25f, 0);
                         attack_WaitTime = 0;
                         intialiseMovement = false;
                         agent.isStopped = false;
@@ -685,7 +687,9 @@ public class EnemyStateMachine : MonoBehaviour
             //spriteRenderer.enabled = false;
             //The above elements must time correctly otherwise the dragon will appear back at the bottom of the screen.
             //Potentially move the sprite higher out of view as well?
-            defaultYPos = spriteRenderer.gameObject.transform.position.y;
+            defaultYPos = spriteRenderer.transform.position.y;
+            defaultWorldPos = spriteRenderer.transform.position;
+            defaultLocalPos = spriteRenderer.transform.localPosition;
             ChangeState(EnemyStates.Fly);
         }
     }
@@ -724,6 +728,7 @@ public class EnemyStateMachine : MonoBehaviour
             {
                 GO_shadowCaster.transform.localScale -= GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
+            if (spriteRenderer.transform.position.y <= 15f) { StopCoroutine(LandingSpriteLand(targetHeight)); }
             yield return new WaitForSeconds(0.03f);
         }
         spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, 15f, spriteRenderer.transform.position.z);
@@ -747,9 +752,11 @@ public class EnemyStateMachine : MonoBehaviour
                 OnDragonLanded?.Invoke();
                 landingPushBack();
             }
+            if(spriteRenderer.transform.position.y >= defaultYPos) { StopCoroutine(LandingSpriteLand(targetHeight)); }
             yield return new WaitForSeconds(0.03f);
         }
-        spriteRenderer.transform.position = new Vector3(spriteRenderer.transform.position.x, defaultYPos, spriteRenderer.transform.position.z);
+        spriteRenderer.transform.position = defaultWorldPos;
+        spriteRenderer.transform.localPosition = defaultLocalPos;
         GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
     }
 
