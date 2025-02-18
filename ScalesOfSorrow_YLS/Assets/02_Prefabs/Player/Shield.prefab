@@ -46,6 +46,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldHealth: 3
+  shieldUpClip:
+    sound: {fileID: 0}
+    priority: 0
+    volume: 0
+    pitch: 0.1
+    loop: 0
+    mute: 0
+    mixer: {fileID: 0}
+    source: {fileID: 0}
+  blockClip:
+    sound: {fileID: 0}
+    priority: 0
+    volume: 0
+    pitch: 0.1
+    loop: 0
+    mute: 0
+    mixer: {fileID: 0}
+    source: {fileID: 0}
+  breakClip:
+    sound: {fileID: 0}
+    priority: 0
+    volume: 0
+    pitch: 0.1
+    loop: 0
+    mute: 0
+    mixer: {fileID: 0}
+    source: {fileID: 0}
 --- !u!135 &7368672774791121201
 SphereCollider:
   m_ObjectHideFlags: 0
