@@ -30,7 +30,6 @@ public class Shield : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(shieldCollider.radius);
         if (shieldHealth <= 0)
         {
             Destroy(this);
