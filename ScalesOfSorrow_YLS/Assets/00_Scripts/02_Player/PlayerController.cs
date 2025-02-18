@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
             if (hits[i].transform.CompareTag("Enemy"))
             {
                 Debug.Log("hit enemy pew pew");
-                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage);
+                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
             }
         }
 
@@ -272,23 +272,28 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Shield()
     {
+        Debug.Log("00 Start of coroutine");
         isShield = !isShield;
 
         if (isShield && !shieldExists)
         {
+            Debug.Log("01 Spawned Shield");
             shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
             
-            shieldReference.transform.LookAt(pTransform.position);
             shieldExists = true;
         } 
         else if (!isShield && shieldExists)
         {
+
+            Debug.Log("01 Destroyed Shield");
             Destroy(shieldReference);
             shieldMove = false;
             StopCoroutine(Shield());
         }
 
-        if (shieldExists == true) { shieldMove = true; }
+        if (shieldExists == true) { shieldMove = true;
+            Debug.Log("02 PreventMovement");
+        }
 
         yield return new WaitForSeconds(shieldDuration);
 

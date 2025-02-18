@@ -252,7 +252,7 @@ MonoBehaviour:
   dashCooldown: 1
   excludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   includeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -288,7 +288,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -297,7 +297,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -306,7 +306,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -315,7 +315,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -324,7 +324,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -333,7 +333,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -342,7 +342,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -351,7 +351,7 @@ MonoBehaviour:
     sound: {fileID: 0}
     priority: 0
     volume: 0
-    pitch: 0
+    pitch: 0.1
     loop: 0
     mute: 0
     mixer: {fileID: 0}
@@ -462,6 +462,50 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: fcef18e4-0604-4839-af61-e1221ee498c2
     m_ActionName: 'Player/Fired Up[/XInputControllerWindows/leftTrigger,/Keyboard/t]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 449d319d-7646-43dd-84d4-5583413d3ccf
+    m_ActionName: UI/Navigate
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4304c868-73cf-450d-91b4-7970d9e12a26
+    m_ActionName: UI/Submit
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: afbdc8fd-eab3-4f8d-b29b-ae9349f526fb
+    m_ActionName: UI/Cancel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d98c4b76-4821-4416-ad2f-ce48d0f43e2b
+    m_ActionName: UI/Point
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 117afddd-0a7d-4ac4-9578-e3fcda6ca6fc
+    m_ActionName: UI/Click
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a19e949e-cec7-4b78-b3e6-7017e60b69d2
+    m_ActionName: UI/ScrollWheel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2a7170f9-e8a8-4447-b5d7-4d76ce1c18b1
+    m_ActionName: UI/MiddleClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 012f9bb5-2a28-4111-822c-48014696eaec
+    m_ActionName: UI/RightClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9d178762-75eb-4498-9900-401efbe32f17
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1546b098-4a91-4bc5-8ef8-75116e44c152
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c3792c4a-2d53-46a9-a4bc-dca8a1b6cd37
+    m_ActionName: 'UI/Pause[/XInputControllerWindows/start]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player
