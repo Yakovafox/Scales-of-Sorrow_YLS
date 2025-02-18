@@ -104,6 +104,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private Ray ray;
     private RaycastHit rayResult;
+    private RaycastHit colHit;
 
 
 
@@ -436,12 +437,27 @@ public class EnemyStateMachine : MonoBehaviour
         if (p2Dist < p1Dist){return PlayerRef[1]; }
         return PlayerRef[0];
     }
+
+    GameObject returnPlayerWithID(int playerID)
+    {
+        if (PlayerRef.Count <= 1) { return PlayerRef[0].gameObject; }
+        for (int i = 0; i < PlayerRef.Count; i++)
+        {
+            if(PlayerRef[i].GetComponent<PlayerController>().playerID == playerID)
+            {
+                return PlayerRef[i].gameObject;
+            }
+            continue;
+        }
+        return PlayerRef[0].gameObject;
+    }
     #endregion
 
     #region Health Functions
 
-    public void ReceiveDamage(float incomingDamage)
+    public void ReceiveDamage(float incomingDamage, int playerID)
     {
+        if(specialActive && dirOverlapsWithShield(playerID)) { return; }
         if(NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
@@ -457,6 +473,19 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool dirOverlapsWithShield(int playerID)
     {
+
+        bool result = false;
+        GameObject playerContext = returnPlayerWithID(playerID);
+
+        Vector3 playerDir = playerContext.transform.position - transform.position;
+        ray = new Ray(sightPosition.position, playerDir);
+        if(Physics.Raycast(ray, out colHit))
+        {
+            if (colHit.transform.gameObject == shieldRef)
+            {
+                return true;
+            }
+        }
 
         return false;
     }
