@@ -746,7 +746,7 @@ public class EnemyStateMachine : MonoBehaviour
             {
                 GO_shadowCaster.transform.localScale += GO_shadowCaster.transform.localScale * (3.5f * Time.deltaTime);
             }
-            if(spriteRenderer.transform.position.y <= defaultYPos  && spriteRenderer.transform.position.y <= defaultYPos + 0.75f && doOneCamShake)
+            if(spriteRenderer.transform.position.y >= defaultYPos  && spriteRenderer.transform.position.y <= defaultYPos + 1f && doOneCamShake)
             {
                 doOneCamShake = false;
                 OnDragonLanded?.Invoke();
