@@ -18,7 +18,7 @@ MonoBehaviour:
     type: 3}
   Target: []
   walkSpeed: 2
-  canFly: 0
+  canFly: 1
   flySpeed: 4
   flying: 0
   moveRadius: 15
