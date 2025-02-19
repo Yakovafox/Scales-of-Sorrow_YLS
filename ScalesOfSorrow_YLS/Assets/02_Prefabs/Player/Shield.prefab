@@ -164,5 +164,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentMode: 0
   xLock: 0
-  yLock: 1
-  zLock: 1
+  yLock: 0
+  zLock: 0

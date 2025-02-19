@@ -80,8 +80,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
     private bool isShield = false;
-    private bool shieldExists = false;
-    private bool shieldMove = false;
+    private bool shieldCooldownDone = true;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDash) { return; }
-        if (!shieldMove) { MoveInput(); }
+        if (!isShield) { MoveInput(); }
     }
 
     public void SetPlayerID(int ID) { playerID = ID; }
@@ -263,51 +262,32 @@ public class PlayerController : MonoBehaviour
 
     public void OnShield(InputAction.CallbackContext context)
     {
-        if (upgradeShield && context.started)
+        if (upgradeShield && context.started && shieldCooldownDone)
         {
-            StopCoroutine(Shield());
-            StartCoroutine(Shield());
+            StartCoroutine(ShieldUp());
         }
     }
 
-    IEnumerator Shield()
+    IEnumerator ShieldUp()
     {
+        shieldCooldownDone = false;
         Debug.Log("00 Start of coroutine");
-        isShield = !isShield;
-
-        if (isShield && !shieldExists)
-        {
-            Debug.Log("01 Spawned Shield");
-            shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
-            
-            shieldExists = true;
-        } 
-        else if (!isShield && shieldExists)
-        {
-            Debug.Log("01 Destroyed Shield");
-            Destroy(shieldReference);
-            shieldMove = false;
-            StopCoroutine(Shield());
-        }
-
-        if (shieldExists == true) { shieldMove = true;
-            Debug.Log("02 PreventMovement");
-        }
-
+        isShield = true;
+        shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
+        
         yield return new WaitForSeconds(shieldDuration);
 
         Debug.Log("03 allow movement");
-        shieldMove = false;
-        if (shieldReference != null) { Destroy(shieldReference); shieldExists = false; Debug.Log("04 destroy shield"); }
+        isShield = false;
+        if (shieldReference != null) { Destroy(shieldReference); }
 
         yield return new WaitForSeconds(shieldCooldown);
-        isShield = false;
+        shieldCooldownDone = true;
         Debug.Log("05 Shield No");
     }
-
     public void ShieldDestroyed()
     {
-        shieldExists = false;
+        isShield = false;
     }
     #endregion ------------------------    Shield    ------------------------
 
