@@ -248,7 +248,7 @@ MonoBehaviour:
   health: 100
   pSpeed: 350
   movementInput: {x: 0, y: 0}
-  dashSpeed: 180
+  dashSpeed: 80
   dashTime: 0.3
   dashCooldown: 1
   excludeLayers:
@@ -357,11 +357,9 @@ MonoBehaviour:
     mute: 0
     mixer: {fileID: 0}
     source: {fileID: 0}
-  tempHealth: {fileID: 4884843274392410703, guid: e91f1e1ffb3255f4abce510f20119c5f,
-    type: 3}
-  temp: {fileID: 0}
-  tempText: {fileID: 0}
-  tempRect: {fileID: 0}
+  animationController: {fileID: 8152626532650697248}
+  runCloud: {fileID: 0}
+  dashCloud: {fileID: 0}
 --- !u!114 &6669472844546632342
 MonoBehaviour:
   m_ObjectHideFlags: 0
