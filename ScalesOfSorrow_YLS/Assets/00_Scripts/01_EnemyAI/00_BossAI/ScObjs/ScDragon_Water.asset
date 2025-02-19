@@ -21,14 +21,14 @@ MonoBehaviour:
   canFly: 0
   flySpeed: 4
   flying: 0
-  moveRadius: 3
+  moveRadius: 15
   timeToWait: 0.5
   GroundLayer:
     serializedVersion: 2
     m_Bits: 8
   canSee: 1
   sightDistance: 10
-  sightAngle: 120
+  sightAngle: 160
   MaxHealth: 150
   Stages: 1
   flightTime: 5
@@ -40,7 +40,7 @@ MonoBehaviour:
   attackCooldown: 0.1
   meleeAttackDistance: 3
   meleeDamage: 10
-  rangedAttackDistance: 9
+  rangedAttackDistance: 10
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
