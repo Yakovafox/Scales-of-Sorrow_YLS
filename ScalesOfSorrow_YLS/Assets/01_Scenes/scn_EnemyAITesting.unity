@@ -1145,6 +1145,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_EnemyAI
       objectReference: {fileID: 0}
+    - target: {fileID: 6605791018841319043, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
