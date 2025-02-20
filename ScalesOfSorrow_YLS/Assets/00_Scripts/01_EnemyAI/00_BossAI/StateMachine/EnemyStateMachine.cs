@@ -97,6 +97,10 @@ public class EnemyStateMachine : MonoBehaviour
     private float debug_Timer = 0.0f;
     private float debug_WaitTime = 0.0f;
 
+    private float dmg_flashTime = 1f;
+
+    private Color dmg_flashColour = Color.white;
+
     private Transform groundChecker;
     private Transform sightPosition;
 
@@ -385,7 +389,7 @@ public class EnemyStateMachine : MonoBehaviour
                     //Change State to Threatened attack! (Special version of attacking.)
                 }
                 //Execute any special functionality that the dragon has. (Example: Dashing toward the player.)
-                StartCoroutine(specialFunctionality());
+                //StartCoroutine(specialFunctionality());
                 
                 // Any Special ability that can be done should happen here. (Example the electro dragons dash.)
                 //Enter attack state and loop back to hear after attack?
@@ -459,8 +463,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
-        if(specialActive && dirOverlapsWithShield(playerID)) { return; }
-        if(NHS_HealthCheckup(incomingDamage) > 0)
+        print("if statement blocking progress!");
+        if (specialActive && dirOverlapsWithShield(playerID)) { return; }
+        StartCoroutine(DamageFlasher());
+        if (NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
             return;
@@ -503,6 +509,23 @@ public class EnemyStateMachine : MonoBehaviour
         }
         stagesLeft -= 1;
         currentHealth = myData_SO.MaxHealth;
+    }
+
+    IEnumerator DamageFlasher()
+    {
+        float currentFlashValue = 0f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dmg_flashTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashValue = Mathf.Lerp(1f, myData_SO.dmg_AnimCurve.Evaluate(elapsedTime), (elapsedTime / dmg_flashTime));
+            spriteRenderer.material.SetColor("_FlashColour", dmg_flashColour);
+            spriteRenderer.material.SetFloat("_FlashAmount", currentFlashValue);
+
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     #endregion

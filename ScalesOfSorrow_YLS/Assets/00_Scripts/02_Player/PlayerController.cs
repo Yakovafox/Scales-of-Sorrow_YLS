@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
             if (hits[i].transform.CompareTag("Enemy"))
             {
                 Debug.Log("hit enemy pew pew");
-                //hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
+                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
             }
         }
 

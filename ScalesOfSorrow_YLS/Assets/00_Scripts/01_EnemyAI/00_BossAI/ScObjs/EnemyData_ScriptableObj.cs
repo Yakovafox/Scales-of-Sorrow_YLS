@@ -72,6 +72,9 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Range(0, 3)]
     public int Stages = 1;
 
+    [Tooltip("Animation curve for damage flash.")]
+    public AnimationCurve dmg_AnimCurve;
+
     [Header("Flying Variables")] [Tooltip("The desired amount of time that the dragon should spend in the air.")]
     public float flightTime = 5f;
     [Tooltip("The cooldown time that determines how long the before the dragon can fly again.")]

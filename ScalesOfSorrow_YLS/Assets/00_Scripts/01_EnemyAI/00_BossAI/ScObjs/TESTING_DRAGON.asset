@@ -30,6 +30,39 @@ MonoBehaviour:
   sightAngle: 120
   MaxHealth: 150
   Stages: 1
+  dmg_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -15.412027
+      outSlope: -15.412027
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0449
+      value: 0.308
+      inSlope: -7.4988885
+      outSlope: -7.4988885
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23811218
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: -1.5017065
+      outSlope: -1.5017065
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   flightTime: 10
   flightCooldownTime: 10
   stunTime: 5
