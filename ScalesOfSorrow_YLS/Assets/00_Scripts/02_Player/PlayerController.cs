@@ -123,12 +123,10 @@ public class PlayerController : MonoBehaviour
         tempRect = temp.GetComponent<RectTransform>();
         if (playerID == 0)
         {
-            Debug.Log("Player ID: " + playerID + " should be 0");
             tempRect.anchoredPosition = new Vector2(-800, -100);
         }
         else
         {
-            Debug.Log("Player ID: " + playerID + " should be 1");
             tempRect.anchoredPosition = new Vector2(800, 100);
         }
     }
@@ -144,7 +142,7 @@ public class PlayerController : MonoBehaviour
         if (!isShield) { MoveInput(); }
     }
 
-    public void SetPlayerID(int ID) { playerID = ID; }
+    public void SetPlayerID(int ID) { playerID = ID; Debug.Log("Player ID"); }
 
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
@@ -162,6 +160,12 @@ public class PlayerController : MonoBehaviour
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Debug.Log("Set Position");
+        transform.position = position;
     }
 
     #endregion ------------------------    Movement    ------------------------
@@ -222,7 +226,6 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
-        Debug.Log(hits.Length);
         //play particle effect
         //SoundEffect
         float totalDamage = attackDamage;
