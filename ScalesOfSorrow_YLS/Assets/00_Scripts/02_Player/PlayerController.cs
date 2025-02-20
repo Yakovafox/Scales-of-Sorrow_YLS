@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using RotaryHeart.Lib.PhysicsExtension;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -98,6 +99,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound playerHitClip;
     [SerializeField] private Sound deathClip;
 
+    [Header("-----Temp UI")]
+    [SerializeField] private GameObject tempHealth;
+    private GameObject temp;
+    private TextMeshProUGUI tempText;
+    private RectTransform tempRect;
+
 
     #endregion ------------------------    Variables    ------------------------
     void Start()
@@ -108,6 +115,22 @@ public class PlayerController : MonoBehaviour
         pSR = GetComponentInChildren<SpriteRenderer>();
 
         attackCharges = maxCharges;
+
+        temp = Instantiate(tempHealth).transform.GetChild(0).gameObject;
+        tempText = temp.GetComponent<TextMeshProUGUI>();
+        tempText.text = health.ToString();
+
+        tempRect = temp.GetComponent<RectTransform>();
+        if (playerID == 0)
+        {
+            Debug.Log("Player ID: " + playerID + " should be 0");
+            tempRect.anchoredPosition = new Vector2(-800, -100);
+        }
+        else
+        {
+            Debug.Log("Player ID: " + playerID + " should be 1");
+            tempRect.anchoredPosition = new Vector2(800, 100);
+        }
     }
 
     void Update()
@@ -295,7 +318,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-
+        tempText.text = health.ToString();
         if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
         if (health >= 0) 
