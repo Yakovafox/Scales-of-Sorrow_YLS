@@ -627,7 +627,7 @@ TextureImporter:
       name: Death_1
       rect:
         serializedVersion: 2
-        x: 141
+        x: 138
         y: 43
         width: 19
         height: 18
@@ -648,7 +648,7 @@ TextureImporter:
       name: Death_2
       rect:
         serializedVersion: 2
-        x: 246
+        x: 242
         y: 43
         width: 19
         height: 18
