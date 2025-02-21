@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using RotaryHeart.Lib.PhysicsExtension;
-using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.Analytics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -99,12 +99,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound playerHitClip;
     [SerializeField] private Sound deathClip;
 
-    [Header("-----Temp UI")]
-    [SerializeField] private GameObject tempHealth;
-    private GameObject temp;
-    private TextMeshProUGUI tempText;
-    private RectTransform tempRect;
+    [Header("------- Animation Controller -------")]
+    [SerializeField] Animator animationController;
 
+    [Header("------- Effects -------")]
+    [SerializeField] ParticleSystem runCloud;
+    [SerializeField] ParticleSystem dashCloud;
 
     #endregion ------------------------    Variables    ------------------------
     void Start()
@@ -115,20 +115,6 @@ public class PlayerController : MonoBehaviour
         pSR = GetComponentInChildren<SpriteRenderer>();
 
         attackCharges = maxCharges;
-
-        temp = Instantiate(tempHealth).transform.GetChild(0).gameObject;
-        tempText = temp.GetComponent<TextMeshProUGUI>();
-        tempText.text = health.ToString();
-
-        tempRect = temp.GetComponent<RectTransform>();
-        if (playerID == 0)
-        {
-            tempRect.anchoredPosition = new Vector2(-800, -100);
-        }
-        else
-        {
-            tempRect.anchoredPosition = new Vector2(800, 100);
-        }
     }
 
     void Update()
@@ -142,7 +128,7 @@ public class PlayerController : MonoBehaviour
         if (!isShield) { MoveInput(); }
     }
 
-    public void SetPlayerID(int ID) { playerID = ID; Debug.Log("Player ID"); }
+    public void SetPlayerID(int ID) { playerID = ID; }
 
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
@@ -160,12 +146,9 @@ public class PlayerController : MonoBehaviour
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
-    }
 
-    public void SetPosition(Vector3 position)
-    {
-        Debug.Log("Set Position");
-        transform.position = position;
+        if (axis.x != 0 || axis.z != 0) { animationController.SetBool("isRunning", true); }
+        else {animationController.SetBool("isRunning", false);}
     }
 
     #endregion ------------------------    Movement    ------------------------
@@ -187,6 +170,8 @@ public class PlayerController : MonoBehaviour
         pCollider.excludeLayers = excludeLayers;
         canDash = false;
         isDash = true;
+
+        animationController.SetTrigger("hasDashed");
 
         pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
 
@@ -223,9 +208,12 @@ public class PlayerController : MonoBehaviour
         canAttack = false;
         attackCharges -= 1;
 
+        animationController.SetTrigger("hasAttacked");
+
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
+        Debug.Log(hits.Length);
         //play particle effect
         //SoundEffect
         float totalDamage = attackDamage;
@@ -321,7 +309,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        tempText.text = health.ToString();
+
         if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
         if (health >= 0) 
