@@ -18,31 +18,40 @@ MonoBehaviour:
     type: 3}
   Target: []
   walkSpeed: 2
-  canFly: 0
+  canFly: 1
   flySpeed: 4
   flying: 0
-  moveRadius: 3
+  moveRadius: 15
   timeToWait: 0.5
   GroundLayer:
     serializedVersion: 2
     m_Bits: 8
   canSee: 1
   sightDistance: 10
-  sightAngle: 120
+  sightAngle: 160
   MaxHealth: 150
   Stages: 1
   flightTime: 5
   flightCooldownTime: 10
   stunTime: 5
   chanceToFly: 33.33
+  pushBackDistance: 5
+  pushBackAmount: 5
   shadow_DefaultSize: 1
-  shadow_MaxSize: 3
+  shadow_MinSize: 1
   attackCooldown: 0.1
   meleeAttackDistance: 3
   meleeDamage: 10
-  rangedAttackDistance: 9
+  rangedAttackDistance: 5
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
   specialAttackChance: 15
   SpecialDamage: 0
+  ability_Timer: 10
+  ability_cooldownTime: 15
+  Shield: {fileID: 0}
+  dashCooldownTime: 2.25
+  Trap: {fileID: 0}
+  fireup_DamageMultiplier: 1.5
+  fireup_ChargeTime: 3

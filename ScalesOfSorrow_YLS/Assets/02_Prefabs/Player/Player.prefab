@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3272692226260714306}
   - component: {fileID: 7572181838060726870}
   - component: {fileID: 4816562947862391984}
-  - component: {fileID: 2174670260944266781}
   m_Layer: 1
   m_Name: shadow caster
   m_TagString: Untagged
@@ -28,9 +27,9 @@ Transform:
   m_GameObject: {fileID: 3988916301408249561}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.4000009, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: -1.25, z: 0}
+  m_LocalScale: {x: 3.5, y: 0.2, z: 2}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7166941391526296494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -86,27 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2174670260944266781
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3988916301408249561}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5703905168941233314
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8999256869386577318}
   - component: {fileID: 4227494370109511080}
+  - component: {fileID: 8152626532650697248}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -133,9 +112,9 @@ Transform:
   m_GameObject: {fileID: 5703905168941233314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -0.4, y: 0.75, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7166941391526296494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -161,7 +140,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 76e79eb2398a8c34083523aac68b27cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -182,17 +161,39 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 89c53edd9a0c5694b87b37106a480b8c, type: 3}
+  m_Sprite: {fileID: 1858766269, guid: 268c2f90c4cf77c42bc4512a8a84d1b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.56, y: 2.56}
+  m_Size: {x: 0.15, y: 0.18}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &8152626532650697248
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5703905168941233314}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8e95b5ae6bb01ca449f3a5cb8b9cb767, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5866699517902324792
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,7 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 0
   health: 100
-  pSpeed: 1000
+  pSpeed: 350
   movementInput: {x: 0, y: 0}
   dashSpeed: 180
   dashTime: 0.3
@@ -356,6 +357,11 @@ MonoBehaviour:
     mute: 0
     mixer: {fileID: 0}
     source: {fileID: 0}
+  tempHealth: {fileID: 4884843274392410703, guid: e91f1e1ffb3255f4abce510f20119c5f,
+    type: 3}
+  temp: {fileID: 0}
+  tempText: {fileID: 0}
+  tempRect: {fileID: 0}
 --- !u!114 &6669472844546632342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,6 +578,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMode: 0
-  xLock: 0
-  yLock: 0
+  xLock: 1
+  yLock: 1
   zLock: 0
