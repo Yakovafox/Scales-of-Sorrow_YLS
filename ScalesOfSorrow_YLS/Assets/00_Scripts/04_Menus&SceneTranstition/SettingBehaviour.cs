@@ -20,13 +20,6 @@ public class SettingBehaviour : MonoBehaviour
         else { settingBehaviourInstance = this; }
         DontDestroyOnLoad(gameObject);
 
-        SettingsMenu(false);
-    }
-
-    void Update()
-    {
-            SettingsMenu(menuEnabled);
-        
     }
 
     public void SettingsMenu(bool menuEnabled)
