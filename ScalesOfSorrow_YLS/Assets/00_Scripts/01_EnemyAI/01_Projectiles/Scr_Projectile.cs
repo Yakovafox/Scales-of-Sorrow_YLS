@@ -18,7 +18,13 @@ public class Scr_Projectile : MonoBehaviour
         set { damageToDeal = value; }
     }
 
+    [SerializeField] private bool ProjectileType_isAmmo;
+
     [SerializeField] private float launchForce = 25f;
+    public float Acc_launchForce
+    {
+        set { launchForce = value; }
+    }
 
     void Start()
     {
@@ -30,12 +36,26 @@ public class Scr_Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        switch (ProjectileType_isAmmo)
         {
-            collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
-        }
+            case false:
+                if (collision.gameObject.CompareTag("Player"))
+                {
+                    collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
+                }
 
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+                break;
+
+            case true:
+                if (collision.gameObject.CompareTag("Player"))
+                {
+                    //Give player ammo.
+                    collision.gameObject.GetComponent<PlayerController>().RechargeMelee();
+                }
+                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+                break;
+    }
         
         Destroy(gameObject);
     }

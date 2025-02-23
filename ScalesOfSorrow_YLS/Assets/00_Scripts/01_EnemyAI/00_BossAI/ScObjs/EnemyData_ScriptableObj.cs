@@ -122,6 +122,13 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The projectile for a ranged attack.")]
     public GameObject rangedProjectile;
 
+    [Header("Player Helping Projectile")]
+    [Tooltip("Projectile that replenishes player attack charges. (The dragon's cry for help if you will.)")]
+    public GameObject ammoProjectile;
+    [Tooltip("Chance of ammo projectile spawning.")]
+    [Range(0, 100)]
+    public float ammoProjectileSpawnChance = 33.33f;
+
     //-------------------------------------------------------------------------------
     
     [Header("----- Special Variables -----")]

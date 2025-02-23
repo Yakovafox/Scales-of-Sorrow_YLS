@@ -310,9 +310,17 @@ public class EnemyStateMachine : MonoBehaviour
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
                     {
-                        doOnce = false;
-                        RangedAttack();
-                        // ShootProjectile
+                        if (shouldSpawnAmmoProjecile())
+                        {
+                            doOnce = false;
+                            spawnAmmo();
+                        }
+                        else
+                        {
+                            doOnce = false;
+                            RangedAttack();
+                            // ShootProjectile
+                        }
                     }
 
                     doOnce = false;
@@ -339,9 +347,17 @@ public class EnemyStateMachine : MonoBehaviour
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
                     {
-                        doOnce = false;
-                        RangedAttack();
-                        // ShootProjectile
+                        if (shouldSpawnAmmoProjecile())
+                        {
+                            doOnce = false;
+                            spawnAmmo();
+                        }
+                        else
+                        {
+                            doOnce = false;
+                            RangedAttack();
+                            // ShootProjectile
+                        }
                     }
 
                     doOnce = false;
@@ -848,6 +864,11 @@ public class EnemyStateMachine : MonoBehaviour
         return myData_SO.specialAttackChance > Random.Range(0,100);
     }
 
+    bool shouldSpawnAmmoProjecile()
+    {
+        return myData_SO.ammoProjectileSpawnChance > Random.Range(0, 100);
+    }
+
     protected virtual void BasicAttack()
     {
         float damageToDeal = 20f;
@@ -876,10 +897,14 @@ public class EnemyStateMachine : MonoBehaviour
         float damageToDeal = 10f;
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
-        
-        GameObject projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
+
+        GameObject projectileInstance;
+
+        projectileInstance = Instantiate(myData_SO.rangedProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
+       
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection(findClosestPlayer());
         projectileInstance.GetComponent<Scr_Projectile>().Accessor_damageToDeal = damageToDeal;
+
         agent.isStopped = true;
 
         if (specialActive) 
@@ -891,6 +916,25 @@ public class EnemyStateMachine : MonoBehaviour
 
         ChangeState(EnemyStates.Idle);
 
+    }
+
+    protected virtual void spawnAmmo()
+    {
+        GameObject projectileInstance;
+
+        projectileInstance = Instantiate(myData_SO.ammoProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
+
+        projectileInstance.GetComponent<Scr_Projectile>().Accessor_dir = GetPlayerDirection(findClosestPlayer());
+
+        agent.isStopped = true;
+
+        if (specialActive)
+        {
+            ChangeState(EnemyStates.Special);
+            return;
+        }
+
+        ChangeState(EnemyStates.Idle);
     }
 
     private List<GameObject> checkPlayersDistance()
