@@ -80,7 +80,7 @@ MonoBehaviour:
     type: 3}
   ammoProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
     type: 3}
-  ammoProjectileSpawnChance: 70
+  ammoProjectileSpawnChance: 15
   specialAttackChance: 90
   SpecialDamage: 0
   ability_Timer: 10

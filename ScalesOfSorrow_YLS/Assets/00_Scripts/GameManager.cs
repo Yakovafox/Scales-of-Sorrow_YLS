@@ -10,21 +10,18 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EnemyStateMachine.OnDragonDefeated += GameWon;
+        PlayerController.OnPlayerDefeated += GameOver;
     }
 
     private void OnDisable()
     {
         EnemyStateMachine.OnDragonDefeated -= GameWon;
+        PlayerController.OnPlayerDefeated -= GameOver;
     }
     
     void Awake()
     {
         GameMenus_Manager = GetComponent<Management_GameMenus>();
-    }
-    
-    void Update()
-    {
-        
     }
 
     void GameWon()

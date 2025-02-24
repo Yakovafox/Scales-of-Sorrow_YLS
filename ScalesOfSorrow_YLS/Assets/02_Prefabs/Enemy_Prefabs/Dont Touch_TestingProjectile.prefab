@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageToDeal: 0
-  ProjectileType_isAmmo: 0
+  ProjectileType_isAmmo: 1
   launchForce: 15
 --- !u!54 &600375132331268558
 Rigidbody:

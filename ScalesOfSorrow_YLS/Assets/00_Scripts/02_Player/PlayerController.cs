@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
+    [SerializeField] private float dmg_flashTime = 0.5f;
+    [SerializeField] private AnimationCurve dmg_AnimCurve;
+    [SerializeField] private Color dmg_flashColour;
+
     [Header("------- Movement -------")]
     [SerializeField] private float pSpeed;
     [SerializeField] private Vector2 movementInput = Vector2.zero;
@@ -112,6 +116,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ParticleSystem dashLeft;
     [SerializeField] ParticleSystem dashRight;
 
+    public delegate void delegate_playerDefeated();
+    public static event delegate_playerDefeated OnPlayerDefeated; 
+
+
     #endregion ------------------------    Variables    ------------------------
     void Start()
     {
@@ -148,7 +156,11 @@ public class PlayerController : MonoBehaviour
         if (!isShield) { MoveInput(); }
     }
 
-    public void SetPlayerID(int ID) { playerID = ID; Debug.Log("Player ID"); }
+    public void SetPlayerID(int ID)
+    { 
+        playerID = ID; Debug.Log("Player ID");
+        transform.position = new Vector3(5, transform.position.y, 5);
+    }
 
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
@@ -241,7 +253,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
-        RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
+        RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask/*, PreviewCondition.Both, 1f, Color.green, Color.red*/);
         //play particle effect
         //SoundEffect
         float totalDamage = attackDamage;
@@ -336,6 +348,8 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
+        StartCoroutine(playerDamageFlash());
+
         health -= damage;
         tempText.text = health.ToString();
         if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
@@ -353,4 +367,22 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion ------------------------    Collision    ------------------------
+
+    private IEnumerator playerDamageFlash()
+    {
+        float currentFlashValue = 0f;
+        float elapsedTime = 0f;
+        SpriteRenderer spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+
+        while (elapsedTime < dmg_flashTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashValue = Mathf.Lerp(1f, dmg_AnimCurve.Evaluate(elapsedTime), (elapsedTime / dmg_flashTime));
+            spriteRenderer.material.SetColor("_FlashColour", dmg_flashColour);
+            spriteRenderer.material.SetFloat("_FlashAmount", currentFlashValue);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
 }
