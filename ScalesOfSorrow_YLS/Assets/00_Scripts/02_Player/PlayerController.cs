@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using RotaryHeart.Lib.PhysicsExtension;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -80,8 +81,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
     private bool isShield = false;
-    private bool shieldExists = false;
-    private bool shieldMove = false;
+    private bool shieldCooldownDone = true;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -99,6 +99,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound playerHitClip;
     [SerializeField] private Sound deathClip;
 
+    [Header("-----Temp UI")]
+    [SerializeField] private GameObject tempHealth;
+    private GameObject temp;
+    private TextMeshProUGUI tempText;
+    private RectTransform tempRect;
+
+    [Header("-----Animtions-----")]
+    [SerializeField] Animator animationController;
+
+    [Header("-----Effects-----")]
+    [SerializeField] ParticleSystem dashLeft;
+    [SerializeField] ParticleSystem dashRight;
 
     #endregion ------------------------    Variables    ------------------------
     void Start()
@@ -109,6 +121,20 @@ public class PlayerController : MonoBehaviour
         pSR = GetComponentInChildren<SpriteRenderer>();
 
         attackCharges = maxCharges;
+
+        temp = Instantiate(tempHealth).transform.GetChild(0).gameObject;
+        tempText = temp.GetComponent<TextMeshProUGUI>();
+        tempText.text = health.ToString();
+
+        tempRect = temp.GetComponent<RectTransform>();
+        if (playerID == 0)
+        {
+            tempRect.anchoredPosition = new Vector2(-800, -100);
+        }
+        else
+        {
+            tempRect.anchoredPosition = new Vector2(800, 100);
+        }
     }
 
     void Update()
@@ -119,10 +145,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDash) { return; }
-        if (!shieldMove) { MoveInput(); }
+        if (!isShield) { MoveInput(); }
     }
 
-    public void SetPlayerID(int ID) { playerID = ID; }
+    public void SetPlayerID(int ID) { playerID = ID; Debug.Log("Player ID"); }
 
     #region ------------------------    Movement    ------------------------
     public void OnMove(InputAction.CallbackContext context)
@@ -140,6 +166,15 @@ public class PlayerController : MonoBehaviour
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
+
+        if (axis.x != 0 | axis.z != 0) {animationController.SetBool("isRunning", true); }
+        else { animationController.SetBool("isRunning", false); }
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Debug.Log("Set Position");
+        transform.position = position;
     }
 
     #endregion ------------------------    Movement    ------------------------
@@ -161,6 +196,11 @@ public class PlayerController : MonoBehaviour
         pCollider.excludeLayers = excludeLayers;
         canDash = false;
         isDash = true;
+
+        animationController.SetTrigger("hasDashed");
+
+        if (movementInput.x > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
+        if (movementInput.x < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
 
         pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
 
@@ -197,10 +237,11 @@ public class PlayerController : MonoBehaviour
         canAttack = false;
         attackCharges -= 1;
 
+        animationController.SetTrigger("hasAttacked");
+
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
-        Debug.Log(hits.Length);
         //play particle effect
         //SoundEffect
         float totalDamage = attackDamage;
@@ -263,51 +304,32 @@ public class PlayerController : MonoBehaviour
 
     public void OnShield(InputAction.CallbackContext context)
     {
-        if (upgradeShield && context.started)
+        if (upgradeShield && context.started && shieldCooldownDone)
         {
-            StopCoroutine(Shield());
-            StartCoroutine(Shield());
+            StartCoroutine(ShieldUp());
         }
     }
 
-    IEnumerator Shield()
+    IEnumerator ShieldUp()
     {
+        shieldCooldownDone = false;
         Debug.Log("00 Start of coroutine");
-        isShield = !isShield;
-
-        if (isShield && !shieldExists)
-        {
-            Debug.Log("01 Spawned Shield");
-            shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
-            
-            shieldExists = true;
-        } 
-        else if (!isShield && shieldExists)
-        {
-            Debug.Log("01 Destroyed Shield");
-            Destroy(shieldReference);
-            shieldMove = false;
-            StopCoroutine(Shield());
-        }
-
-        if (shieldExists == true) { shieldMove = true;
-            Debug.Log("02 PreventMovement");
-        }
-
+        isShield = true;
+        shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
+        
         yield return new WaitForSeconds(shieldDuration);
 
         Debug.Log("03 allow movement");
-        shieldMove = false;
-        if (shieldReference != null) { Destroy(shieldReference); shieldExists = false; Debug.Log("04 destroy shield"); }
+        isShield = false;
+        if (shieldReference != null) { Destroy(shieldReference); }
 
         yield return new WaitForSeconds(shieldCooldown);
-        isShield = false;
+        shieldCooldownDone = true;
         Debug.Log("05 Shield No");
     }
-
     public void ShieldDestroyed()
     {
-        shieldExists = false;
+        isShield = false;
     }
     #endregion ------------------------    Shield    ------------------------
 
@@ -315,7 +337,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-
+        tempText.text = health.ToString();
         if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
         if (health >= 0) 
