@@ -50,7 +50,7 @@ public class EnemyStateMachine : MonoBehaviour
     #region Local Variables
     //Local Variables
 
-    private float currentHealth = 150f;
+    public float currentHealth = 150f;
     private int stagesLeft;
 
     public List<GameObject> PlayerRef;
@@ -141,6 +141,9 @@ public class EnemyStateMachine : MonoBehaviour
     #region DragonEvents
     public delegate void delegate_dragonLanded();
     public static event delegate_dragonLanded OnDragonLanded;
+
+    public delegate void delegate_dragonDefeated();
+    public static event delegate_dragonDefeated OnDragonDefeated;
 
     
     #endregion
@@ -519,7 +522,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
-            Debug.Log("Dragon has been defeated!!!!");
+            OnDragonDefeated();
             return;
             //DefeatOfDragon
         }
