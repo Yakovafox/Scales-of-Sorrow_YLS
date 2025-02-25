@@ -142,11 +142,11 @@ public class PlayerController : MonoBehaviour
         tempRect = temp.GetComponent<RectTransform>();
         if (playerID == 0)
         {
-            tempRect.anchoredPosition = new Vector2(80, -50);
+            tempRect.anchoredPosition = new Vector2(-339, 187);
         }
         else
         {
-            tempRect.anchoredPosition = new Vector2(80, -100);
+            tempRect.anchoredPosition = new Vector2(-339, 130);
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);

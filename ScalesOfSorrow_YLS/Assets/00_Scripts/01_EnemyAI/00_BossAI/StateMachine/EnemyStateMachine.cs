@@ -75,6 +75,10 @@ public class EnemyStateMachine : MonoBehaviour
     private GameObject InstantiatePosition;
     private GameObject shieldRef;
 
+    [SerializeField] private ParticleSystem FlightEffect;
+
+    private UI_Management GameUIManager;
+
 
 
 
@@ -176,6 +180,9 @@ public class EnemyStateMachine : MonoBehaviour
         //Functionality for setting the Dragon health on startup.
         currentHealth = myData_SO.MaxHealth;
         stagesLeft = myData_SO.Stages;
+
+        GameUIManager = GameObject.FindGameObjectWithTag("Gameplay_Canvas").GetComponent<UI_Management>();
+        GameUIManager.Acc_maxDamage = myData_SO.MaxHealth;
     }
 
 
@@ -490,12 +497,12 @@ public class EnemyStateMachine : MonoBehaviour
     {
 
         //Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
-        print("if statement blocking progress!");
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
         StartCoroutine(DamageFlasher());
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
+            GameUIManager.updateEnemyHealthBar(incomingDamage);
             return;
         }
         healthReachedZero();
@@ -740,6 +747,7 @@ public class EnemyStateMachine : MonoBehaviour
             defaultYPos = spriteRenderer.transform.position.y;
             defaultWorldPos = spriteRenderer.transform.position;
             defaultLocalPos = spriteRenderer.transform.localPosition;
+            if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
             ChangeState(EnemyStates.Fly);
         }
     }
@@ -799,6 +807,7 @@ public class EnemyStateMachine : MonoBehaviour
             if(spriteRenderer.transform.position.y >= defaultYPos  && spriteRenderer.transform.position.y <= defaultYPos + 0.95f && doOneCamShake)
             {
                 doOneCamShake = false;
+                if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
                 OnDragonLanded?.Invoke();
                 landingPushBack();
             }
@@ -807,7 +816,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
         spriteRenderer.transform.position = defaultWorldPos;
         spriteRenderer.transform.localPosition = defaultLocalPos;
-        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
+        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, 0.5f, myData_SO.shadow_DefaultSize);
     }
 
     IEnumerator LandingLerp()

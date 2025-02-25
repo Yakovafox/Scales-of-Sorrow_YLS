@@ -39,27 +39,22 @@ public class Scr_Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch (ProjectileType_isAmmo)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            case false:
-                if (collision.gameObject.CompareTag("Player"))
-                {
+            switch (ProjectileType_isAmmo)
+            {
+                case false:
                     collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
-                }
+                    break;
 
-                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
-                break;
-
-            case true:
-                if (collision.gameObject.CompareTag("Player"))
-                {
+                case true:
                     //Give player ammo.
                     collision.gameObject.GetComponent<PlayerController>().RechargeMelee();
-                }
-                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
-                break;
-    }
-        
+                    break;
+            }
+        }
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+
         Destroy(gameObject);
     }
 

@@ -10097,7 +10097,7 @@ MonoBehaviour:
   dmg_flashColour: {r: 0.6698113, g: 0.14217694, b: 0.14217694, a: 1}
   pSpeed: 350
   movementInput: {x: 0, y: 0}
-  dashSpeed: 80
+  dashSpeed: 35
   dashTime: 0.3
   dashCooldown: 1
   excludeLayers:
@@ -15501,7 +15501,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0, g: 1, b: 0.29478312, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

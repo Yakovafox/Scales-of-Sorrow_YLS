@@ -70,7 +70,7 @@ MonoBehaviour:
   chanceToFly: 33.33
   pushBackDistance: 5
   pushBackAmount: 5
-  shadow_DefaultSize: 1
+  shadow_DefaultSize: 2.5
   shadow_MinSize: 1
   attackCooldown: 0.1
   meleeAttackDistance: 3
