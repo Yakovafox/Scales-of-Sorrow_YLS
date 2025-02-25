@@ -3,20 +3,6 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[CustomEditor(typeof(CameraShaker)), CanEditMultipleObjects]
-public class TestShakeButton : Editor
-{
-    public delegate void TestShake_Delegate();
-    public static event TestShake_Delegate TestShake;
-
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        
-        if (GUILayout.Button("Test Shake Amount    (Game must be Running!!!!)"))
-            TestShake?.Invoke();
-    }
-}
 
 public class CameraShaker : MonoBehaviour
 {
@@ -33,13 +19,11 @@ public class CameraShaker : MonoBehaviour
 
     private void OnEnable()
     {
-        TestShakeButton.TestShake += cameraShakeFromEvent;
         EnemyStateMachine.OnDragonLanded += cameraShakeFromEvent;
     }
 
     private void OnDisable()
     {
-        TestShakeButton.TestShake -= cameraShakeFromEvent;
         EnemyStateMachine.OnDragonLanded -= cameraShakeFromEvent;
     }
     

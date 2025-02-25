@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound deathClip;
 
     [Header("-----Temp UI")]
+    private GameObject canvas_Gameplay;
     [SerializeField] private GameObject tempHealth;
     private GameObject temp;
     private TextMeshProUGUI tempText;
@@ -115,6 +116,9 @@ public class PlayerController : MonoBehaviour
     [Header("-----Effects-----")]
     [SerializeField] ParticleSystem dashLeft;
     [SerializeField] ParticleSystem dashRight;
+    [SerializeField] ParticleSystem attackEffect;
+    [SerializeField] ParticleSystem attackHit;
+
 
     public delegate void delegate_playerDefeated();
     public static event delegate_playerDefeated OnPlayerDefeated; 
@@ -130,19 +134,22 @@ public class PlayerController : MonoBehaviour
 
         attackCharges = maxCharges;
 
-        temp = Instantiate(tempHealth).transform.GetChild(0).gameObject;
+        canvas_Gameplay = GameObject.FindGameObjectWithTag("Gameplay_Canvas");
+        temp = Instantiate(tempHealth, canvas_Gameplay.transform).transform.GetChild(0).gameObject;
         tempText = temp.GetComponent<TextMeshProUGUI>();
         tempText.text = health.ToString();
 
         tempRect = temp.GetComponent<RectTransform>();
         if (playerID == 0)
         {
-            tempRect.anchoredPosition = new Vector2(-800, -100);
+            tempRect.anchoredPosition = new Vector2(80, -50);
         }
         else
         {
-            tempRect.anchoredPosition = new Vector2(800, 100);
+            tempRect.anchoredPosition = new Vector2(80, -100);
         }
+
+        transform.position = new Vector3(8, transform.position.y, 4);
     }
 
     void Update()
@@ -159,7 +166,6 @@ public class PlayerController : MonoBehaviour
     public void SetPlayerID(int ID)
     { 
         playerID = ID; Debug.Log("Player ID");
-        transform.position = new Vector3(5, transform.position.y, 5);
     }
 
     #region ------------------------    Movement    ------------------------
@@ -251,6 +257,9 @@ public class PlayerController : MonoBehaviour
 
         animationController.SetTrigger("hasAttacked");
 
+        if (!attackEffect.isPlaying) { attackEffect.Play(); }
+
+
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask/*, PreviewCondition.Both, 1f, Color.green, Color.red*/);
@@ -270,6 +279,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("hit enemy pew pew");
                 hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
+                if (!attackHit.isPlaying) { attackHit.Play(); }
             }
         }
 
@@ -354,9 +364,11 @@ public class PlayerController : MonoBehaviour
         tempText.text = health.ToString();
         if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
-        if (health >= 0) 
+        if (health <= 0) 
         {
             if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+            temp.SetActive(false);
+            OnPlayerDefeated();
         }
     }
 

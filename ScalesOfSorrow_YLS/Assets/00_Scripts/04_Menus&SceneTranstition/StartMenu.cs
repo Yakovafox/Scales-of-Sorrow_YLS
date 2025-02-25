@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StartMenu : MonoBehaviour
 {
@@ -10,17 +11,23 @@ public class StartMenu : MonoBehaviour
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject settingsCanvas;
     [SerializeField] private GameObject creditsCanvas;
+    [SerializeField] private GameObject loadingCanvas;
 
     [Header("First Selected Objects")]
     [SerializeField] private GameObject mainMenuFirstSelect;
     [SerializeField] private GameObject settingsMenuFirstSelect;
     [SerializeField] private GameObject creditsFirstSelect;
 
+    private Slider loadingBar;
+
     private void Start()
     {
         mainMenuCanvas.SetActive(true);
         settingsCanvas.SetActive(false);
         creditsCanvas.SetActive(false);
+        loadingCanvas.SetActive(false);
+
+        loadingBar = loadingCanvas.GetComponentInChildren<Slider>();
 
     }
 
@@ -53,7 +60,24 @@ public class StartMenu : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        mainMenuCanvas.SetActive(false);
+        StartCoroutine(LoadAsyncScene(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
+    IEnumerator LoadAsyncScene(int sceneIndex)
+    {
+        AsyncOperation loadAsyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        Debug.Log("Activated and Loading!");
+
+        loadingCanvas.SetActive(true);
+
+        while (!loadAsyncOperation.isDone)
+        {
+            float loadProgress = Mathf.Clamp01(loadAsyncOperation.progress / 0.9f);
+            loadingBar.value = loadProgress;
+
+            yield return null;
+        }
     }
 
     public void Quit()

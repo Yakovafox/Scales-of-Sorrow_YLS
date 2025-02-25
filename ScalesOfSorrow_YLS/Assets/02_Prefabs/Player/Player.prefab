@@ -10060,6 +10060,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 0
   health: 100
+  dmg_flashTime: 0.5
+  dmg_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -15.412027
+      outSlope: -15.412027
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0449
+      value: 0.308
+      inSlope: -7.4988885
+      outSlope: -7.4988885
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23811218
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: -1.5017065
+      outSlope: -1.5017065
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dmg_flashColour: {r: 0.6698113, g: 0.14217694, b: 0.14217694, a: 1}
   pSpeed: 350
   movementInput: {x: 0, y: 0}
   dashSpeed: 80
@@ -10171,7 +10206,8 @@ MonoBehaviour:
     mute: 0
     mixer: {fileID: 0}
     source: {fileID: 0}
-  tempHealth: {fileID: 0}
+  tempHealth: {fileID: 3469851368366389311, guid: d454edd58c4b6ae49a4c9815de1848d1,
+    type: 3}
   animationController: {fileID: 8152626532650697248}
   dashLeft: {fileID: 621178157422664777}
   dashRight: {fileID: 7666198717647291779}
@@ -10327,6 +10363,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: c3792c4a-2d53-46a9-a4bc-dca8a1b6cd37
     m_ActionName: 'UI/Pause[/XInputControllerWindows/start]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 104d76bf-2a2d-4101-b84f-fbd89a1cdd49
+    m_ActionName: 'Player/MenuOpenClose[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player

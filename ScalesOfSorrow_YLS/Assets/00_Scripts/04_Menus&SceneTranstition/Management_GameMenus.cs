@@ -25,6 +25,7 @@ public class Management_GameMenus : MonoBehaviour
         {
             Menus[i] = canvasHolder.transform.GetChild(i).gameObject;
             if(Menus[i].gameObject.activeInHierarchy){ Menus[i].SetActive(false); }
+            if (Menus[i].gameObject.CompareTag("Gameplay_Canvas")) { Menus[i].SetActive(true); }
         }
         
         loadingScreen = canvasHolder.transform.Find("Canvas_LoadingScreen").gameObject;
@@ -69,7 +70,7 @@ public class Management_GameMenus : MonoBehaviour
     public void showGameOverScreen()
     {
         Time.timeScale = 0;
-        canvasHolder.transform.Find("Canvas_GameSuccess").gameObject.SetActive(true);
+        canvasHolder.transform.Find("Canvas_GameOver").gameObject.SetActive(true);
         enableMouseFeatures();
     }
 

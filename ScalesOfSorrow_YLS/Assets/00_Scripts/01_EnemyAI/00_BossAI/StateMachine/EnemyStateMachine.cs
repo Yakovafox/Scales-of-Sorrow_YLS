@@ -25,7 +25,7 @@ public class EnemyStateMachine : MonoBehaviour
 
 
 
-    [Tooltip ("Starting state for the AI")]
+    [Tooltip("Starting state for the AI")]
     [SerializeField] private EnemyStates currentState = EnemyStates.Idle;
 
 
@@ -33,8 +33,11 @@ public class EnemyStateMachine : MonoBehaviour
     [Tooltip("Points in the world the AI should navigate to and from")]
     [SerializeField] public GameObject patrolPoints_Parent;
 
-    [Tooltip ("Scriptable Object reference that holds all the variables for this enemy type")]
+    [Tooltip("Scriptable Object reference that holds all the variables for this enemy type")]
     [SerializeField] private EnemyData_ScriptableObj myData_SO;
+
+    [Header("-----Animtions-----")]
+    [SerializeField] Animator animationController;
 
     #region DEBUG TOGGLES
     [Header("Debug Toggles")]
@@ -54,7 +57,7 @@ public class EnemyStateMachine : MonoBehaviour
     private int stagesLeft;
 
     public List<GameObject> PlayerRef;
-    
+
     private NavMeshAgent agent;
     private float defaultAgentRadius;
     private Vector3 investigationArea;
@@ -87,7 +90,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float flyCooldown_Timer = 0.0f;
     private float flyCooldown_WaitTime = 0.0f;
-    
+
     private float ability_Timer = 0.0f;
     private float ability_WaitTime = 0.0f;
 
@@ -134,6 +137,8 @@ public class EnemyStateMachine : MonoBehaviour
     private bool pushback_VelocityShouldReset = false;
 
     private bool movingRight = false;
+
+    
 
     #endregion
     
@@ -341,6 +346,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
+                    animationController.SetTrigger("exitSpecial");
 
                     if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
@@ -483,7 +489,7 @@ public class EnemyStateMachine : MonoBehaviour
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
 
-        Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
+        //Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
         print("if statement blocking progress!");
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
         StartCoroutine(DamageFlasher());
@@ -876,6 +882,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void BasicAttack()
     {
+
+        animationController.SetTrigger("hasMeleed");
+
         float damageToDeal = 20f;
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
@@ -898,7 +907,10 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     protected virtual void RangedAttack()
-    { 
+    {
+
+        animationController.SetTrigger("hasRanged");
+
         float damageToDeal = 10f;
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
@@ -991,6 +1003,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void initialiseSpecialAbility()
     {
+        animationController.SetBool("isSpecial", true);
+
         Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
@@ -1005,7 +1019,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void exitSpecialAbility()
     {
-        Debug.Log("Exiting Special Ability");
+        animationController.SetBool("isSpecial", false);
+
         if (!shieldRef.IsUnityNull())
         {
             Destroy(shieldRef);
