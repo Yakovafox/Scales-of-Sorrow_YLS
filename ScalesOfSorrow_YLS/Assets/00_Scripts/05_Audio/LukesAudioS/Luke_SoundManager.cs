@@ -6,14 +6,16 @@ using UnityEngine;
 
 public enum SoundType
 {
-    PlayerMove,
+    PlayerDash,
     PlayerAttack,
     PlayerShield,
-    PlayerHit,
+    PlayerHitDamage,
+    PlayerHitAmmo,
     DragonMove,
     DragonFly,
     DragonMeleeAttack,
     DragonRangedAttack,
+    DragonHit,
     WaterDragonSpecial,
     DragonFireupSpecial
 }

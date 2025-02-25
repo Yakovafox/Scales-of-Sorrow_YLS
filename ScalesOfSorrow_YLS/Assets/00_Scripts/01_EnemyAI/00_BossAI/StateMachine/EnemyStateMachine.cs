@@ -482,6 +482,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
+
+        Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
         print("if statement blocking progress!");
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
         StartCoroutine(DamageFlasher());

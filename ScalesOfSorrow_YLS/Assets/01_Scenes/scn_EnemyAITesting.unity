@@ -1460,6 +1460,66 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[0].name
+      value: PlayerDash
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[3].name
+      value: PlayerHitDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[4].name
+      value: PlayerHitAmmo
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[5].name
+      value: DragonMove
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[6].name
+      value: DragonFly
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[7].name
+      value: DragonMeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[8].name
+      value: DragonRangedAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[9].name
+      value: DragonHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[10].name
+      value: WaterDragonSpecial
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[11].name
+      value: DragonFireupSpecial
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[0].sounds.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8300280000209597864, guid: 8d9159a3a4b248c4db72f2bdd121a256,
         type: 3}
       propertyPath: m_LocalPosition.x
