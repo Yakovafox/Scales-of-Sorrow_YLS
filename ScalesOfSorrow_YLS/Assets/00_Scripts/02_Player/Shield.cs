@@ -12,9 +12,9 @@ public class Shield : MonoBehaviour
     private GameObject parentPlayer;
     private SphereCollider shieldCollider;
     [Space]
-    [SerializeField] AudioClip shieldUpClip;
-    [SerializeField] AudioClip blockClip;
-    [SerializeField] AudioClip breakClip;
+    [SerializeField] Sound shieldUpClip;
+    [SerializeField] Sound blockClip;
+    [SerializeField] Sound breakClip;
 
     #endregion
 
@@ -23,28 +23,27 @@ public class Shield : MonoBehaviour
         parentPlayer = transform.parent.gameObject;
         shieldCollider = GetComponent<SphereCollider>();
 
-        if(shieldUpClip != null) { SoundManager.instanceSM.PlaySound(shieldUpClip, transform.position, false); }
+        if(shieldUpClip.sound != null) { SoundManager.instanceSM.PlaySound(shieldUpClip, transform.position); }
         
     }
 
 
     void Update()
     {
-        Debug.Log(shieldCollider.radius);
         if (shieldHealth <= 0)
         {
             Destroy(this);
             //informs player that shield is destroyed
             parentPlayer.GetComponent<PlayerController>().ShieldDestroyed();
 
-            if (breakClip != null) { SoundManager.instanceSM.PlaySound(breakClip, transform.position, false); }
+            if (breakClip.sound != null) { SoundManager.instanceSM.PlaySound(breakClip, transform.position); }
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("DMG-Projectile"))
         {
-            if (blockClip != null) { SoundManager.instanceSM.PlaySound(blockClip, transform.position, false); }
+            if (blockClip.sound != null) { SoundManager.instanceSM.PlaySound(blockClip, transform.position); }
             Destroy(collision.gameObject);
             shieldHealth--;
         }

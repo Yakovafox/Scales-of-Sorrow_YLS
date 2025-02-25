@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using RotaryHeart.Lib.PhysicsExtension;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,8 +13,15 @@ using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 public class PlayerController : MonoBehaviour
 {
     #region ------------------------    Variables    ------------------------
+    [Header("------- ID -------")]
+    public int playerID;
+
     [Header("------- Health -------")]
     [SerializeField] private float health;
+
+    [SerializeField] private float dmg_flashTime = 0.5f;
+    [SerializeField] private AnimationCurve dmg_AnimCurve;
+    [SerializeField] private Color dmg_flashColour;
 
     [Header("------- Movement -------")]
     [SerializeField] private float pSpeed;
@@ -77,8 +85,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shieldCooldown;
     [SerializeField] private float shieldDistance;
     private bool isShield = false;
-    private bool shieldExists = false;
-    private bool shieldMove = false;
+    private bool shieldCooldownDone = true;
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
@@ -86,15 +93,35 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool upgradeDash;
 
     [Header("------- Audio -------")]
-    [SerializeField] private AudioClip movementClip;
-    [SerializeField] private AudioClip attackClip;
-    [SerializeField] private AudioClip rechargeClip;
-    [SerializeField] private AudioClip noChargeClip;
-    [SerializeField] private AudioClip dashClip;
-    [SerializeField] private AudioClip firedUpClip;
-    [SerializeField] private AudioClip firedDownClip;
-    [SerializeField] private AudioClip hitClip;
-    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private Sound movementClip;
+    [SerializeField] private Sound attackClip;
+    [SerializeField] private Sound rechargeClip;
+    [SerializeField] private Sound noChargeClip;
+    [SerializeField] private Sound dashClip;
+    [SerializeField] private Sound firedUpClip;
+    [SerializeField] private Sound firedDownClip;
+    [SerializeField] private Sound playerHitClip;
+    [SerializeField] private Sound deathClip;
+
+    [Header("-----Temp UI")]
+    private GameObject canvas_Gameplay;
+    [SerializeField] private GameObject tempHealth;
+    private GameObject temp;
+    private TextMeshProUGUI tempText;
+    private RectTransform tempRect;
+
+    [Header("-----Animtions-----")]
+    [SerializeField] Animator animationController;
+
+    [Header("-----Effects-----")]
+    [SerializeField] ParticleSystem dashLeft;
+    [SerializeField] ParticleSystem dashRight;
+    [SerializeField] ParticleSystem attackEffect;
+    [SerializeField] ParticleSystem attackHit;
+
+
+    public delegate void delegate_playerDefeated();
+    public static event delegate_playerDefeated OnPlayerDefeated; 
 
 
     #endregion ------------------------    Variables    ------------------------
@@ -106,6 +133,23 @@ public class PlayerController : MonoBehaviour
         pSR = GetComponentInChildren<SpriteRenderer>();
 
         attackCharges = maxCharges;
+
+        canvas_Gameplay = GameObject.FindGameObjectWithTag("Gameplay_Canvas");
+        temp = Instantiate(tempHealth, canvas_Gameplay.transform).transform.GetChild(0).gameObject;
+        tempText = temp.GetComponent<TextMeshProUGUI>();
+        tempText.text = health.ToString();
+
+        tempRect = temp.GetComponent<RectTransform>();
+        if (playerID == 0)
+        {
+            tempRect.anchoredPosition = new Vector2(-339, 187);
+        }
+        else
+        {
+            tempRect.anchoredPosition = new Vector2(-339, 130);
+        }
+
+        transform.position = new Vector3(8, transform.position.y, 4);
     }
 
     void Update()
@@ -116,7 +160,12 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDash) { return; }
-        if (!shieldMove) { MoveInput(); }
+        if (!isShield) { MoveInput(); }
+    }
+
+    public void SetPlayerID(int ID)
+    { 
+        playerID = ID; Debug.Log("Player ID");
     }
 
     #region ------------------------    Movement    ------------------------
@@ -124,7 +173,7 @@ public class PlayerController : MonoBehaviour
     {
         movementInput = context.ReadValue<Vector2>();
 
-        if (movementClip != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position, false); }
+        if (movementClip.sound != null) { SoundManager.instanceSM.PlaySound(movementClip, transform.position); }
 
     }
     
@@ -135,6 +184,15 @@ public class PlayerController : MonoBehaviour
 
         if(axis.x > 0) { pSR.flipX = false; }
         else if (axis.x < 0) {pSR.flipX = true; }
+
+        if (axis.x != 0 | axis.z != 0) {animationController.SetBool("isRunning", true); }
+        else { animationController.SetBool("isRunning", false); }
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Debug.Log("Set Position");
+        transform.position = position;
     }
 
     #endregion ------------------------    Movement    ------------------------
@@ -147,7 +205,7 @@ public class PlayerController : MonoBehaviour
         { 
             StartCoroutine(DefaultDash());
 
-            if (dashClip != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position, false); }
+            if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
         }
     }
 
@@ -156,6 +214,11 @@ public class PlayerController : MonoBehaviour
         pCollider.excludeLayers = excludeLayers;
         canDash = false;
         isDash = true;
+
+        animationController.SetTrigger("hasDashed");
+
+        if (movementInput.x > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
+        if (movementInput.x < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
 
         pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
 
@@ -177,12 +240,12 @@ public class PlayerController : MonoBehaviour
         if (!canAttack || attackCharges <= 0) 
         {
 
-            if (noChargeClip != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position, false); }
+            if (noChargeClip.sound != null) { SoundManager.instanceSM.PlaySound(noChargeClip, transform.position); }
             return; 
         }
         else
         {
-            if (attackClip != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position, false); }
+            if (attackClip.sound != null) { SoundManager.instanceSM.PlaySound(attackClip, transform.position); }
             StartCoroutine(Attack()); 
         }
     }
@@ -192,23 +255,31 @@ public class PlayerController : MonoBehaviour
         canAttack = false;
         attackCharges -= 1;
 
+        animationController.SetTrigger("hasAttacked");
+
+        if (!attackEffect.isPlaying) { attackEffect.Play(); }
+
+
         Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
 
-        RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask, PreviewCondition.Both, 1f, Color.green, Color.red);
-
+        RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask/*, PreviewCondition.Both, 1f, Color.green, Color.red*/);
         //play particle effect
         //SoundEffect
+        float totalDamage = attackDamage;
 
         for (int i = 0; i < hits.Length; i++) 
         {
+
             if (isFiredUp)
             {
-                //damage uses extra damaage
+                totalDamage += extraDamage;
             }
 
             if (hits[i].transform.CompareTag("Enemy"))
             {
-
+                Debug.Log("hit enemy pew pew");
+                hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
+                if (!attackHit.isPlaying) { attackHit.Play(); }
             }
         }
 
@@ -234,11 +305,11 @@ public class PlayerController : MonoBehaviour
 
         if (isFiredUp)
         {
-            if (firedUpClip != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position, false); }
+            if (firedUpClip.sound != null) { SoundManager.instanceSM.PlaySound(firedUpClip, transform.position); }
         }
         else
         {
-            if (firedDownClip != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position, false); }
+            if (firedDownClip.sound != null) { SoundManager.instanceSM.PlaySound(firedDownClip, transform.position); }
         }
 
         yield return new WaitForSeconds(firedUpDuration);
@@ -255,66 +326,75 @@ public class PlayerController : MonoBehaviour
 
     public void OnShield(InputAction.CallbackContext context)
     {
-        if (upgradeShield && context.started)
+        if (upgradeShield && context.started && shieldCooldownDone)
         {
-            StopCoroutine(Shield());
-            StartCoroutine(Shield());
+            StartCoroutine(ShieldUp());
         }
     }
 
-    IEnumerator Shield()
+    IEnumerator ShieldUp()
     {
-        isShield = !isShield;
-
-        if (isShield && !shieldExists)
-        {
-            shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
-            
-            shieldReference.transform.LookAt(pTransform.position);
-            shieldExists = true;
-        } 
-        else if (!isShield && shieldExists)
-        {
-            Destroy(shieldReference);
-            shieldMove = false;
-            StopCoroutine(Shield());
-        }
-
-        if (shieldExists == true) { shieldMove = true; }
-
+        shieldCooldownDone = false;
+        Debug.Log("00 Start of coroutine");
+        isShield = true;
+        shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
+        
         yield return new WaitForSeconds(shieldDuration);
 
-        shieldMove = false;
-        if (shieldReference != null) { Destroy(shieldReference); shieldExists = false; }
+        Debug.Log("03 allow movement");
+        isShield = false;
+        if (shieldReference != null) { Destroy(shieldReference); }
 
         yield return new WaitForSeconds(shieldCooldown);
-        isShield = false;
+        shieldCooldownDone = true;
+        Debug.Log("05 Shield No");
     }
-
     public void ShieldDestroyed()
     {
-        shieldExists = false;
+        isShield = false;
     }
     #endregion ------------------------    Shield    ------------------------
 
     #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
+        StartCoroutine(playerDamageFlash());
+
         health -= damage;
+        tempText.text = health.ToString();
+        if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
-        if (hitClip != null) { SoundManager.instanceSM.PlaySound(hitClip, transform.position, false); }
-
-        if (health >= 0) 
+        if (health <= 0) 
         {
-            if (deathClip != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position, false); }
+            if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+            temp.SetActive(false);
+            OnPlayerDefeated();
         }
     }
 
     public void RechargeMelee()
     {
-        if (rechargeClip != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position, false); }
+        if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
     }
 
     #endregion ------------------------    Collision    ------------------------
+
+    private IEnumerator playerDamageFlash()
+    {
+        float currentFlashValue = 0f;
+        float elapsedTime = 0f;
+        SpriteRenderer spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+
+        while (elapsedTime < dmg_flashTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashValue = Mathf.Lerp(1f, dmg_AnimCurve.Evaluate(elapsedTime), (elapsedTime / dmg_flashTime));
+            spriteRenderer.material.SetColor("_FlashColour", dmg_flashColour);
+            spriteRenderer.material.SetFloat("_FlashAmount", currentFlashValue);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
 }

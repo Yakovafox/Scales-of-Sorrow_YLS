@@ -20,15 +20,6 @@ public class SettingBehaviour : MonoBehaviour
         else { settingBehaviourInstance = this; }
         DontDestroyOnLoad(gameObject);
 
-        SettingsMenu(false);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
-            menuEnabled = !menuEnabled;
-            SettingsMenu(menuEnabled);
-        
     }
 
     public void SettingsMenu(bool menuEnabled)

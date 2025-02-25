@@ -30,12 +30,47 @@ MonoBehaviour:
   sightAngle: 120
   MaxHealth: 150
   Stages: 1
-  flightTime: 5
-  flightCooldownTime: 15
+  dmg_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -15.412027
+      outSlope: -15.412027
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0449
+      value: 0.308
+      inSlope: -7.4988885
+      outSlope: -7.4988885
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23811218
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: -1.5017065
+      outSlope: -1.5017065
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  flightTime: 10
+  flightCooldownTime: 10
   stunTime: 5
-  chanceToFly: 90
-  shadow_DefaultSize: 1
-  shadow_MaxSize: 3
+  chanceToFly: 33.333
+  pushBackDistance: 15
+  pushBackAmount: 50
+  shadow_DefaultSize: 3
+  shadow_MinSize: 1
   attackCooldown: 2.5
   meleeAttackDistance: 1
   meleeDamage: 10
@@ -43,5 +78,15 @@ MonoBehaviour:
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
-  specialAttackChance: 33.33
+  ammoProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
+    type: 3}
+  ammoProjectileSpawnChance: 15
+  specialAttackChance: 90
   SpecialDamage: 0
+  ability_Timer: 10
+  ability_cooldownTime: 15
+  Shield: {fileID: 6119186117212267296, guid: a8c18dbba155d234da6d2c11a3fdaacf, type: 3}
+  dashCooldownTime: 2.25
+  Trap: {fileID: 0}
+  fireup_DamageMultiplier: 1.5
+  fireup_ChargeTime: 3

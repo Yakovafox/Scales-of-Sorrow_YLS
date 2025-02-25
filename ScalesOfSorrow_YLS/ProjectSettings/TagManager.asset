@@ -6,6 +6,10 @@ TagManager:
   tags:
   - DMG-Projectile
   - AMO-Projectile
+  - Enemy
+  - Enm_Shield
+  - GameManager
+  - Gameplay_Canvas
   layers:
   - Default
   - TransparentFX
@@ -15,8 +19,8 @@ TagManager:
   - UI
   - Enemy
   - CameraTriggers
-  - 
-  - 
+  - Shield
+  - Projectile
   - 
   - 
   - 
@@ -42,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 80145001
     locked: 0
