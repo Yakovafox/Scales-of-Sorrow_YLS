@@ -206,6 +206,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DefaultDash());
 
             if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
+            Luke_SoundManager.PlaySound(SoundType.PlayerDash, 1);
         }
     }
 
