@@ -8,6 +8,8 @@ TagManager:
   - AMO-Projectile
   - Enemy
   - Enm_Shield
+  - GameManager
+  - Gameplay_Canvas
   layers:
   - Default
   - TransparentFX

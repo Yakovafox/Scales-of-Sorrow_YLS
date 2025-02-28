@@ -25,7 +25,7 @@ public class EnemyStateMachine : MonoBehaviour
 
 
 
-    [Tooltip ("Starting state for the AI")]
+    [Tooltip("Starting state for the AI")]
     [SerializeField] private EnemyStates currentState = EnemyStates.Idle;
 
 
@@ -33,8 +33,11 @@ public class EnemyStateMachine : MonoBehaviour
     [Tooltip("Points in the world the AI should navigate to and from")]
     [SerializeField] public GameObject patrolPoints_Parent;
 
-    [Tooltip ("Scriptable Object reference that holds all the variables for this enemy type")]
+    [Tooltip("Scriptable Object reference that holds all the variables for this enemy type")]
     [SerializeField] private EnemyData_ScriptableObj myData_SO;
+
+    [Header("-----Animtions-----")]
+    [SerializeField] Animator animationController;
 
     #region DEBUG TOGGLES
     [Header("Debug Toggles")]
@@ -54,7 +57,7 @@ public class EnemyStateMachine : MonoBehaviour
     private int stagesLeft;
 
     public List<GameObject> PlayerRef;
-    
+
     private NavMeshAgent agent;
     private float defaultAgentRadius;
     private Vector3 investigationArea;
@@ -72,6 +75,10 @@ public class EnemyStateMachine : MonoBehaviour
     private GameObject InstantiatePosition;
     private GameObject shieldRef;
 
+    [SerializeField] private ParticleSystem FlightEffect;
+
+    private UI_Management GameUIManager;
+
 
 
 
@@ -87,7 +94,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float flyCooldown_Timer = 0.0f;
     private float flyCooldown_WaitTime = 0.0f;
-    
+
     private float ability_Timer = 0.0f;
     private float ability_WaitTime = 0.0f;
 
@@ -135,6 +142,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool movingRight = false;
 
+    
+
     #endregion
     
 
@@ -171,6 +180,9 @@ public class EnemyStateMachine : MonoBehaviour
         //Functionality for setting the Dragon health on startup.
         currentHealth = myData_SO.MaxHealth;
         stagesLeft = myData_SO.Stages;
+
+        GameUIManager = GameObject.FindGameObjectWithTag("Gameplay_Canvas").GetComponent<UI_Management>();
+        GameUIManager.Acc_maxDamage = myData_SO.MaxHealth;
     }
 
 
@@ -341,6 +353,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (doOnce)
                 {
+                    animationController.SetTrigger("exitSpecial");
 
                     if (InAttackRange(myData_SO.meleeAttackDistance))
                     {
@@ -483,13 +496,13 @@ public class EnemyStateMachine : MonoBehaviour
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
 
-        Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
-        print("if statement blocking progress!");
+        //Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
         StartCoroutine(DamageFlasher());
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
+            GameUIManager.updateEnemyHealthBar(incomingDamage);
             return;
         }
         healthReachedZero();
@@ -734,6 +747,7 @@ public class EnemyStateMachine : MonoBehaviour
             defaultYPos = spriteRenderer.transform.position.y;
             defaultWorldPos = spriteRenderer.transform.position;
             defaultLocalPos = spriteRenderer.transform.localPosition;
+            if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
             ChangeState(EnemyStates.Fly);
         }
     }
@@ -793,6 +807,7 @@ public class EnemyStateMachine : MonoBehaviour
             if(spriteRenderer.transform.position.y >= defaultYPos  && spriteRenderer.transform.position.y <= defaultYPos + 0.95f && doOneCamShake)
             {
                 doOneCamShake = false;
+                if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
                 OnDragonLanded?.Invoke();
                 landingPushBack();
             }
@@ -801,7 +816,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
         spriteRenderer.transform.position = defaultWorldPos;
         spriteRenderer.transform.localPosition = defaultLocalPos;
-        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize, myData_SO.shadow_DefaultSize);
+        GO_shadowCaster.transform.localScale = new Vector3(myData_SO.shadow_DefaultSize, 0.5f, myData_SO.shadow_DefaultSize);
     }
 
     IEnumerator LandingLerp()
@@ -876,6 +891,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void BasicAttack()
     {
+
+        animationController.SetTrigger("hasMeleed");
+
         float damageToDeal = 20f;
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
@@ -898,7 +916,10 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     protected virtual void RangedAttack()
-    { 
+    {
+
+        animationController.SetTrigger("hasRanged");
+
         float damageToDeal = 10f;
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
@@ -991,6 +1012,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void initialiseSpecialAbility()
     {
+        animationController.SetBool("isSpecial", true);
+
         Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
@@ -1005,7 +1028,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual void exitSpecialAbility()
     {
-        Debug.Log("Exiting Special Ability");
+        animationController.SetBool("isSpecial", false);
+
         if (!shieldRef.IsUnityNull())
         {
             Destroy(shieldRef);

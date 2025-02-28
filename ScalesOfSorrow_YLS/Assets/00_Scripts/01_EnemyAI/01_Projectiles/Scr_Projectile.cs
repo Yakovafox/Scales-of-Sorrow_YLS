@@ -21,6 +21,8 @@ public class Scr_Projectile : MonoBehaviour
     [SerializeField] private bool ProjectileType_isAmmo;
 
     [SerializeField] private float launchForce = 25f;
+
+    [SerializeField] private float projectileLifespan = 7f;
     public float Acc_launchForce
     {
         set { launchForce = value; }
@@ -29,34 +31,36 @@ public class Scr_Projectile : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Vector3 aimedLocation = playerDir; // Quaternion.Euler(0, 15, 0) * transform.forward;
-        rb.velocity = aimedLocation * launchForce;
+        Vector3 aimedLocation = playerDir; // Locate player direction and fire projectile this way.
+        rb.velocity = aimedLocation * launchForce; // Increase the rigidbodies velocity in the direction it is facing. (Firing the projectile).
+        StartCoroutine(lifespan()); //Start up a cleaning lifespan coroutine which after a time destroys the object to clean the environment of any loose projectiles.
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch (ProjectileType_isAmmo)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            case false:
-                if (collision.gameObject.CompareTag("Player"))
-                {
+            switch (ProjectileType_isAmmo)
+            {
+                case false:
                     collision.gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
-                }
+                    break;
 
-                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
-                break;
-
-            case true:
-                if (collision.gameObject.CompareTag("Player"))
-                {
+                case true:
                     //Give player ammo.
                     collision.gameObject.GetComponent<PlayerController>().RechargeMelee();
-                }
-                if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
-                break;
+                    break;
+            }
+        }
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enm_Shield")) return;
+
+        Destroy(gameObject);
     }
-        
+
+    private IEnumerator lifespan()
+    {
+        yield return new WaitForSeconds(projectileLifespan);
         Destroy(gameObject);
     }
 }
