@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fire Toon
+  m_Name: Dark Water
   m_Shader: {fileID: -6465566751694194690, guid: 603910fb43dfe674ab6344529a90ed51,
     type: 3}
   m_Parent: {fileID: 0}
@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2400
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -61,7 +61,7 @@ Material:
     - _Fresnel_Threshold: 0.25
     - _Outline_Thickness: 0
     - _QueueControl: 0
-    - _QueueOffset: -50
+    - _QueueOffset: 0
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -71,8 +71,8 @@ Material:
     - _UIMaskSoftnessY: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Dark_Color: {r: 0.7075472, g: 0.36372313, b: 0.056737285, a: 0}
-    - _Lit_Color: {r: 0.9622642, g: 0.66723037, b: 0.66723037, a: 0}
+    - _Dark_Color: {r: 0.28607264, g: 0.2924528, b: 0.24141152, a: 0}
+    - _Lit_Color: {r: 0.29837132, g: 0.4245283, b: 0.33201316, a: 0}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
