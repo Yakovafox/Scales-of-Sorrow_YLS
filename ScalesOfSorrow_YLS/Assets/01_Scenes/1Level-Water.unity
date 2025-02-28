@@ -42204,6 +42204,16 @@ PrefabInstance:
       propertyPath: soundList.Array.data[11].name
       value: DragonFireupSpecial
       objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: soundList.Array.data[0].sounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611108704608700060, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
+      propertyPath: 'soundList.Array.data[0].sounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: f945b79b0a4c81840bc6abe3fd19a938, type: 3}
     - target: {fileID: 8300280000209597864, guid: 8d9159a3a4b248c4db72f2bdd121a256,
         type: 3}
       propertyPath: m_LocalPosition.x

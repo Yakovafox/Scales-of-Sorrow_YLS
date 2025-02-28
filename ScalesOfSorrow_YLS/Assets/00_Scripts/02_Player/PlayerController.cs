@@ -103,6 +103,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound playerHitClip;
     [SerializeField] private Sound deathClip;
 
+    private AudioSource player_audioSource;
+
     [Header("-----Temp UI")]
     private GameObject canvas_Gameplay;
     [SerializeField] private GameObject tempHealth;
@@ -131,6 +133,7 @@ public class PlayerController : MonoBehaviour
         pRB = GetComponent<Rigidbody>();
         pCollider = GetComponent<Collider>();
         pSR = GetComponentInChildren<SpriteRenderer>();
+        player_audioSource = GetComponentInChildren<AudioSource>();
 
         attackCharges = maxCharges;
 
@@ -206,6 +209,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DefaultDash());
 
             if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
+            Luke_SoundManager.PlaySound(SoundType.PlayerDash, 1, player_audioSource);
         }
     }
 
