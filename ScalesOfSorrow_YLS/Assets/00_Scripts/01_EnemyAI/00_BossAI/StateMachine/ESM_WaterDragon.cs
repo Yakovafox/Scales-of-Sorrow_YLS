@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ESM_WaterDragon : EnemyStateMachine
 {
     protected override void BasicAttack()
     {
-        Debug.Log("Water Default Attack");
+        base.BasicAttack();
     }
 
     protected override void RangedAttack()
@@ -16,7 +17,31 @@ public class ESM_WaterDragon : EnemyStateMachine
 
     protected override void initialiseSpecialAbility()
     {
-        base.initialiseSpecialAbility();
+        animationController.SetBool("isSpecial", true);
+
+        Debug.Log("Initialising Special Ability");
+        //Setup any functionality for the ability here, spawn in shield etc.
+        //In base machine setup all abilities at once 
+        if (!myData_SO.Shield.IsUnityNull())
+        {
+            shieldRef = Instantiate(myData_SO.Shield, InstantiatePosition.transform.position, Quaternion.identity);
+            shieldRef.transform.parent = InstantiatePosition.transform;
+        }
+    }
+
+    protected override void exitSpecialAbility()
+    {
+        animationController.SetBool("isSpecial", false);
+
+        if (!shieldRef.IsUnityNull())
+        {
+            Destroy(shieldRef);
+        }
+    }
+
+    protected override IEnumerator specialFunctionality()
+    {
+        return base.specialFunctionality();
     }
 
 }

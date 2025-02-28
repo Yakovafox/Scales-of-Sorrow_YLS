@@ -34,10 +34,10 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] public GameObject patrolPoints_Parent;
 
     [Tooltip("Scriptable Object reference that holds all the variables for this enemy type")]
-    [SerializeField] private EnemyData_ScriptableObj myData_SO;
+    [SerializeField] protected EnemyData_ScriptableObj myData_SO;
 
     [Header("-----Animtions-----")]
-    [SerializeField] Animator animationController;
+    [SerializeField] protected Animator animationController;
 
     #region DEBUG TOGGLES
     [Header("Debug Toggles")]
@@ -53,7 +53,7 @@ public class EnemyStateMachine : MonoBehaviour
     #region Local Variables
     //Local Variables
 
-    public float currentHealth = 150f;
+    private float currentHealth = 150f;
     private int stagesLeft;
 
     public List<GameObject> PlayerRef;
@@ -70,10 +70,11 @@ public class EnemyStateMachine : MonoBehaviour
 
     private GameObject GO_shadowCaster;
     private SpriteRenderer spriteRenderer;
+    private Material SR_MAT;
     private Collider hitCollider;
 
-    private GameObject InstantiatePosition;
-    private GameObject shieldRef;
+    protected GameObject InstantiatePosition;
+    protected GameObject shieldRef;
 
     [SerializeField] private ParticleSystem FlightEffect;
 
@@ -88,6 +89,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     private float attack_Timer = 0.0f;
     private float attack_WaitTime = 0.0f;
+
+    private float meleeAttack_Timer = 0.0f;
+    private float meleeAttack_WaitTime = 0.0f;
 
     private float flying_Timer = 0.0f;
     private float flying_WaitTime = 0.0f;
@@ -136,7 +140,7 @@ public class EnemyStateMachine : MonoBehaviour
     private bool shouldSpecial;
     private bool specialActive;
     private bool water_specialActive;
-    private bool firedUp = false;
+    protected bool firedUp = false;
 
     private bool pushback_VelocityShouldReset = false;
 
@@ -172,6 +176,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         GO_shadowCaster = gameObject.transform.Find("shadowCaster").gameObject;
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
+        SR_MAT = spriteRenderer.material;
         InstantiatePosition = sightPosition.transform.Find("InstantiatePoint").gameObject;
         myData_SO.Target = null;
         
@@ -191,6 +196,7 @@ public class EnemyStateMachine : MonoBehaviour
         if (PlayerRef.Count == 0) { return;}
         state_Timer += Time.deltaTime;
         attack_Timer += Time.deltaTime;
+        meleeAttack_Timer += Time.deltaTime;
         flyCooldown_Timer += Time.deltaTime;
         abilityCooldown_Timer += Time.deltaTime;
         debug_Timer += Time.deltaTime;
@@ -317,9 +323,10 @@ public class EnemyStateMachine : MonoBehaviour
                         break;
                         //Special Attack 
                     }
-                    if (InAttackRange(myData_SO.meleeAttackDistance))
+                    if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
+                        print("!!!!!MELEEEEE ATTACCKKKKKK!!!!!!!");
                         BasicAttack();
                         //Melee Attack
                     }
@@ -355,7 +362,7 @@ public class EnemyStateMachine : MonoBehaviour
                 {
                     animationController.SetTrigger("exitSpecial");
 
-                    if (InAttackRange(myData_SO.meleeAttackDistance))
+                    if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
                         BasicAttack();
@@ -440,6 +447,14 @@ public class EnemyStateMachine : MonoBehaviour
         currentState = newState;
         state_Timer = 0;
         debug_Timer = 0;
+    }
+
+    private void resetReference()
+    {
+        spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
+        SR_MAT = spriteRenderer.material;
+
+        GameUIManager = GameObject.FindGameObjectWithTag("Gameplay_Canvas").GetComponent<UI_Management>();
     }
 
     #region Player2Functions
@@ -550,11 +565,16 @@ public class EnemyStateMachine : MonoBehaviour
         float currentFlashValue = 0f;
         float elapsedTime = 0f;
 
+        //Inherited classes are losing their reference often? Im not sure why this checks to make sure the reference is not null and then regrabs the reference if it is.
+        if (spriteRenderer.IsUnityNull()) { resetReference(); }
+
+
         while (elapsedTime < dmg_flashTime)
         {
             elapsedTime += Time.deltaTime;
 
             currentFlashValue = Mathf.Lerp(1f, myData_SO.dmg_AnimCurve.Evaluate(elapsedTime), (elapsedTime / dmg_flashTime));
+
             spriteRenderer.material.SetColor("_FlashColour", dmg_flashColour);
             spriteRenderer.material.SetFloat("_FlashAmount", currentFlashValue);
 
@@ -824,7 +844,6 @@ public class EnemyStateMachine : MonoBehaviour
         Vector3 targetHeight = new Vector3(spriteRenderer.gameObject.transform.position.x, defaultYPos, spriteRenderer.gameObject.transform.position.z);
         float distance = Vector3.Distance(targetHeight, spriteRenderer.gameObject.transform.position);
         float waitTime = distance / (655f * Time.deltaTime);
-        print("This is the time to wait" + waitTime);
         StartCoroutine(LandingSpriteLand(targetHeight));
         yield return new WaitForSeconds(waitTime);
     }
@@ -872,6 +891,11 @@ public class EnemyStateMachine : MonoBehaviour
         attack_WaitTime = TimeToUse;
         return attack_Timer > attack_WaitTime;
     }
+    bool MeleeAttackCooldown(float TimeToUse)
+    {
+        meleeAttack_WaitTime = TimeToUse;
+        return meleeAttack_Timer > meleeAttack_WaitTime;
+    }
     #endregion
 
     #region AttackFunctions
@@ -912,6 +936,7 @@ public class EnemyStateMachine : MonoBehaviour
                 tempHitArray[i].gameObject.GetComponent<PlayerController>().TakeDamage(damageToDeal);
             }
         }
+        meleeAttack_Timer = 0;
         ChangeState(EnemyStates.Idle);
     }
 
@@ -997,7 +1022,6 @@ public class EnemyStateMachine : MonoBehaviour
             StartCoroutine(UpdatePlayerVelocityZero(rb));
             rb.AddForce(dirAndForce, ForceMode.Impulse);
             pushback_VelocityShouldReset = false;
-            Debug.Log("Pushing back player: " + playersImPushingBack[i].name);
         }
     }
 

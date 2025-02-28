@@ -112,6 +112,8 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The maximum melee damage the enemy can deal.")]
     [Range(0,100)]
     public float meleeDamage = 10f;
+    [Tooltip("The cooldown before the dragon can melee again.")]
+    public float meleeCooldown = 3f;
 
     [Header("Ranged Attack")]
     [Tooltip("The maximum distance that the player can be for a melee attack. NOTE: MUST be a value greater than 0!")]

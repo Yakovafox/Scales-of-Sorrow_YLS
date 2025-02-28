@@ -9327,6 +9327,32 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a85949e94ab500845b2090802572d209, type: 3}
+--- !u!1 &643391286 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1268346332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &643391287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643391286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330a2cf65cc9a044c8d1876577c49118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  patrolPoints_Parent: {fileID: 0}
+  myData_SO: {fileID: 11400000, guid: c923ccbb0cdde0d4583f072034d9efe7, type: 2}
+  animationController: {fileID: 1254886979}
+  Toggle_Sight_Debug: 0
+  debugSphere: {fileID: 1833701135}
+  PlayerRef: []
+  FlightEffect: {fileID: 1983834303}
 --- !u!1001 &658439299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17399,6 +17425,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+        type: 3}
       propertyPath: myData_SO
       value: 
       objectReference: {fileID: 11400000, guid: c923ccbb0cdde0d4583f072034d9efe7,
@@ -17523,6 +17554,10 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 2012043395}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 643391287}
     - targetCorrespondingSourceObject: {fileID: 1535875258528425573, guid: 4688c53db7cb1b54ebe290e75276ed0a,
         type: 3}
       insertIndex: -1
@@ -41205,6 +41240,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 453e5404de873484b92289610096ae86, type: 3}
+--- !u!198 &1983834303 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2012116550185859650, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1268346332}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1984262294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 206446724329513300, guid: 91ceda1c0fe0bf943a20d2ce477f2d94,
