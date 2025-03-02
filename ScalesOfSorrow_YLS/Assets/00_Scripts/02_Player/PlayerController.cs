@@ -29,12 +29,13 @@ public class PlayerController : MonoBehaviour
     private Transform pTransform;
     private Rigidbody pRB;
     private SpriteRenderer pSR;
+    private PlayerInput playerInput;
   
     [Header("------- Dash -------")]
     [Tooltip("dashSpeed controls how fast with the player moves during the dash. This can be used to control the distance")]
     [SerializeField] private float dashSpeed;
     private Collider pCollider;
-    private bool canDash = true;
+    private bool canDash = false;
     private bool isDash = false;
 
     [Tooltip("dashTime controls how long the dash lasts")]
@@ -127,10 +128,12 @@ public class PlayerController : MonoBehaviour
     #endregion ------------------------    Variables    ------------------------
     void Start()
     {
+        canDash = false;
         pTransform = transform;
         pRB = GetComponent<Rigidbody>();
         pCollider = GetComponent<Collider>();
         pSR = GetComponentInChildren<SpriteRenderer>();
+        playerInput = GetComponent<PlayerInput>();
 
         attackCharges = maxCharges;
 
@@ -150,6 +153,8 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);
+        playerInput.enabled = true;
+        canDash = true;
     }
 
     void Update()
@@ -182,8 +187,8 @@ public class PlayerController : MonoBehaviour
         Vector3 axis = new Vector3(movementInput.x, 0, movementInput.y);
         pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
-        if(axis.x > 0) { pSR.flipX = false; }
-        else if (axis.x < 0) {pSR.flipX = true; }
+        if(axis.x > 0) { transform.localScale = new Vector3(0.25f, 0.25f, 0.25f); }
+        else if (axis.x < 0) { transform.localScale = new Vector3(-0.25f, 0.25f, 0.25f); }
 
         if (axis.x != 0 | axis.z != 0) {animationController.SetBool("isRunning", true); }
         else { animationController.SetBool("isRunning", false); }
@@ -358,17 +363,21 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
-        StartCoroutine(playerDamageFlash());
-
-        health -= damage;
-        tempText.text = health.ToString();
-        if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
-
-        if (health <= 0) 
+        if (!isShield)
         {
-            if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
-            temp.SetActive(false);
-            OnPlayerDefeated();
+
+            StartCoroutine(playerDamageFlash());
+
+            health -= damage;
+            tempText.text = health.ToString();
+            if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
+
+            if (health <= 0)
+            {
+                if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+                temp.SetActive(false);
+                OnPlayerDefeated();
+            }
         }
     }
 
@@ -377,8 +386,6 @@ public class PlayerController : MonoBehaviour
         if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
     }
-
-    #endregion ------------------------    Collision    ------------------------
 
     private IEnumerator playerDamageFlash()
     {
@@ -397,4 +404,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
+    #endregion ------------------------    Collision    ------------------------
+
+    
 }

@@ -10102,7 +10102,7 @@ MonoBehaviour:
   dashCooldown: 1
   excludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1023
   includeLayers:
     serializedVersion: 2
     m_Bits: 0
