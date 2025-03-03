@@ -161,5 +161,9 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float fireup_DamageMultiplier = 1.5f;
     [Tooltip("Time it takes for the dragon to gain damage buff.")]
     public float fireup_ChargeTime = 3f;
+    [Tooltip("Colour for the fireup charge.")]
+    public Color FireUp_Colour;
+    [Tooltip("Animation Curve for the fireup charge.")]
+    public AnimationCurve FireUp_AnimCurve;
 
 }

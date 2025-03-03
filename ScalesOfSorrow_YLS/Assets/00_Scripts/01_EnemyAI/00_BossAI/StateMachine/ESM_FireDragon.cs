@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ESM_WaterDragon : EnemyStateMachine
+public class ESM_FireDragon : EnemyStateMachine
 {
     protected override void BasicAttack()
     {
@@ -18,12 +18,7 @@ public class ESM_WaterDragon : EnemyStateMachine
     protected override void initialiseSpecialAbility()
     {
         animationController.SetBool("isSpecial", true);
-        if (!audioSource.isPlaying)
-        {
-            Luke_SoundManager.PlaySound(SoundType.WaterDragonSpecial, 1, audioSource);
-        }
 
-        Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
         if (!myData_SO.Shield.IsUnityNull())
@@ -45,7 +40,17 @@ public class ESM_WaterDragon : EnemyStateMachine
 
     protected override IEnumerator specialFunctionality()
     {
-        return base.specialFunctionality();
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.DragonFireupSpecial, 1, audioSource);
+        }
+        if (!firedUp)
+        {
+            StartCoroutine(SpriteFlasher(myData_SO.fireup_ChargeTime, myData_SO.FireUp_Colour, myData_SO.FireUp_AnimCurve));
+            yield return new WaitForSeconds(myData_SO.fireup_ChargeTime);
+            firedUp = true;
+        }
+        yield return null;
     }
 
 }

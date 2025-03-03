@@ -76,6 +76,8 @@ public class EnemyStateMachine : MonoBehaviour
     protected GameObject InstantiatePosition;
     protected GameObject shieldRef;
 
+    protected AudioSource audioSource;
+
     [SerializeField] private ParticleSystem FlightEffect;
 
     private UI_Management GameUIManager;
@@ -178,6 +180,8 @@ public class EnemyStateMachine : MonoBehaviour
         spriteRenderer = gameObject.transform.Find("CharacterBillboard").GetComponent<SpriteRenderer>();
         SR_MAT = spriteRenderer.material;
         InstantiatePosition = sightPosition.transform.Find("InstantiatePoint").gameObject;
+        audioSource = GetComponent<AudioSource>();
+
         myData_SO.Target = null;
         
         StartCoroutine(searchForPlayerInScene());
@@ -326,7 +330,6 @@ public class EnemyStateMachine : MonoBehaviour
                     if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        print("!!!!!MELEEEEE ATTACCKKKKKK!!!!!!!");
                         BasicAttack();
                         //Melee Attack
                     }
@@ -511,9 +514,15 @@ public class EnemyStateMachine : MonoBehaviour
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
 
-        //Luke_SoundManager.PlaySound(SoundType.DragonHit, 1);
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.DragonHit, 1, audioSource);
+        }
+
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
-        StartCoroutine(DamageFlasher());
+
+        StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
+
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
             currentHealth -= incomingDamage;
@@ -560,7 +569,7 @@ public class EnemyStateMachine : MonoBehaviour
         currentHealth = myData_SO.MaxHealth;
     }
 
-    IEnumerator DamageFlasher()
+    protected IEnumerator SpriteFlasher(float flashTime, Color flashColour, AnimationCurve AnimCurve)
     {
         float currentFlashValue = 0f;
         float elapsedTime = 0f;
@@ -569,13 +578,13 @@ public class EnemyStateMachine : MonoBehaviour
         if (spriteRenderer.IsUnityNull()) { resetReference(); }
 
 
-        while (elapsedTime < dmg_flashTime)
+        while (elapsedTime < flashTime)
         {
             elapsedTime += Time.deltaTime;
 
-            currentFlashValue = Mathf.Lerp(1f, myData_SO.dmg_AnimCurve.Evaluate(elapsedTime), (elapsedTime / dmg_flashTime));
+            currentFlashValue = Mathf.Lerp(1f, AnimCurve.Evaluate(elapsedTime), (elapsedTime / flashTime));
 
-            spriteRenderer.material.SetColor("_FlashColour", dmg_flashColour);
+            spriteRenderer.material.SetColor("_FlashColour", flashColour);
             spriteRenderer.material.SetFloat("_FlashAmount", currentFlashValue);
 
             yield return new WaitForSeconds(0.01f);
@@ -768,6 +777,10 @@ public class EnemyStateMachine : MonoBehaviour
             defaultWorldPos = spriteRenderer.transform.position;
             defaultLocalPos = spriteRenderer.transform.localPosition;
             if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
+            if (!audioSource.isPlaying)
+            {
+                Luke_SoundManager.PlaySound(SoundType.DragonFly, 1, audioSource);
+            }
             ChangeState(EnemyStates.Fly);
         }
     }
@@ -828,6 +841,10 @@ public class EnemyStateMachine : MonoBehaviour
             {
                 doOneCamShake = false;
                 if (!FlightEffect.isPlaying) { FlightEffect.Play(); }
+                if (!audioSource.isPlaying)
+                {
+                    Luke_SoundManager.PlaySound(SoundType.DragonLand, 1, audioSource);
+                }
                 OnDragonLanded?.Invoke();
                 landingPushBack();
             }
@@ -917,6 +934,10 @@ public class EnemyStateMachine : MonoBehaviour
     {
 
         animationController.SetTrigger("hasMeleed");
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.DragonMeleeAttack, 1, audioSource);
+        }
 
         float damageToDeal = 20f;
         if (firedUp)
@@ -924,7 +945,6 @@ public class EnemyStateMachine : MonoBehaviour
         //Cause Player Damage here or effect that can cause damage.
         if (specialActive)
         {
-            print("From MELEE: special is active and returning to special state.");
             ChangeState(EnemyStates.Special); return;
         }
 
@@ -944,6 +964,10 @@ public class EnemyStateMachine : MonoBehaviour
     {
 
         animationController.SetTrigger("hasRanged");
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.DragonRangedAttack, 1, audioSource);
+        }
 
         float damageToDeal = 10f;
         if (firedUp)
@@ -972,6 +996,10 @@ public class EnemyStateMachine : MonoBehaviour
     protected virtual void spawnAmmo()
     {
         GameObject projectileInstance;
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.DragonRangedAttack, 1, audioSource); //Change to special audio for shooting ammo projectile?
+        }
 
         projectileInstance = Instantiate(myData_SO.ammoProjectile, sightPosition.position, Quaternion.identity); // This works but needs a prefab in it disabled for development.
 
@@ -1033,12 +1061,18 @@ public class EnemyStateMachine : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
+    #endregion
+
+    #region special Functions
 
     protected virtual void initialiseSpecialAbility()
     {
         animationController.SetBool("isSpecial", true);
+        if (!audioSource.isPlaying)
+        {
+            Luke_SoundManager.PlaySound(SoundType.WaterDragonSpecial, 1, audioSource);
+        }
 
-        Debug.Log("Initialising Special Ability");
         //Setup any functionality for the ability here, spawn in shield etc.
         //In base machine setup all abilities at once 
         if (!myData_SO.Shield.IsUnityNull())
@@ -1065,6 +1099,8 @@ public class EnemyStateMachine : MonoBehaviour
     {
         if (!firedUp)
         {
+
+            StartCoroutine(SpriteFlasher(myData_SO.fireup_ChargeTime, myData_SO.FireUp_Colour, myData_SO.FireUp_AnimCurve));
             yield return new WaitForSeconds(myData_SO.fireup_ChargeTime);
             firedUp = true;
         }

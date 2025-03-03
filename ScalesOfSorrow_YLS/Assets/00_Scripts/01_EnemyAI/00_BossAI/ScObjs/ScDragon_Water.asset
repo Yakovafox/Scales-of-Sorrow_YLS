@@ -75,6 +75,7 @@ MonoBehaviour:
   attackCooldown: 0.1
   meleeAttackDistance: 3
   meleeDamage: 10
+  meleeCooldown: 3
   rangedAttackDistance: 5
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
@@ -91,3 +92,82 @@ MonoBehaviour:
   Trap: {fileID: 0}
   fireup_DamageMultiplier: 1.5
   fireup_ChargeTime: 3
+  FireUp_Colour: {r: 0.6981132, g: 0.1040583, b: 0.1040583, a: 1}
+  FireUp_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1.5125914
+      outSlope: -1.5125914
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.20984216
+    - serializedVersion: 3
+      time: 0.15099771
+      value: 0.0033324806
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.06078849
+    - serializedVersion: 3
+      time: 0.29672772
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.45
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6
+      value: 1
+      inSlope: 0.25832406
+      outSlope: 0.25832406
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7510741
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9
+      value: 1
+      inSlope: 0.019382501
+      outSlope: 0.019382501
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.15187897
+      outSlope: -0.15187897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13713153
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 0
+    m_RotationOrder: 4
