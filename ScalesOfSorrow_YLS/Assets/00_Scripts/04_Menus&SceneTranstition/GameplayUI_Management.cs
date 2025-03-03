@@ -24,6 +24,13 @@ public class UI_Management : MonoBehaviour
         
     }
 
+    public void resetEnemyHealthBar(float currentHealth)
+    {
+        currentDamage = currentHealth;
+        float convertedDamage = Mathf.InverseLerp(0, maxDamage, currentDamage);
+        EnemyHealthBar.value = convertedDamage;
+    }
+
     public void updateEnemyHealthBar(float damageRecieved)
     {
         currentDamage += damageRecieved;

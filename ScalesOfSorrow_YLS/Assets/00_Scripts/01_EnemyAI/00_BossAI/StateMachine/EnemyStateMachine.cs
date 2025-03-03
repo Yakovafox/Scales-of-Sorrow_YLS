@@ -471,6 +471,9 @@ public class EnemyStateMachine : MonoBehaviour
             PlayerRef.Add(tempPlayerArray[i]);
         }
         //Code to adjust Health here or attack damage etc.
+
+        currentHealth = currentHealth * 2;
+        GameUIManager.resetEnemyHealthBar(currentHealth);
     }
     
     public void player2Left()
@@ -478,6 +481,8 @@ public class EnemyStateMachine : MonoBehaviour
         if (PlayerRef.Count <= 1) { return; }
         PlayerRef.RemoveAt(1);
         //Code to adjust Health here or attack damage etc.
+        currentHealth = currentHealth / 2;
+        GameUIManager.resetEnemyHealthBar(currentHealth);
     }
 
     bool doesP2Exist()
@@ -513,7 +518,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void ReceiveDamage(float incomingDamage, int playerID)
     {
-
+        if (audioSource.IsUnityNull()) { audioSource = GetComponent<AudioSource>(); }
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.DragonHit, 1, audioSource);
@@ -567,6 +572,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
         stagesLeft -= 1;
         currentHealth = myData_SO.MaxHealth;
+        GameUIManager.resetEnemyHealthBar(0);
     }
 
     protected IEnumerator SpriteFlasher(float flashTime, Color flashColour, AnimationCurve AnimCurve)
