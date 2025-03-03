@@ -43,11 +43,11 @@ Material:
     - _2: 2
     - _Alpha: 1
     - _Cell_Softness: 0.45
-    - _Frame_Jump: 0.5
-    - _Frame_Speed: 2
+    - _Frame_Jump: 0.25
+    - _Frame_Speed: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Water_Scale: 50
+    - _Water_Scale: 250
     - _Wave: 5
     - _Wave_Speed: 1
     m_Colors:

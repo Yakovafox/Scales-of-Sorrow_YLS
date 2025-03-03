@@ -71,8 +71,8 @@ Material:
     - _UIMaskSoftnessY: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Dark_Color: {r: 0.509434, g: 0.3010407, b: 0.16580634, a: 0}
-    - _Lit_Color: {r: 0.8867924, g: 0.6688125, b: 0.6232645, a: 0}
+    - _Dark_Color: {r: 1, g: 0.8141848, b: 0.6839622, a: 0}
+    - _Lit_Color: {r: 0.9716981, g: 0.34376112, b: 0.34376112, a: 0}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
