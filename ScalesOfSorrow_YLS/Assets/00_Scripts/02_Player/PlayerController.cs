@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Variables    ------------------------
     [Header("------- ID -------")]
     public int playerID;
+    [SerializeField] private Transform parent;
 
     [Header("------- Health -------")]
     [SerializeField] private float health;
@@ -128,6 +129,10 @@ public class PlayerController : MonoBehaviour
     #endregion ------------------------    Variables    ------------------------
     void Start()
     {
+        parent = GameObject.FindGameObjectWithTag("playerParent").transform;
+        transform.parent = parent;
+        parent.GetComponent<PlayerDeath>().AddChild(gameObject);
+
         canDash = false;
         pTransform = transform;
         pRB = GetComponent<Rigidbody>();
@@ -376,7 +381,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
                 temp.SetActive(false);
-                OnPlayerDefeated();
+
+                parent.GetComponent<PlayerDeath>().RemoveChild(gameObject);
             }
         }
     }

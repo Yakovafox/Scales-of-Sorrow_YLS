@@ -10,6 +10,7 @@ TagManager:
   - Enm_Shield
   - GameManager
   - Gameplay_Canvas
+  - playerParent
   layers:
   - Default
   - TransparentFX
