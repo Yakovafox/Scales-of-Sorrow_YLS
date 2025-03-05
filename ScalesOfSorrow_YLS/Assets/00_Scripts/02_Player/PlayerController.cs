@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Variables    ------------------------
     [Header("------- ID -------")]
     public int playerID;
+    [SerializeField] private PlayerDeath playerDeath;
 
     [Header("------- Health -------")]
     [SerializeField] private float health;
@@ -140,6 +141,9 @@ public class PlayerController : MonoBehaviour
         pCollider = GetComponent<Collider>();
         pSR = GetComponentInChildren<SpriteRenderer>();
         player_audioSource = GetComponentInChildren<AudioSource>();
+
+        playerDeath = FindAnyObjectByType<PlayerDeath>();
+        playerDeath.AddChild(gameObject);
 
         attackCharges = maxCharges;
 
@@ -389,7 +393,8 @@ public class PlayerController : MonoBehaviour
         {
             if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
             temp.SetActive(false);
-            OnPlayerDefeated();
+            playerDeath.RemoveChild(gameObject);
+            pSR.enabled = false;
         }
     }
 
