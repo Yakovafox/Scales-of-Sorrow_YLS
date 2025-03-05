@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using TMPro;    
 
 public class Management_GameMenus : MonoBehaviour
@@ -17,6 +18,9 @@ public class Management_GameMenus : MonoBehaviour
     private GameObject canvas_GameUI;
 
     private Slider loadingBar;
+
+    [SerializeField] private GameObject firstGameOverOBJ;
+    [SerializeField] private GameObject firstGameWonOBJ;
     
     
     void Awake()
@@ -83,6 +87,8 @@ public class Management_GameMenus : MonoBehaviour
         Time.timeScale = 0;
         canvasHolder.transform.Find("Canvas_GameOver").gameObject.SetActive(true);
         enableMouseFeatures();
+
+        EventSystem.current.SetSelectedGameObject(firstGameOverOBJ);
     }
 
     public void showGameWonScreen()
@@ -90,6 +96,8 @@ public class Management_GameMenus : MonoBehaviour
         Time.timeScale = 0;
         canvasHolder.transform.Find("Canvas_GameSuccess").gameObject.SetActive(true);
         enableMouseFeatures();
+
+        EventSystem.current.SetSelectedGameObject(firstGameWonOBJ);
     }
 
     public void RetryLevel()
@@ -98,6 +106,9 @@ public class Management_GameMenus : MonoBehaviour
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         LoadLevel(currentSceneIndex);
         Debug.Log("Clicked On");
+
+        EventSystem.current.SetSelectedGameObject(null);
+
     }
 
     public void ExitGame()
