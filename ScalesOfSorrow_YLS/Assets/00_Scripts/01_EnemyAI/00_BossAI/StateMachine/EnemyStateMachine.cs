@@ -330,7 +330,7 @@ public class EnemyStateMachine : MonoBehaviour
                     if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        BasicAttack();
+                        StartCoroutine(BasicAttack());
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
@@ -338,12 +338,12 @@ public class EnemyStateMachine : MonoBehaviour
                         if (shouldSpawnAmmoProjecile())
                         {
                             doOnce = false;
-                            spawnAmmo();
+                            StartCoroutine(spawnAmmo());
                         }
                         else
                         {
                             doOnce = false;
-                            RangedAttack();
+                            StartCoroutine(RangedAttack());
                             // ShootProjectile
                         }
                     }
@@ -368,7 +368,7 @@ public class EnemyStateMachine : MonoBehaviour
                     if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        BasicAttack();
+                        StartCoroutine(BasicAttack());
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
@@ -376,12 +376,12 @@ public class EnemyStateMachine : MonoBehaviour
                         if (shouldSpawnAmmoProjecile())
                         {
                             doOnce = false;
-                            spawnAmmo();
+                            StartCoroutine(spawnAmmo());
                         }
                         else
                         {
                             doOnce = false;
-                            RangedAttack();
+                            StartCoroutine(RangedAttack());
                             // ShootProjectile
                         }
                     }
@@ -936,10 +936,11 @@ public class EnemyStateMachine : MonoBehaviour
         return myData_SO.ammoProjectileSpawnChance > Random.Range(0, 100);
     }
 
-    protected virtual void BasicAttack()
+    protected virtual IEnumerator BasicAttack()
     {
 
         animationController.SetTrigger("hasMeleed");
+        yield return new WaitForSeconds(myData_SO.meleeChargeUpTime);
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.DragonMeleeAttack, 1, audioSource);
@@ -951,7 +952,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Cause Player Damage here or effect that can cause damage.
         if (specialActive)
         {
-            ChangeState(EnemyStates.Special); return;
+            ChangeState(EnemyStates.Special); yield return null;
         }
 
         Collider[] tempHitArray = Physics.OverlapSphere(transform.position, myData_SO.meleeAttackDistance);
@@ -966,10 +967,11 @@ public class EnemyStateMachine : MonoBehaviour
         ChangeState(EnemyStates.Idle);
     }
 
-    protected virtual void RangedAttack()
+    protected virtual IEnumerator RangedAttack()
     {
 
         animationController.SetTrigger("hasRanged");
+        yield return new WaitForSeconds(myData_SO.rangedChargeUpTime);
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.DragonRangedAttack, 1, audioSource);
@@ -992,15 +994,16 @@ public class EnemyStateMachine : MonoBehaviour
         {
             print("From RANGED: special is active and returning to special state.");
             ChangeState(EnemyStates.Special); 
-            return; 
+            yield return null; 
         }
 
         ChangeState(EnemyStates.Idle);
 
     }
 
-    protected virtual void spawnAmmo()
+    protected virtual IEnumerator spawnAmmo()
     {
+        yield return new WaitForSeconds(myData_SO.rangedChargeUpTime);
         GameObject projectileInstance;
         if (!audioSource.isPlaying)
         {
@@ -1016,7 +1019,7 @@ public class EnemyStateMachine : MonoBehaviour
         if (specialActive)
         {
             ChangeState(EnemyStates.Special);
-            return;
+            yield return null;
         }
 
         ChangeState(EnemyStates.Idle);

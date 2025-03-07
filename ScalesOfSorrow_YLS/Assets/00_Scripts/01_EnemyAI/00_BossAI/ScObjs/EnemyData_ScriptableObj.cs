@@ -114,6 +114,8 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float meleeDamage = 10f;
     [Tooltip("The cooldown before the dragon can melee again.")]
     public float meleeCooldown = 3f;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float meleeChargeUpTime = 0.2f;
 
     [Header("Ranged Attack")]
     [Tooltip("The maximum distance that the player can be for a melee attack. NOTE: MUST be a value greater than 0!")]
@@ -123,6 +125,8 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float rangedDamage = 10f;
     [Tooltip("The projectile for a ranged attack.")]
     public GameObject rangedProjectile;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float rangedChargeUpTime = 0.1f;
 
     [Header("Player Helping Projectile")]
     [Tooltip("Projectile that replenishes player attack charges. (The dragon's cry for help if you will.)")]

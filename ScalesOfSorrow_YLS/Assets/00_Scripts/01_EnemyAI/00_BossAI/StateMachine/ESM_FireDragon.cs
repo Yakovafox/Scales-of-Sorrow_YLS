@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class ESM_FireDragon : EnemyStateMachine
 {
-    protected override void BasicAttack()
+    protected override IEnumerator BasicAttack()
     {
-        base.BasicAttack();
+        yield return base.BasicAttack();
     }
 
-    protected override void RangedAttack()
+    protected override IEnumerator RangedAttack()
     {
-        base.RangedAttack();
+        yield return base.RangedAttack();
     }
 
     protected override void initialiseSpecialAbility()
