@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fire Toon Dark
+  m_Name: Fire Toon Light
   m_Shader: {fileID: -6465566751694194690, guid: 603910fb43dfe674ab6344529a90ed51,
     type: 3}
   m_Parent: {fileID: 0}
@@ -71,8 +71,8 @@ Material:
     - _UIMaskSoftnessY: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Dark_Color: {r: 0.8301887, g: 0.6824932, b: 0.57564974, a: 0}
-    - _Lit_Color: {r: 0.3301887, g: 0.07008723, b: 0.07008723, a: 0}
+    - _Dark_Color: {r: 1, g: 0.9619319, b: 0.9098039, a: 0}
+    - _Lit_Color: {r: 1, g: 0.79580677, b: 0.6933962, a: 0}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
