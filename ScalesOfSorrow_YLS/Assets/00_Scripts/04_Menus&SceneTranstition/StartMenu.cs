@@ -11,12 +11,14 @@ public class StartMenu : MonoBehaviour
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject settingsCanvas;
     [SerializeField] private GameObject creditsCanvas;
+    [SerializeField] private GameObject controlSchemeCanvas;
     [SerializeField] private GameObject loadingCanvas;
 
     [Header("First Selected Objects")]
     [SerializeField] private GameObject mainMenuFirstSelect;
     [SerializeField] private GameObject settingsMenuFirstSelect;
     [SerializeField] private GameObject creditsFirstSelect;
+    [SerializeField] private GameObject controlsFirstSelect;
 
     private Slider loadingBar;
 
@@ -25,6 +27,7 @@ public class StartMenu : MonoBehaviour
         mainMenuCanvas.SetActive(true);
         settingsCanvas.SetActive(false);
         creditsCanvas.SetActive(false);
+        controlSchemeCanvas.SetActive(false);
         loadingCanvas.SetActive(false);
 
         loadingBar = loadingCanvas.GetComponentInChildren<Slider>();
@@ -36,6 +39,7 @@ public class StartMenu : MonoBehaviour
         mainMenuCanvas.SetActive(true);
         settingsCanvas.SetActive(false);
         creditsCanvas.SetActive(false);
+        controlSchemeCanvas.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(mainMenuFirstSelect);
     }
@@ -57,6 +61,16 @@ public class StartMenu : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(creditsFirstSelect);
     }
+    
+    public void OpenControlsMenu()
+    {
+        mainMenuCanvas.SetActive(false);
+        settingsCanvas.SetActive(false);
+        creditsCanvas.SetActive(false);
+        controlSchemeCanvas.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(creditsFirstSelect);
+    }
 
     public void Play()
     {
@@ -67,7 +81,6 @@ public class StartMenu : MonoBehaviour
     IEnumerator LoadAsyncScene(int sceneIndex)
     {
         AsyncOperation loadAsyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
-        Debug.Log("Activated and Loading!");
 
         loadingCanvas.SetActive(true);
 
