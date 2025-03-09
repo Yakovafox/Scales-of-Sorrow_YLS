@@ -4187,7 +4187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 305595442}
   - component: {fileID: 305595441}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16099,6 +16099,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_Mode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5469616581390097924, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5523405408926516189, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -16265,7 +16270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1155949024}
   - component: {fileID: 1155949023}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16717,7 +16722,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1217033636}
   - component: {fileID: 1217033635}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28366,7 +28371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1750531785}
   - component: {fileID: 1750531784}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44450,11 +44455,11 @@ SceneRoots:
   - {fileID: 1229395135}
   - {fileID: 1268346332}
   - {fileID: 1833701139}
+  - {fileID: 305595442}
   - {fileID: 1750531785}
   - {fileID: 1155949024}
   - {fileID: 1217033636}
   - {fileID: 136619953}
-  - {fileID: 305595442}
   - {fileID: 518815191}
   - {fileID: 1005377174}
   - {fileID: 2038069357}
