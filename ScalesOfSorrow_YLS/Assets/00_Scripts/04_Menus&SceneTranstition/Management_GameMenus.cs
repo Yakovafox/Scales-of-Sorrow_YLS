@@ -17,6 +17,8 @@ public class Management_GameMenus : MonoBehaviour
 
     private GameObject canvas_GameUI;
 
+    [SerializeField] private GameObject canvas_Dialogue;
+
     private Slider loadingBar;
 
     [SerializeField] private GameObject firstGameOverOBJ;
@@ -89,6 +91,12 @@ public class Management_GameMenus : MonoBehaviour
         enableMouseFeatures();
 
         EventSystem.current.SetSelectedGameObject(firstGameOverOBJ);
+    }
+
+    public void showDialogue()
+    {
+        canvas_Dialogue.SetActive(true);
+        FindFirstObjectByType<DialogueManager>().EnterDialogueMode();
     }
 
     public void showGameWonScreen()
