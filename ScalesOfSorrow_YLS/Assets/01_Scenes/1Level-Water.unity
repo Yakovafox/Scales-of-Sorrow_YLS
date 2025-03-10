@@ -16086,6 +16086,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2960334079345889393, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3964577583805924500, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -16100,6 +16105,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Gameplay_Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5245832953218274998, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5469616581390097924, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
@@ -16125,6 +16135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UI_Canvases
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986935060416712911, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7222116571259891366, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
