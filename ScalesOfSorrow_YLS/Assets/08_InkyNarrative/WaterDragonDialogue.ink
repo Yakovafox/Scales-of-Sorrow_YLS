@@ -1,1 +1,0 @@
-"Sorry I got a little mad. I only got mad because I thought you were an enemy" - Wynona The Water Dragon
