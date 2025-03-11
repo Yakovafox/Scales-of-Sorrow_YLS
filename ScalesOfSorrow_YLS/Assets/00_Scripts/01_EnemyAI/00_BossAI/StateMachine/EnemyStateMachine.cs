@@ -262,7 +262,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (flyTimeOut() && !flyingToRandomPoint)
                 {
-                    RandomisedMovePoint();
+                    //RandomisedMovePoint();
                     flyingToRandomPoint = true;
                 }
                 else if (flyTimeOut() && flyingToRandomPoint)
