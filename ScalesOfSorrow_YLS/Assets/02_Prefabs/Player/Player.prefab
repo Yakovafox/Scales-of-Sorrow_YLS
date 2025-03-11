@@ -4915,6 +4915,7 @@ GameObject:
   - component: {fileID: 3272692226260714306}
   - component: {fileID: 7572181838060726870}
   - component: {fileID: 4816562947862391984}
+  - component: {fileID: 4245283811301056695}
   m_Layer: 1
   m_Name: shadow caster
   m_TagString: Untagged
@@ -4989,6 +4990,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4245283811301056695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3988916301408249561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fda2a7d352e36f4aad86d23abbf936a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMode: 0
+  xLock: 1
+  yLock: 1
+  zLock: 0
 --- !u!1 &5124858882247164873
 GameObject:
   m_ObjectHideFlags: 0
@@ -9949,7 +9966,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 76e79eb2398a8c34083523aac68b27cd, type: 2}
+  - {fileID: 2100000, guid: 536b0f61fe9a8f64495764a24a296561, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10434,8 +10451,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMode: 0
-  xLock: 1
-  yLock: 1
+  xLock: 0
+  yLock: 0
   zLock: 0
 --- !u!1 &5879689446446010618
 GameObject:
