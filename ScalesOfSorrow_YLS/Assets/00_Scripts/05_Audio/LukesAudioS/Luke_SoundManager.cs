@@ -13,6 +13,7 @@ public enum SoundType
     PlayerHitAmmo,
     DragonMove,
     DragonFly,
+    DragonLand,
     DragonMeleeAttack,
     DragonRangedAttack,
     DragonHit,
@@ -36,7 +37,8 @@ public class Luke_SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundList[] soundList;
     private static Luke_SoundManager instance;
-    private AudioSource audioSource;
+    private AudioSource default_audioSource;
+    private AudioSource referenced_audioSource;
 
 #if UNITY_EDITOR
     
@@ -53,13 +55,17 @@ public class Luke_SoundManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        default_audioSource = GetComponent<AudioSource>();
     }
     
-    public static void PlaySound(SoundType sound, float volume = 1)
+    public static void PlaySound(SoundType sound, float volume = 1, AudioSource audioSource = null)
     {
+        instance.referenced_audioSource = audioSource;
+
+        if(instance.soundList[(int)sound].Sounds.Length <= 0) { return; }
         AudioClip[] clips = instance.soundList[(int)sound].Sounds;
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
-        instance.audioSource.PlayOneShot(randomClip, volume);
+        instance.referenced_audioSource.PlayOneShot(randomClip, volume);
     }
 }

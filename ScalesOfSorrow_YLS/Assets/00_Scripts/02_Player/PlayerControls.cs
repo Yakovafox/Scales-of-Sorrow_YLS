@@ -85,17 +85,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""2a588a87-c3c1-40d6-aad7-2ddcb3c37c94"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""a70b2d3f-b558-4105-b0f4-f42972a67816"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",

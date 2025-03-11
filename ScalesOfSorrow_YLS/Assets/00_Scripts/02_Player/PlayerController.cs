@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Variables    ------------------------
     [Header("------- ID -------")]
     public int playerID;
+    [SerializeField] private PlayerDeath playerDeath;
 
     [Header("------- Health -------")]
     [SerializeField] private float health;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("dashSpeed controls how fast with the player moves during the dash. This can be used to control the distance")]
     [SerializeField] private float dashSpeed;
     private Collider pCollider;
-    private bool canDash = true;
+    private bool canDash = false;
     private bool isDash = false;
 
     [Tooltip("dashTime controls how long the dash lasts")]
@@ -103,9 +104,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sound playerHitClip;
     [SerializeField] private Sound deathClip;
 
-    [Header("-----Temp UI")]
+    private AudioSource player_audioSource;
+
+    [Header("----- UI -----")]
     private GameObject canvas_Gameplay;
     [SerializeField] private GameObject tempHealth;
+    private GameObject individualUI;
+    private TextMeshProUGUI IDUI;
+    private TextMeshProUGUI AmmoUI;
+    private TextMeshProUGUI ShieldUI;
+    private TextMeshProUGUI FireUpUI;
+
     private GameObject temp;
     private TextMeshProUGUI tempText;
     private RectTransform tempRect;
@@ -131,25 +140,37 @@ public class PlayerController : MonoBehaviour
         pRB = GetComponent<Rigidbody>();
         pCollider = GetComponent<Collider>();
         pSR = GetComponentInChildren<SpriteRenderer>();
+        player_audioSource = GetComponentInChildren<AudioSource>();
+
+        playerDeath = FindAnyObjectByType<PlayerDeath>();
+        playerDeath.AddChild(gameObject);
 
         attackCharges = maxCharges;
 
         canvas_Gameplay = GameObject.FindGameObjectWithTag("Gameplay_Canvas");
-        temp = Instantiate(tempHealth, canvas_Gameplay.transform).transform.GetChild(0).gameObject;
-        tempText = temp.GetComponent<TextMeshProUGUI>();
-        tempText.text = health.ToString();
+        individualUI = Instantiate(tempHealth, canvas_Gameplay.transform);
+        temp = individualUI.transform.GetChild(1).gameObject;
 
-        tempRect = temp.GetComponent<RectTransform>();
+        IDUI = individualUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        IDUI.text = "P" + (playerID + 1);
+        tempText = individualUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        tempText.text = health.ToString();
+        AmmoUI = individualUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        AmmoUI.text = attackCharges.ToString();
+        ShieldUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+
+        tempRect = individualUI.GetComponent<RectTransform>();
         if (playerID == 0)
         {
-            tempRect.anchoredPosition = new Vector2(-339, 187);
+            tempRect.anchoredPosition = new Vector2(-352, -166);
         }
         else
         {
-            tempRect.anchoredPosition = new Vector2(-339, 130);
+            tempRect.anchoredPosition = new Vector2(350, -166);
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);
+        canDash = true;
     }
 
     void Update()
@@ -206,7 +227,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DefaultDash());
 
             if (dashClip.sound != null) { SoundManager.instanceSM.PlaySound(dashClip, transform.position); }
-            Luke_SoundManager.PlaySound(SoundType.PlayerDash, 1);
+            Luke_SoundManager.PlaySound(SoundType.PlayerDash, 1, player_audioSource);
         }
     }
 
@@ -255,6 +276,7 @@ public class PlayerController : MonoBehaviour
     {
         canAttack = false;
         attackCharges -= 1;
+        AmmoUI.text = attackCharges.ToString();
 
         animationController.SetTrigger("hasAttacked");
 
@@ -338,6 +360,7 @@ public class PlayerController : MonoBehaviour
         shieldCooldownDone = false;
         Debug.Log("00 Start of coroutine");
         isShield = true;
+        ShieldUI.enabled = false;
         shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
         
         yield return new WaitForSeconds(shieldDuration);
@@ -347,6 +370,7 @@ public class PlayerController : MonoBehaviour
         if (shieldReference != null) { Destroy(shieldReference); }
 
         yield return new WaitForSeconds(shieldCooldown);
+        ShieldUI.enabled = true;
         shieldCooldownDone = true;
         Debug.Log("05 Shield No");
     }
@@ -369,7 +393,8 @@ public class PlayerController : MonoBehaviour
         {
             if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
             temp.SetActive(false);
-            OnPlayerDefeated();
+            playerDeath.RemoveChild(gameObject);
+            pSR.enabled = false;
         }
     }
 
@@ -377,6 +402,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
         attackCharges++;
+        AmmoUI.text = attackCharges.ToString();
     }
 
     #endregion ------------------------    Collision    ------------------------
