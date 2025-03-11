@@ -170,4 +170,15 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("Animation Curve for the fireup charge.")]
     public AnimationCurve FireUp_AnimCurve;
 
+
+    //----------------------------------------------------------------------------------
+
+    [Header("Defeat Attributes")]
+    [Tooltip("Time that the dragon flashes for on defeat.")]
+    public float defeat_flashTime = 5f;
+    [Tooltip("Colour for the Defeat flash.")]
+    public Color defeat_Colour = Color.white;
+    [Tooltip("Animation Curve for the Dragons Defeat.")]
+    public AnimationCurve defeat_AnimCurve;
+
 }

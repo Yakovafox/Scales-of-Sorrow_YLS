@@ -11,6 +11,7 @@ using WaitForSeconds = UnityEngine.WaitForSeconds;
 
 public enum EnemyStates
 {
+    Stopped,
     Idle,
     Moving,
     Fly,
@@ -26,7 +27,7 @@ public class EnemyStateMachine : MonoBehaviour
 
 
     [Tooltip("Starting state for the AI")]
-    [SerializeField] private EnemyStates currentState = EnemyStates.Idle;
+    [SerializeField] private EnemyStates currentState = EnemyStates.Stopped;
 
 
 
@@ -160,9 +161,17 @@ public class EnemyStateMachine : MonoBehaviour
     public delegate void delegate_dragonDefeated();
     public static event delegate_dragonDefeated OnDragonDefeated;
 
-    
+
     #endregion
 
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        
+    }
 
     public virtual void Awake()
     {
@@ -207,6 +216,10 @@ public class EnemyStateMachine : MonoBehaviour
 
         switch (currentState)
         {
+            case EnemyStates.Stopped:
+                agent.isStopped = true;
+                break;
+
             case EnemyStates.Idle:
                 if (stunned)
                 {
@@ -403,7 +416,6 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 if (abilityTimeOut())
                 {
-                    print("ability timed out!");
                     exitSpecialAbility();
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
@@ -526,10 +538,9 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
 
-        StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
-
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
+            StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
             currentHealth -= incomingDamage;
             GameUIManager.updateEnemyHealthBar(incomingDamage);
             return;
@@ -566,7 +577,10 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
-            OnDragonDefeated();
+            //OnDragonDefeated();
+            ChangeState(EnemyStates.Stopped);
+            StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, myData_SO.defeat_Colour, myData_SO.defeat_AnimCurve));
+            //Play Breath particle effect here?
             return;
             //DefeatOfDragon
         }
@@ -595,6 +609,16 @@ public class EnemyStateMachine : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    private void StopAI()
+    {
+        ChangeState(EnemyStates.Stopped);
+    }
+
+    private void StartUpAI()
+    {
+        ChangeState(EnemyStates.Idle);
     }
 
     #endregion
