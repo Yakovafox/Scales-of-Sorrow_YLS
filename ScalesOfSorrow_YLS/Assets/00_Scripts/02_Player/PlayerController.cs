@@ -464,4 +464,17 @@ public class PlayerController : MonoBehaviour
 
     #endregion ------------------------    Ghost Mode    ------------------------
 
+    #region ------------------------    Pause    ------------------------
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            //pause here
+        }
+    }
+
+    #endregion ------------------------    Pause    ------------------------
+
+
 }

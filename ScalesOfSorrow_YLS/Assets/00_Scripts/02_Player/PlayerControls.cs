@@ -73,7 +73,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MenuOpenClose"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""104d76bf-2a2d-4101-b84f-fbd89a1cdd49"",
                     ""expectedControlType"": ""Button"",
@@ -255,7 +255,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""MenuOpenClose"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -266,7 +266,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
-                    ""action"": ""MenuOpenClose"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -857,7 +857,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Shield = m_Player.FindAction("Shield", throwIfNotFound: true);
         m_Player_FiredUp = m_Player.FindAction("Fired Up", throwIfNotFound: true);
-        m_Player_MenuOpenClose = m_Player.FindAction("MenuOpenClose", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -937,7 +937,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Shield;
     private readonly InputAction m_Player_FiredUp;
-    private readonly InputAction m_Player_MenuOpenClose;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -947,7 +947,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Shield => m_Wrapper.m_Player_Shield;
         public InputAction @FiredUp => m_Wrapper.m_Player_FiredUp;
-        public InputAction @MenuOpenClose => m_Wrapper.m_Player_MenuOpenClose;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -972,9 +972,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @FiredUp.started += instance.OnFiredUp;
             @FiredUp.performed += instance.OnFiredUp;
             @FiredUp.canceled += instance.OnFiredUp;
-            @MenuOpenClose.started += instance.OnMenuOpenClose;
-            @MenuOpenClose.performed += instance.OnMenuOpenClose;
-            @MenuOpenClose.canceled += instance.OnMenuOpenClose;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -994,9 +994,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @FiredUp.started -= instance.OnFiredUp;
             @FiredUp.performed -= instance.OnFiredUp;
             @FiredUp.canceled -= instance.OnFiredUp;
-            @MenuOpenClose.started -= instance.OnMenuOpenClose;
-            @MenuOpenClose.performed -= instance.OnMenuOpenClose;
-            @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1165,7 +1165,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnShield(InputAction.CallbackContext context);
         void OnFiredUp(InputAction.CallbackContext context);
-        void OnMenuOpenClose(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
