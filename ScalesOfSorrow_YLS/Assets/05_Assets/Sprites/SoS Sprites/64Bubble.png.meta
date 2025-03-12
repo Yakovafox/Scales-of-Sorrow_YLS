@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 57a2d47cb257f2a4796881acc11fbeeb
+guid: 3c710b6494de19844a8d6bcd74137730
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -160,172 +160,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_0
-      rect:
-        serializedVersion: 2
-        x: 7
-        y: 11
-        width: 77
-        height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: efffab8c104b1ec4e933d126608819d1
-      internalID: -113962777
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_1
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 11
-        width: 76
-        height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b6be2eabf41927e47bebc39cef42466b
-      internalID: 1520067029
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_2
-      rect:
-        serializedVersion: 2
-        x: 199
-        y: 11
-        width: 76
-        height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7fb0be0877058614bb6eae31c48e13e7
-      internalID: -186566841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 296
-        y: 11
-        width: 75
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 68d8d47a696efce418b9331cdfb86590
-      internalID: 45848792
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 393
-        y: 10
-        width: 73
-        height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d449cc3195f2c7e4fb95b63ff54501db
-      internalID: -202540964
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Water_Dragon_Idle-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 488
-        y: 11
-        width: 75
-        height: 35
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5bdb7da531b98fb40b97c69e609e22f5
-      internalID: -839023868
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: headDragon
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 29
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7bbbf2bb79834d4397f81c5e0b2549a
-      internalID: -2067412490
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b58232ae8a0409741bee513c15ab5c09
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Water_Dragon_Idle-Sheet_0: -113962777
-      Water_Dragon_Idle-Sheet_1: 1520067029
-      Water_Dragon_Idle-Sheet_2: -186566841
-      Water_Dragon_Idle-Sheet_3: 45848792
-      Water_Dragon_Idle-Sheet_4: -202540964
-      Water_Dragon_Idle-Sheet_5: -839023868
-      headDragon: -2067412490
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

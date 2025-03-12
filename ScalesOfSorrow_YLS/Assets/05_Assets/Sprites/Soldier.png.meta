@@ -686,6 +686,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: HeadPlayer
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 649
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8d58a95c25891e488f827273a09bb08
+      internalID: -1082413546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -708,6 +729,7 @@ TextureImporter:
       Death_1: 502267531
       Death_2: -831696006
       Death_3: 1845696631
+      HeadPlayer: -1082413546
       Idle_0: 1858766269
       Idle_1: 37238417
       Idle_2: 21967884

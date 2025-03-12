@@ -10060,6 +10060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerID: 0
+  playerDeath: {fileID: 0}
   health: 100
   dmg_flashTime: 0.5
   dmg_AnimCurve:
@@ -10098,6 +10099,7 @@ MonoBehaviour:
   dmg_flashColour: {r: 0.6698113, g: 0.14217694, b: 0.14217694, a: 1}
   pSpeed: 350
   movementInput: {x: 0, y: 0}
+  previousInput: {x: 0, y: 0, z: 0}
   dashSpeed: 35
   dashTime: 0.3
   dashCooldown: 1
@@ -10214,6 +10216,15 @@ MonoBehaviour:
   dashRight: {fileID: 7666198717647291779}
   attackEffect: {fileID: 7741684857696844677}
   attackHit: {fileID: 4415367140425175599}
+  isGhost: 0
+  canBlock: 1
+  ghostCooldown: 2
+  excludeAttack:
+    serializedVersion: 2
+    m_Bits: 576
+  includeAttack:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &6669472844546632342
 MonoBehaviour:
   m_ObjectHideFlags: 0

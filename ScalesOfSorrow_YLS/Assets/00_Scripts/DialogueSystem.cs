@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Ink.Runtime;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -10,13 +11,20 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Image profilePicture;
+    [SerializeField] private Sprite dragonProfilePicture;
+    [SerializeField] private Sprite playerProfilePicture;
 
-    [SerializeField] private TextAsset startDialogue;
-    [SerializeField] private TextAsset finalDialogue;
+    [SerializeField] private TextAsset dialogue;
     private Story currentStory;
     public bool dialogueIsPlaying { get; private set; }
 
     private static DialogueManager instance;
+    [SerializeField] private Management_GameMenus gameMenus;
+
+    private const string SPEAKER_TAG = "speaker";
+    private const string PORTRAIT_TAG = "portrait";
 
     private void Awake()
     {
@@ -27,13 +35,6 @@ public class DialogueManager : MonoBehaviour
         }
         else { instance = this; }
 
-        Time.timeScale = 0;
-    }
-
-    private void Start()
-    {
-        dialogueIsPlaying = true;
-        EnterDialogueMode(startDialogue);
     }
 
     private void Update()
@@ -45,9 +46,9 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    public void EnterDialogueMode(TextAsset inkJSON)
+    public void EnterDialogueMode()
     {
-        currentStory = new Story(inkJSON.text);
+        currentStory = new Story(dialogue.text);
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
@@ -61,19 +62,51 @@ public class DialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
+
+        gameMenus.showGameOverScreen();
     }
 
     private void ContinueStory()
     {
         if (currentStory.canContinue)
         {
-            // set text for the current dialogue line
             dialogueText.text = currentStory.Continue();
+
+            HandleTags(currentStory.currentTags);
         }
         else
         {
+            Debug.Log("Exiting Dialogue");
             StartCoroutine(ExitDialogueMode());
-            Time.timeScale = 1f;
+        }
+    }
+
+    private void HandleTags(List<string> currentTags)
+    {
+        foreach (string tag in currentTags)
+        {
+            string[] splitTag = tag.Split(':');
+
+            if (splitTag.Length != 2) { Debug.LogError("Tag failed to parse: " + tag); }
+
+            string tagKey = splitTag[0].Trim();
+            string tagValue = splitTag[1].Trim();
+
+            switch (tagKey)
+            {
+                case SPEAKER_TAG:
+                    nameText.text = tagValue;
+                    break;
+
+                case PORTRAIT_TAG: 
+                    if(tagValue == "Kelp") { profilePicture.sprite = dragonProfilePicture; }
+                    else { profilePicture.sprite = playerProfilePicture; }
+                    break;
+
+                default:
+                    Debug.LogWarning("Tag exists ");
+                    break;
+            }
         }
     }
 }

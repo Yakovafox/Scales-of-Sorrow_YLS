@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
 
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [Header("------- Movement -------")]
     [SerializeField] private float pSpeed;
     [SerializeField] private Vector2 movementInput = Vector2.zero;
+    [SerializeField] private Vector3 previousInput;
     private Transform pTransform;
     private Rigidbody pRB;
     private SpriteRenderer pSR;
@@ -128,6 +130,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ParticleSystem attackEffect;
     [SerializeField] ParticleSystem attackHit;
 
+    [Header("-----GhostMode-----")]
+    [SerializeField] private bool isGhost;
+    [SerializeField] private bool canBlock = true;
+    [SerializeField] private float ghostCooldown;
+    [SerializeField] private LayerMask excludeAttack;
+    [SerializeField] private LayerMask includeAttack;
+
 
     public delegate void delegate_playerDefeated();
     public static event delegate_playerDefeated OnPlayerDefeated; 
@@ -166,7 +175,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            tempRect.anchoredPosition = new Vector2(350, -166);
+            tempRect.anchoredPosition = new Vector2(300, -166);
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);
@@ -183,10 +192,9 @@ public class PlayerController : MonoBehaviour
         if (isDash) { return; }
         if (!isShield) { MoveInput(); }
     }
-
     public void SetPlayerID(int ID)
     { 
-        playerID = ID; Debug.Log("Player ID");
+        playerID = ID;
     }
 
     #region ------------------------    Movement    ------------------------
@@ -201,6 +209,7 @@ public class PlayerController : MonoBehaviour
     private void MoveInput()
     {
         Vector3 axis = new Vector3(movementInput.x, 0, movementInput.y);
+        if (movementInput != Vector2.zero) { previousInput = new Vector3(movementInput.x, 0, movementInput.y); }
         pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
         if(axis.x > 0) { pSR.flipX = false; }
@@ -212,7 +221,6 @@ public class PlayerController : MonoBehaviour
 
     public void SetPosition(Vector3 position)
     {
-        Debug.Log("Set Position");
         transform.position = position;
     }
 
@@ -239,10 +247,10 @@ public class PlayerController : MonoBehaviour
 
         animationController.SetTrigger("hasDashed");
 
-        if (movementInput.x > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
-        if (movementInput.x < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
+        if (previousInput.x > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
+        if (previousInput.x < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
 
-        pRB.velocity = new Vector3(movementInput.x, 0, movementInput.y) * dashSpeed;
+        pRB.velocity = (previousInput) * dashSpeed;
 
         yield return new WaitForSeconds(dashTime);
         pCollider.excludeLayers = includeLayers;
@@ -283,7 +291,7 @@ public class PlayerController : MonoBehaviour
         if (!attackEffect.isPlaying) { attackEffect.Play(); }
 
 
-        Vector3 direction = new Vector3(movementInput.x, 0, movementInput.y);
+        Vector3 direction = previousInput;
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask/*, PreviewCondition.Both, 1f, Color.green, Color.red*/);
         //play particle effect
@@ -383,30 +391,32 @@ public class PlayerController : MonoBehaviour
     #region ------------------------    Collision    ------------------------
     public void TakeDamage(float damage)
     {
-        StartCoroutine(playerDamageFlash());
-
-        health -= damage;
-        tempText.text = health.ToString();
-        if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
-
-        if (health <= 0) 
+        if (isShield) { return; }
+        else if (isGhost & canBlock) {  StartCoroutine(GhostHit()); }
+        else 
         {
-            if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
-            temp.SetActive(false);
-            playerDeath.RemoveChild(gameObject);
-            pSR.enabled = false;
+            StartCoroutine(playerDamageFlash());
+
+            health -= damage;
+            tempText.text = health.ToString();
+            
+            if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
+
+            if (health <= 0)
+            {
+                if (deathClip.sound != null) { SoundManager.instanceSM.PlaySound(deathClip, transform.position); }
+                
+                temp.SetActive(false);
+                
+                playerDeath.RemoveChild(gameObject);
+
+                pSR.enabled = false;
+
+                EnterGhost();
+            }
         }
+
     }
-
-    public void RechargeMelee()
-    {
-        if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
-        attackCharges++;
-        AmmoUI.text = attackCharges.ToString();
-    }
-
-    #endregion ------------------------    Collision    ------------------------
-
     private IEnumerator playerDamageFlash()
     {
         float currentFlashValue = 0f;
@@ -424,4 +434,34 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
+
+    public void RechargeMelee()
+    {
+        if (rechargeClip.sound != null) { SoundManager.instanceSM.PlaySound(rechargeClip, transform.position); }
+        attackCharges++;
+        AmmoUI.text = attackCharges.ToString();
+    }
+
+    #endregion ------------------------    Collision    ------------------------
+
+    #region ------------------------    Ghost Mode    ------------------------
+    
+    private void EnterGhost()
+    {
+        isGhost = true;
+        canAttack = false;
+    }
+
+    private IEnumerator GhostHit()
+    {
+        canBlock = false;
+        pCollider.excludeLayers = excludeAttack;
+        yield return new WaitForSeconds(ghostCooldown);
+        canBlock = true;
+        pCollider.excludeLayers = includeAttack;
+        yield return null;
+    }
+
+    #endregion ------------------------    Ghost Mode    ------------------------
+
 }

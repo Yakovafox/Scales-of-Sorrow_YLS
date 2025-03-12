@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     void GameWon()
     {
-        GameMenus_Manager.showGameWonScreen();
+        GameMenus_Manager.showDialogue();
     }
 
     void GameOver()

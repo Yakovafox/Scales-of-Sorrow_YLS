@@ -3305,6 +3305,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 458516272}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &209087441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8684702608218696691, guid: 331cf63effe045b468422cc9e8f11bcb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1133159756}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &210475240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4187,7 +4199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 305595442}
   - component: {fileID: 305595441}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16074,6 +16086,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2960334079345889393, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3964577583805924500, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -16089,6 +16106,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Gameplay_Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5245832953218274998, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5469616581390097924, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_Interactable
@@ -16099,6 +16121,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_Mode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5469616581390097924, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5523405408926516189, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -16108,6 +16135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UI_Canvases
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986935060416712911, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7222116571259891366, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
@@ -16265,7 +16297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1155949024}
   - component: {fileID: 1155949023}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16717,7 +16749,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1217033636}
   - component: {fileID: 1217033635}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27855,6 +27887,60 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1684027390}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1688571155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1688571157}
+  - component: {fileID: 1688571156}
+  m_Layer: 0
+  m_Name: DialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1688571156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688571155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aeb158b6cf317b4484a050defb11c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialoguePanel: {fileID: 1718506721}
+  dialogueText: {fileID: 1945501258}
+  nameText: {fileID: 209087441}
+  profilePicture: {fileID: 1749964969}
+  dragonProfilePicture: {fileID: -2067412490, guid: 57a2d47cb257f2a4796881acc11fbeeb,
+    type: 3}
+  playerProfilePicture: {fileID: -1082413546, guid: 268c2f90c4cf77c42bc4512a8a84d1b2,
+    type: 3}
+  dialogue: {fileID: 4900000, guid: 914ab6acb1185514589612b2eeb85428, type: 3}
+  gameMenus: {fileID: 765524463}
+--- !u!4 &1688571157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688571155}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 382.6846, y: 274.45096, z: -18.07654}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1693342614 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed7a4a3139a350e4794e03abe21b13b2,
@@ -28152,6 +28238,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 683796407}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1718506721 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3054093955445537357, guid: 331cf63effe045b468422cc9e8f11bcb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1133159756}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1739651924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28360,6 +28452,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2056213532}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1749964969 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1046417259891209387, guid: 331cf63effe045b468422cc9e8f11bcb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1133159756}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1750289794 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3330661089422431090, guid: c3bed4d90f245874eb82356b8c02e26d,
@@ -28376,7 +28480,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1750531785}
   - component: {fileID: 1750531784}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: invisible walls (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36235,6 +36339,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed7a4a3139a350e4794e03abe21b13b2, type: 3}
+--- !u!114 &1945501258 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5056862190892735139, guid: 331cf63effe045b468422cc9e8f11bcb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1133159756}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1945883992 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a85949e94ab500845b2090802572d209,
@@ -42449,6 +42565,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 1ef336e610d3e5a4b9cb95ac19e3c104, type: 3}
     - target: {fileID: 6879365372144385257, guid: 8d9159a3a4b248c4db72f2bdd121a256,
         type: 3}
+      propertyPath: canvas_Dialogue
+      value: 
+      objectReference: {fileID: 1718506721}
+    - target: {fileID: 6879365372144385257, guid: 8d9159a3a4b248c4db72f2bdd121a256,
+        type: 3}
       propertyPath: firstGameWonOBJ
       value: 
       objectReference: {fileID: 1133159757}
@@ -44460,11 +44581,11 @@ SceneRoots:
   - {fileID: 1229395135}
   - {fileID: 1268346332}
   - {fileID: 1833701139}
+  - {fileID: 305595442}
   - {fileID: 1750531785}
   - {fileID: 1155949024}
   - {fileID: 1217033636}
   - {fileID: 136619953}
-  - {fileID: 305595442}
   - {fileID: 518815191}
   - {fileID: 1005377174}
   - {fileID: 2038069357}
@@ -44472,3 +44593,4 @@ SceneRoots:
   - {fileID: 1156285463}
   - {fileID: 1131425794}
   - {fileID: 1445102988}
+  - {fileID: 1688571157}
