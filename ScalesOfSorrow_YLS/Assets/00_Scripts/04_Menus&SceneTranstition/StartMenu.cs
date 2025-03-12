@@ -69,7 +69,7 @@ public class StartMenu : MonoBehaviour
         creditsCanvas.SetActive(false);
         controlSchemeCanvas.SetActive(true);
 
-        EventSystem.current.SetSelectedGameObject(creditsFirstSelect);
+        EventSystem.current.SetSelectedGameObject(controlsFirstSelect);
     }
 
     public void Play()

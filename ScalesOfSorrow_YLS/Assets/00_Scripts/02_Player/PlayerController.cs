@@ -114,11 +114,11 @@ public class PlayerController : MonoBehaviour
     private GameObject individualUI;
     private TextMeshProUGUI IDUI;
     private TextMeshProUGUI AmmoUI;
-    private TextMeshProUGUI ShieldUI;
-    private TextMeshProUGUI FireUpUI;
+    private UnityEngine.UI.Slider ShieldUI;
+    private UnityEngine.UI.Slider FireUpUI;
 
     private GameObject temp;
-    private TextMeshProUGUI tempText;
+    private UnityEngine.UI.Slider HealthBar;
     private RectTransform tempRect;
 
     [Header("-----Animtions-----")]
@@ -160,22 +160,22 @@ public class PlayerController : MonoBehaviour
         individualUI = Instantiate(tempHealth, canvas_Gameplay.transform);
         temp = individualUI.transform.GetChild(1).gameObject;
 
-        IDUI = individualUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        IDUI = individualUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         IDUI.text = "P" + (playerID + 1);
-        tempText = individualUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        tempText.text = health.ToString();
-        AmmoUI = individualUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        HealthBar = individualUI.transform.GetChild(2).GetComponent<UnityEngine.UI.Slider>();
+        HealthBar.value = ValueConverter0to1(health, 0, 100);
+        AmmoUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         AmmoUI.text = attackCharges.ToString();
-        ShieldUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        ShieldUI = individualUI.transform.GetChild(4).GetComponent<UnityEngine.UI.Slider>();
 
         tempRect = individualUI.GetComponent<RectTransform>();
         if (playerID == 0)
         {
-            tempRect.anchoredPosition = new Vector2(-352, -166);
+            tempRect.anchoredPosition = new Vector2(-280, -150);
         }
         else
         {
-            tempRect.anchoredPosition = new Vector2(300, -166);
+            tempRect.anchoredPosition = new Vector2(320, -150);
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);
@@ -368,7 +368,7 @@ public class PlayerController : MonoBehaviour
         shieldCooldownDone = false;
         Debug.Log("00 Start of coroutine");
         isShield = true;
-        ShieldUI.enabled = false;
+        ShieldUI.value = ValueFlipper(0);
         shieldReference = Instantiate(shieldPrefab, pTransform.position, quaternion.identity, transform);
         
         yield return new WaitForSeconds(shieldDuration);
@@ -378,7 +378,7 @@ public class PlayerController : MonoBehaviour
         if (shieldReference != null) { Destroy(shieldReference); }
 
         yield return new WaitForSeconds(shieldCooldown);
-        ShieldUI.enabled = true;
+        ShieldUI.value = ValueFlipper(1);
         shieldCooldownDone = true;
         Debug.Log("05 Shield No");
     }
@@ -398,7 +398,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(playerDamageFlash());
 
             health -= damage;
-            tempText.text = health.ToString();
+            HealthBar.value = ValueConverter0to1(health, 0, 100);
             
             if (playerHitClip.sound != null) { SoundManager.instanceSM.PlaySound(playerHitClip, transform.position); }
 
@@ -463,5 +463,17 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion ------------------------    Ghost Mode    ------------------------
+
+    private float ValueConverter0to1(float value, float minValue, float maxValue)
+    {
+        Debug.Log(value);
+        Debug.Log((value - minValue) / (maxValue - minValue));
+        return (value - minValue) / (maxValue - minValue);
+    }
+
+    private float ValueFlipper(float valueToFlip)
+    {
+        return 1 - valueToFlip;
+    }
 
 }
