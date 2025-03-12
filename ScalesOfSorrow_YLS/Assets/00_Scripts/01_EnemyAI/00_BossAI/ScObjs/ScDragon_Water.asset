@@ -29,8 +29,8 @@ MonoBehaviour:
   canSee: 1
   sightDistance: 10
   sightAngle: 160
-  MaxHealth: 150
-  Stages: 1
+  MaxHealth: 10
+  Stages: 0
   dmg_AnimCurve:
     serializedVersion: 2
     m_Curve:
@@ -76,10 +76,12 @@ MonoBehaviour:
   meleeAttackDistance: 3
   meleeDamage: 10
   meleeCooldown: 3
+  meleeChargeUpTime: 0.2
   rangedAttackDistance: 5
   rangedDamage: 10
   rangedProjectile: {fileID: 5755901808654403707, guid: 7257429b9623446438831f30a79131b8,
     type: 3}
+  rangedChargeUpTime: 0.1
   ammoProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
     type: 3}
   ammoProjectileSpawnChance: 33.33
@@ -170,4 +172,39 @@ MonoBehaviour:
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 0
+    m_RotationOrder: 4
+  defeat_flashTime: 3
+  defeat_Colour: {r: 0.2028302, g: 0.97772646, b: 1, a: 1}
+  defeat_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.5206705
+      outSlope: -0.5206705
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06433469
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.5644684
+      outSlope: 0.5644684
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.070291996
+      outWeight: 0.33333334
+    m_PreInfinity: 1
+    m_PostInfinity: 1
     m_RotationOrder: 4

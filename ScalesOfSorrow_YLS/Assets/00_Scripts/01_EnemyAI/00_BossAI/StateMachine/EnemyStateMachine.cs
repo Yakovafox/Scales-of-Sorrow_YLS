@@ -11,6 +11,7 @@ using WaitForSeconds = UnityEngine.WaitForSeconds;
 
 public enum EnemyStates
 {
+    Stopped,
     Idle,
     Moving,
     Fly,
@@ -26,7 +27,7 @@ public class EnemyStateMachine : MonoBehaviour
 
 
     [Tooltip("Starting state for the AI")]
-    [SerializeField] private EnemyStates currentState = EnemyStates.Idle;
+    [SerializeField] private EnemyStates currentState = EnemyStates.Stopped;
 
 
 
@@ -160,9 +161,17 @@ public class EnemyStateMachine : MonoBehaviour
     public delegate void delegate_dragonDefeated();
     public static event delegate_dragonDefeated OnDragonDefeated;
 
-    
+
     #endregion
 
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        
+    }
 
     public virtual void Awake()
     {
@@ -207,6 +216,10 @@ public class EnemyStateMachine : MonoBehaviour
 
         switch (currentState)
         {
+            case EnemyStates.Stopped:
+                agent.isStopped = true;
+                break;
+
             case EnemyStates.Idle:
                 if (stunned)
                 {
@@ -262,7 +275,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (flyTimeOut() && !flyingToRandomPoint)
                 {
-                    RandomisedMovePoint();
+                    //RandomisedMovePoint();
                     flyingToRandomPoint = true;
                 }
                 else if (flyTimeOut() && flyingToRandomPoint)
@@ -330,7 +343,7 @@ public class EnemyStateMachine : MonoBehaviour
                     if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        BasicAttack();
+                        StartCoroutine(BasicAttack());
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
@@ -338,12 +351,12 @@ public class EnemyStateMachine : MonoBehaviour
                         if (shouldSpawnAmmoProjecile())
                         {
                             doOnce = false;
-                            spawnAmmo();
+                            StartCoroutine(spawnAmmo());
                         }
                         else
                         {
                             doOnce = false;
-                            RangedAttack();
+                            StartCoroutine(RangedAttack());
                             // ShootProjectile
                         }
                     }
@@ -368,7 +381,7 @@ public class EnemyStateMachine : MonoBehaviour
                     if (MeleeAttackCooldown(myData_SO.meleeCooldown) && InAttackRange(myData_SO.meleeAttackDistance))
                     {
                         doOnce = false;
-                        BasicAttack();
+                        StartCoroutine(BasicAttack());
                         //Melee Attack
                     }
                     else if (InAttackRange(myData_SO.rangedAttackDistance))
@@ -376,12 +389,12 @@ public class EnemyStateMachine : MonoBehaviour
                         if (shouldSpawnAmmoProjecile())
                         {
                             doOnce = false;
-                            spawnAmmo();
+                            StartCoroutine(spawnAmmo());
                         }
                         else
                         {
                             doOnce = false;
-                            RangedAttack();
+                            StartCoroutine(RangedAttack());
                             // ShootProjectile
                         }
                     }
@@ -403,7 +416,6 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 if (abilityTimeOut())
                 {
-                    print("ability timed out!");
                     exitSpecialAbility();
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
@@ -526,10 +538,9 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
 
-        StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
-
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
+            StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
             currentHealth -= incomingDamage;
             GameUIManager.updateEnemyHealthBar(incomingDamage);
             return;
@@ -566,7 +577,10 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
-            OnDragonDefeated();
+            //OnDragonDefeated();
+            ChangeState(EnemyStates.Stopped);
+            StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, myData_SO.defeat_Colour, myData_SO.defeat_AnimCurve));
+            //Play Breath particle effect here?
             return;
             //DefeatOfDragon
         }
@@ -595,6 +609,16 @@ public class EnemyStateMachine : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    private void StopAI()
+    {
+        ChangeState(EnemyStates.Stopped);
+    }
+
+    private void StartUpAI()
+    {
+        ChangeState(EnemyStates.Idle);
     }
 
     #endregion
@@ -936,10 +960,11 @@ public class EnemyStateMachine : MonoBehaviour
         return myData_SO.ammoProjectileSpawnChance > Random.Range(0, 100);
     }
 
-    protected virtual void BasicAttack()
+    protected virtual IEnumerator BasicAttack()
     {
 
         animationController.SetTrigger("hasMeleed");
+        yield return new WaitForSeconds(myData_SO.meleeChargeUpTime);
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.DragonMeleeAttack, 1, audioSource);
@@ -951,7 +976,7 @@ public class EnemyStateMachine : MonoBehaviour
         //Cause Player Damage here or effect that can cause damage.
         if (specialActive)
         {
-            ChangeState(EnemyStates.Special); return;
+            ChangeState(EnemyStates.Special); yield return null;
         }
 
         Collider[] tempHitArray = Physics.OverlapSphere(transform.position, myData_SO.meleeAttackDistance);
@@ -966,10 +991,11 @@ public class EnemyStateMachine : MonoBehaviour
         ChangeState(EnemyStates.Idle);
     }
 
-    protected virtual void RangedAttack()
+    protected virtual IEnumerator RangedAttack()
     {
 
         animationController.SetTrigger("hasRanged");
+        yield return new WaitForSeconds(myData_SO.rangedChargeUpTime);
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.DragonRangedAttack, 1, audioSource);
@@ -992,15 +1018,16 @@ public class EnemyStateMachine : MonoBehaviour
         {
             print("From RANGED: special is active and returning to special state.");
             ChangeState(EnemyStates.Special); 
-            return; 
+            yield return null; 
         }
 
         ChangeState(EnemyStates.Idle);
 
     }
 
-    protected virtual void spawnAmmo()
+    protected virtual IEnumerator spawnAmmo()
     {
+        yield return new WaitForSeconds(myData_SO.rangedChargeUpTime);
         GameObject projectileInstance;
         if (!audioSource.isPlaying)
         {
@@ -1016,7 +1043,7 @@ public class EnemyStateMachine : MonoBehaviour
         if (specialActive)
         {
             ChangeState(EnemyStates.Special);
-            return;
+            yield return null;
         }
 
         ChangeState(EnemyStates.Idle);

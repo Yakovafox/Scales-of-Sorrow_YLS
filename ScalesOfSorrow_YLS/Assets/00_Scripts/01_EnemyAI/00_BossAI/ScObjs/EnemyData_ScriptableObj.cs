@@ -114,6 +114,8 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float meleeDamage = 10f;
     [Tooltip("The cooldown before the dragon can melee again.")]
     public float meleeCooldown = 3f;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float meleeChargeUpTime = 0.2f;
 
     [Header("Ranged Attack")]
     [Tooltip("The maximum distance that the player can be for a melee attack. NOTE: MUST be a value greater than 0!")]
@@ -123,6 +125,8 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float rangedDamage = 10f;
     [Tooltip("The projectile for a ranged attack.")]
     public GameObject rangedProjectile;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float rangedChargeUpTime = 0.1f;
 
     [Header("Player Helping Projectile")]
     [Tooltip("Projectile that replenishes player attack charges. (The dragon's cry for help if you will.)")]
@@ -165,5 +169,16 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public Color FireUp_Colour;
     [Tooltip("Animation Curve for the fireup charge.")]
     public AnimationCurve FireUp_AnimCurve;
+
+
+    //----------------------------------------------------------------------------------
+
+    [Header("Defeat Attributes")]
+    [Tooltip("Time that the dragon flashes for on defeat.")]
+    public float defeat_flashTime = 5f;
+    [Tooltip("Colour for the Defeat flash.")]
+    public Color defeat_Colour = Color.white;
+    [Tooltip("Animation Curve for the Dragons Defeat.")]
+    public AnimationCurve defeat_AnimCurve;
 
 }
