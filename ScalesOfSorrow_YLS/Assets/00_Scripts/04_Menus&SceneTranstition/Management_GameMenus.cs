@@ -96,7 +96,7 @@ public class Management_GameMenus : MonoBehaviour
     public void showDialogue()
     {
         canvas_Dialogue.SetActive(true);
-        FindFirstObjectByType<DialogueManager>().EnterDialogueMode();
+        FindFirstObjectByType<DialogueManager>().EnterDialogueMode(false);
     }
 
     public void showGameWonScreen()

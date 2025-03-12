@@ -16,8 +16,10 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Sprite dragonProfilePicture;
     [SerializeField] private Sprite playerProfilePicture;
 
-    [SerializeField] private TextAsset dialogue;
+    [SerializeField] private TextAsset startDialogue;
+    [SerializeField] private TextAsset endDialgoue;
     private Story currentStory;
+
     public bool dialogueIsPlaying { get; private set; }
 
     private static DialogueManager instance;
@@ -46,9 +48,11 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    public void EnterDialogueMode()
+    public void EnterDialogueMode(bool intro)
     {
-        currentStory = new Story(dialogue.text);
+        if (intro) { currentStory = new Story(startDialogue.text);}
+        else { currentStory = new Story(endDialgoue.text); }
+
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 

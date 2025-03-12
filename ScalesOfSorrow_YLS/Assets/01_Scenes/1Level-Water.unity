@@ -3325,6 +3325,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -3395,21 +3410,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp (7)
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18501,6 +18501,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -18571,21 +18586,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp Prefab
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27914,7 +27914,8 @@ MonoBehaviour:
     type: 3}
   playerProfilePicture: {fileID: -1082413546, guid: 268c2f90c4cf77c42bc4512a8a84d1b2,
     type: 3}
-  dialogue: {fileID: 4900000, guid: 914ab6acb1185514589612b2eeb85428, type: 3}
+  startDialogue: {fileID: 4900000, guid: 6d669395722216c469402c7a036563d4, type: 3}
+  endDialgoue: {fileID: 4900000, guid: c1a302791acfb9b41a211e27b33755e5, type: 3}
   gameMenus: {fileID: 765524463}
 --- !u!4 &1688571157
 Transform:
