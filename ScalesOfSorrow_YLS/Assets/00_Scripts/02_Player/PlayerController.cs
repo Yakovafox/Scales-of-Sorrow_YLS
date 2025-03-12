@@ -476,4 +476,12 @@ public class PlayerController : MonoBehaviour
         return 1 - valueToFlip;
     }
 
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            //Pause Functionality
+        }
+    }
+
 }

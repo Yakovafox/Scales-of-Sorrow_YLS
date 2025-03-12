@@ -26,6 +26,10 @@ public class DialogueManager : MonoBehaviour
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
+
+    public delegate void DragonBehaviour();
+    public static event DragonBehaviour OnDragonBehaviour;
+
     private void Awake()
     {
         if (instance != null)
