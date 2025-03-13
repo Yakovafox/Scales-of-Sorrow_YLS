@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     [Header("------- ID -------")]
     public int playerID;
     [SerializeField] private PlayerDeath playerDeath;
-
+    [SerializeField] private Animator player1Animator;
+    [SerializeField] public  RuntimeAnimatorController player2Animator;
     [Header("------- Health -------")]
     [SerializeField] private float health;
 
@@ -150,6 +151,7 @@ public class PlayerController : MonoBehaviour
         pCollider = GetComponent<Collider>();
         pSR = GetComponentInChildren<SpriteRenderer>();
         player_audioSource = GetComponentInChildren<AudioSource>();
+        player1Animator = GetComponentInChildren<Animator>();
 
         playerDeath = FindAnyObjectByType<PlayerDeath>();
         playerDeath.AddChild(gameObject);
@@ -176,6 +178,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             tempRect.anchoredPosition = new Vector2(320, -150);
+            player1Animator.runtimeAnimatorController = player2Animator as RuntimeAnimatorController;
         }
 
         transform.position = new Vector3(8, transform.position.y, 4);

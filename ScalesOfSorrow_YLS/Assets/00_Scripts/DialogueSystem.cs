@@ -16,16 +16,20 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Sprite dragonProfilePicture;
     [SerializeField] private Sprite playerProfilePicture;
 
-    [SerializeField] private TextAsset dialogue;
+    [SerializeField] private TextAsset startDialogue;
+    [SerializeField] private TextAsset endDialogue;
     private Story currentStory;
     public bool dialogueIsPlaying { get; private set; }
 
     private static DialogueManager instance;
     [SerializeField] private Management_GameMenus gameMenus;
 
+    bool isEnd;
+
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
+    
 
     public delegate void DragonBehaviour();
     public static event DragonBehaviour OnDragonBehaviour;
@@ -41,6 +45,12 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        EnterDialogueMode(true);
+    }
+
+
     private void Update()
     {
         if (!dialogueIsPlaying) { return; }
@@ -50,9 +60,14 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    public void EnterDialogueMode()
+    public void EnterDialogueMode(bool start)
     {
-        currentStory = new Story(dialogue.text);
+        if (start) { currentStory = new Story(startDialogue.text); }
+        else 
+        {
+            currentStory = new Story (endDialogue.text);
+            isEnd = true;
+        }
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
@@ -67,7 +82,8 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
 
-        gameMenus.showGameOverScreen();
+        if (isEnd) { gameMenus.showGameOverScreen(); }
+        else {  OnDragonBehaviour(); }
     }
 
     private void ContinueStory()

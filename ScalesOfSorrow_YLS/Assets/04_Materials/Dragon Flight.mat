@@ -13,15 +13,16 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHABLEND_ON
+  - _ALPHA_CLIP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 2450
   stringTagMap:
-    AlphaDepth: true
+    AlphaDepth: False
     IGNOREPROJECTOR: true
-    RenderType: Transparent
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
@@ -99,7 +100,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 0
     - _CustomRenderQueue: 0
-    - _Cutoff: 0
+    - _Cutoff: 0.05
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
@@ -125,7 +126,7 @@ Material:
     - _SrcBlend: 5
     - _Surface: 0
     - _WorkflowMode: 1
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFollowOffset: {r: 10.8, g: 21, b: -22, a: 0}
