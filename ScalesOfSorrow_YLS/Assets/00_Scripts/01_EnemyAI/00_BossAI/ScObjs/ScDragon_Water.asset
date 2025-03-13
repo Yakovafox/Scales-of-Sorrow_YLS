@@ -209,4 +209,5 @@ MonoBehaviour:
     m_PostInfinity: 1
     m_RotationOrder: 4
   UnlockableSprite: {fileID: 21300000, guid: 5caa9c45dee17414bb8e05f6a3bf6e05, type: 3}
-  ButtonPrompt: {fileID: 21300000, guid: e36ad1b67838331428048605d015023b, type: 3}
+  cButtonPrompt: {fileID: 21300000, guid: e36ad1b67838331428048605d015023b, type: 3}
+  kButtonPrompt: {fileID: 21300000, guid: 9b2ef8a5c26e1294c928d0380468d5c9, type: 3}

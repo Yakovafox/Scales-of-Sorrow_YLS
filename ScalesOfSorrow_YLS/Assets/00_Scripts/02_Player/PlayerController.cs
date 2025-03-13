@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Controls amount of attack charges")]
     [SerializeField] private int maxCharges;
                      private int attackCharges;
-                     private bool canAttack = true;
+                     private bool canAttack = false;
 
     [Header("------- Fired Up -------")]
     [Tooltip("Controls the extra damage for the fired up ability")]
@@ -93,8 +93,23 @@ public class PlayerController : MonoBehaviour
 
     [Header("------- Upgrades -------")]
     [SerializeField] private bool upgradeShield;
+    public bool Acc_upgradeShield
+    {
+        get { return upgradeShield; }
+        set { upgradeShield = value; }
+    }
     [SerializeField] private bool upgradeFiredUp;
+    public bool Acc_upgradeFiredUp
+    {
+        get { return upgradeFiredUp; }
+        set { upgradeFiredUp = value; }
+    }
     [SerializeField] private bool upgradeDash;
+    public bool Acc_upgradeDash
+    {
+        get { return upgradeDash; }
+        set { upgradeDash = value; }
+    }
 
     [Header("------- Audio -------")]
     [SerializeField] private Sound movementClip;
@@ -116,7 +131,7 @@ public class PlayerController : MonoBehaviour
     private TextMeshProUGUI IDUI;
     private TextMeshProUGUI AmmoUI;
     private UnityEngine.UI.Slider ShieldUI;
-    private UnityEngine.UI.Slider FireUpUI;
+    private UnityEngine.UI.Slider FiredUpUI;
 
     private GameObject temp;
     private UnityEngine.UI.Slider HealthBar;
@@ -140,10 +155,20 @@ public class PlayerController : MonoBehaviour
 
 
     public delegate void delegate_playerDefeated();
-    public static event delegate_playerDefeated OnPlayerDefeated; 
+    public static event delegate_playerDefeated OnPlayerDefeated;
 
 
     #endregion ------------------------    Variables    ------------------------
+
+    private void OnEnable()
+    {
+        DialogueManager.OnPlayerAttacking += enableDisableAttacking();
+    }
+    private void OnDisable()
+    {
+        DialogueManager.OnPlayerAttacking -= enableDisableAttacking();
+    }
+
     void Start()
     {
         pTransform = transform;
@@ -168,7 +193,12 @@ public class PlayerController : MonoBehaviour
         HealthBar.value = ValueConverter0to1(health, 0, 100);
         AmmoUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         AmmoUI.text = attackCharges.ToString();
+
         ShieldUI = individualUI.transform.GetChild(4).GetComponent<UnityEngine.UI.Slider>();
+        if (!upgradeShield) { ShieldUI.gameObject.SetActive(false); }
+
+        FiredUpUI = individualUI.transform.GetChild(5).GetComponent<UnityEngine.UI.Slider>();
+        if (!upgradeFiredUp) { FiredUpUI.gameObject.SetActive(false); }
 
         tempRect = individualUI.GetComponent<RectTransform>();
         if (playerID == 0)
@@ -215,8 +245,8 @@ public class PlayerController : MonoBehaviour
         if (movementInput != Vector2.zero) { previousInput = new Vector3(movementInput.x, 0, movementInput.y); }
         pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
-        if(axis.x > 0) { pSR.flipX = false; }
-        else if (axis.x < 0) {pSR.flipX = true; }
+        if(axis.x > 0) { transform.localScale = new Vector3(.25f, .25f, .25f); }
+        else if (axis.x < 0) { transform.localScale = new Vector3(-.25f, .25f, .25f); }
 
         if (axis.x != 0 | axis.z != 0) {animationController.SetBool("isRunning", true); }
         else { animationController.SetBool("isRunning", false); }
@@ -319,6 +349,11 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
+    }
+
+    private void enableDisableAttacking()
+    {
+        canAttack = !canAttack;
     }
 
     #endregion ------------------------    Attack    ------------------------
@@ -477,6 +512,13 @@ public class PlayerController : MonoBehaviour
     private float ValueFlipper(float valueToFlip)
     {
         return 1 - valueToFlip;
+    }
+
+    public void upgrade()
+    {
+        if (upgradeShield) { ShieldUI.gameObject.SetActive(true); }
+        if (upgradeFiredUp) { FiredUpUI.gameObject.SetActive(true); }
+        if (upgradeDash) { return; }
     }
 
     public void OnPause(InputAction.CallbackContext context)

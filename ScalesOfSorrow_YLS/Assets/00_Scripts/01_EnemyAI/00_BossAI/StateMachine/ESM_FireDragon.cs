@@ -13,6 +13,7 @@ public class ESM_FireDragon : EnemyStateMachine
         for (int i = 0; i < PlayerRef.Count; i++)
         {
             PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeFiredUp = true;
+            PlayerRef[i].GetComponent<PlayerController>().upgrade();
         }
     }
 

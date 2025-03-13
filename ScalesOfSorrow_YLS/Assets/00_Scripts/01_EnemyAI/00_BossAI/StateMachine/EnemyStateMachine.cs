@@ -92,7 +92,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     private Image P1UnlockImage;
     private Image P2UnlockImage;
-    private Image ButtonPrompt;
+    private Image cButtonPrompt;
+    private Image kButtonPrompt;
 
 
 
@@ -223,8 +224,10 @@ public class EnemyStateMachine : MonoBehaviour
         P1UnlockImage.sprite = myData_SO.UnlockableSprite;
         P2UnlockImage = NewAbilityParent.transform.GetChild(2).GetComponent<Image>();
         P2UnlockImage.sprite = myData_SO.UnlockableSprite;
-        ButtonPrompt = NewAbilityParent.transform.GetChild(3).GetComponent<Image>();
-        ButtonPrompt.sprite = myData_SO.ButtonPrompt;
+        cButtonPrompt = NewAbilityParent.transform.GetChild(3).GetComponent<Image>();
+        cButtonPrompt.sprite = myData_SO.cButtonPrompt;
+        kButtonPrompt = NewAbilityParent.transform.GetChild(4).GetComponent<Image>();
+        kButtonPrompt.sprite = myData_SO.kButtonPrompt;
 
         NewAbilityParent.SetActive(false);
     }
@@ -638,6 +641,7 @@ public class EnemyStateMachine : MonoBehaviour
         {
             PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeShield = true;
             PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeFiredUp = true;
+            PlayerRef[i].GetComponent<PlayerController>().upgrade();
         }
     }
 
@@ -677,9 +681,11 @@ public class EnemyStateMachine : MonoBehaviour
         {
             case EnemyStates.Stopped:
                 StartUpAI();
+                animationController.SetBool("isSpecial", false);
                 break;
             case EnemyStates.Idle:
                 StopAI();
+                animationController.SetBool("isSpecial", false);
                 break;
             default:
                 return;

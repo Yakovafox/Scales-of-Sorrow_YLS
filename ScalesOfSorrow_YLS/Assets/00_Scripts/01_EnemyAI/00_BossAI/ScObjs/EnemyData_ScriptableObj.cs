@@ -184,7 +184,9 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Header("Unlockable Ability")]
     [Tooltip("Sprite that shows up when new ability has been unlocked.")]
     public Sprite UnlockableSprite;
-    [Tooltip("Prompt for new ability and how to activate it.")]
-    public Sprite ButtonPrompt;
+    [Tooltip("Controller prompt for new ability and how to activate it.")]
+    public Sprite cButtonPrompt;
+    [Tooltip("Keyboard prompt for new ability and how to activate it.")]
+    public Sprite kButtonPrompt;
 
 }
