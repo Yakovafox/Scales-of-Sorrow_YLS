@@ -72,22 +72,30 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Range(0, 3)]
     public int Stages = 1;
 
+    [Tooltip("Animation curve for damage flash.")]
+    public AnimationCurve dmg_AnimCurve;
+
     [Header("Flying Variables")] [Tooltip("The desired amount of time that the dragon should spend in the air.")]
     public float flightTime = 5f;
     [Tooltip("The cooldown time that determines how long the before the dragon can fly again.")]
     public float flightCooldownTime = 10f;
     [Tooltip("Time to wait when being stunned/Time that dragon will spend before moving after landing.")]
-    public float stunTime = 5f;
+    public float stunTime = 1f;
     
     [Tooltip("The chance at which the dragon will take flight.")]
     [Range(0,100)]
     public float chanceToFly = 33.33f;
+
+    [Tooltip("The distance at which the push back will search for a player, when dragon is landing.")]
+    public float pushBackDistance = 5f;
+    [Tooltip("The amount of force applied to the player on a dragons landing pushback function.")]
+    public float pushBackAmount = 5f;
     
     [Tooltip("The default size of the dragon's shadow when on the floor.")]
-    public float shadow_DefaultSize = 1f;
+    public float shadow_DefaultSize = 3f;
     
     [Tooltip("The maximum size of the dragon's shadow when off the floor.")]
-    public float shadow_MaxSize = 3f;
+    public float shadow_MinSize = 1f;
 
     //---------------------------------------------------------------------------------
 
@@ -104,6 +112,10 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("The maximum melee damage the enemy can deal.")]
     [Range(0,100)]
     public float meleeDamage = 10f;
+    [Tooltip("The cooldown before the dragon can melee again.")]
+    public float meleeCooldown = 3f;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float meleeChargeUpTime = 0.2f;
 
     [Header("Ranged Attack")]
     [Tooltip("The maximum distance that the player can be for a melee attack. NOTE: MUST be a value greater than 0!")]
@@ -113,7 +125,20 @@ public class EnemyData_ScriptableObj : ScriptableObject
     public float rangedDamage = 10f;
     [Tooltip("The projectile for a ranged attack.")]
     public GameObject rangedProjectile;
+    [Tooltip("Charge up time/Wind up time before attack, starts after the attack animation.")]
+    public float rangedChargeUpTime = 0.1f;
 
+    [Header("Player Helping Projectile")]
+    [Tooltip("Projectile that replenishes player attack charges. (The dragon's cry for help if you will.)")]
+    public GameObject ammoProjectile;
+    [Tooltip("Chance of ammo projectile spawning.")]
+    [Range(0, 100)]
+    public float ammoProjectileSpawnChance = 33.33f;
+
+    //-------------------------------------------------------------------------------
+    
+    [Header("----- Special Variables -----")]
+    
     [Header("Special Attack")]
     [Tooltip("The chance that a special attack will happen.")]
     [Range(0, 100)]
@@ -121,5 +146,47 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("Damage that the special attack should deal.")]
     [Range(0, 150)]
     public float SpecialDamage;
+    [Tooltip("Time that the Dragon stays in the ability.")]
+    public float ability_Timer = 10f;
+    [Tooltip("Cooldown time before the Dragon can enter the special ability again.")]
+    public float ability_cooldownTime = 15f;
+
+    [Header("-- Individual Special Variables --")]
+
+    [Tooltip("Shield prefab that the dragon can put up in the Special State.")]
+    public GameObject Shield;
+    
+    [Tooltip("Time before dragon can Dash again.")]
+    public float dashCooldownTime = 2.25f;
+    [Tooltip("Trap prefab that the dragon can deploy in the Special State.")]
+    public GameObject Trap;
+
+    [Tooltip("Multiplied by default damage, used when in dragons special ability.")]
+    public float fireup_DamageMultiplier = 1.5f;
+    [Tooltip("Time it takes for the dragon to gain damage buff.")]
+    public float fireup_ChargeTime = 3f;
+    [Tooltip("Colour for the fireup charge.")]
+    public Color FireUp_Colour;
+    [Tooltip("Animation Curve for the fireup charge.")]
+    public AnimationCurve FireUp_AnimCurve;
+
+
+    //----------------------------------------------------------------------------------
+
+    [Header("Defeat Attributes")]
+    [Tooltip("Time that the dragon flashes for on defeat.")]
+    public float defeat_flashTime = 5f;
+    [Tooltip("Colour for the Defeat flash.")]
+    public Color defeat_Colour = Color.white;
+    [Tooltip("Animation Curve for the Dragons Defeat.")]
+    public AnimationCurve defeat_AnimCurve;
+
+    [Header("Unlockable Ability")]
+    [Tooltip("Sprite that shows up when new ability has been unlocked.")]
+    public Sprite UnlockableSprite;
+    [Tooltip("Controller prompt for new ability and how to activate it.")]
+    public Sprite cButtonPrompt;
+    [Tooltip("Keyboard prompt for new ability and how to activate it.")]
+    public Sprite kButtonPrompt;
 
 }

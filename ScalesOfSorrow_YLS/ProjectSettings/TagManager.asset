@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - DMG-Projectile
+  - AMO-Projectile
+  - Enemy
+  - Enm_Shield
+  - GameManager
+  - Gameplay_Canvas
+  - playerParent
   layers:
   - Default
   - TransparentFX
@@ -12,10 +19,10 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
-  - 
-  - 
-  - 
+  - CameraTriggers
+  - Shield
+  - Projectile
+  - InvisibleWalls
   - 
   - 
   - 
@@ -40,4 +47,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 80145001
     locked: 0
