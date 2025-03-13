@@ -20025,6 +20025,7 @@ MonoBehaviour:
     source: {fileID: 0}
   tempHealth: {fileID: 3469851368366389311, guid: d454edd58c4b6ae49a4c9815de1848d1,
     type: 3}
+  P2Image: {fileID: 56904270, guid: e06dbf30745787241a8af6ce4798eecb, type: 3}
   animationController: {fileID: 8152626532650697248}
   dashLeft: {fileID: 621178157422664777}
   dashRight: {fileID: 7666198717647291779}
@@ -20205,6 +20206,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 104d76bf-2a2d-4101-b84f-fbd89a1cdd49
     m_ActionName: 'Player/MenuOpenClose[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 85faff44-bd4b-4259-b8d9-e59efc642717
+    m_ActionName: 'Player/DialogueSkip[/Mouse/leftButton,/XInputControllerWindows/buttonSouth]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player

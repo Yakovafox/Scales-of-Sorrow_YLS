@@ -129,6 +129,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject tempHealth;
     private GameObject individualUI;
     private TextMeshProUGUI IDUI;
+    private UnityEngine.UI.Image playerImage;
+    public Sprite P2Image;
     private TextMeshProUGUI AmmoUI;
     private UnityEngine.UI.Slider ShieldUI;
     private UnityEngine.UI.Slider FiredUpUI;
@@ -162,11 +164,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        DialogueManager.OnPlayerAttacking += enableDisableAttacking();
+        DialogueManager.OnPlayerAttacking += enableDisableAttacking;
     }
     private void OnDisable()
     {
-        DialogueManager.OnPlayerAttacking -= enableDisableAttacking();
+        DialogueManager.OnPlayerAttacking -= enableDisableAttacking;
     }
 
     void Start()
@@ -189,6 +191,12 @@ public class PlayerController : MonoBehaviour
 
         IDUI = individualUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         IDUI.text = "P" + (playerID + 1);
+        playerImage = IDUI.gameObject.transform.GetChild(0).GetComponent<UnityEngine.UI.Image>();
+        if (playerID + 1 == 2)
+        {
+            playerImage.sprite = P2Image;
+        }
+
         HealthBar = individualUI.transform.GetChild(2).GetComponent<UnityEngine.UI.Slider>();
         HealthBar.value = ValueConverter0to1(health, 0, 100);
         AmmoUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
