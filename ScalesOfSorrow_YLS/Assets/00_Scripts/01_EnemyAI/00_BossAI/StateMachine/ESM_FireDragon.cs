@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class ESM_FireDragon : EnemyStateMachine
 {
+
+    protected override void givePlayerSpecialAbility()
+    {
+        StartCoroutine(enableDisableAbilityUnlock());
+
+        for (int i = 0; i < PlayerRef.Count; i++)
+        {
+            PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeFiredUp = true;
+        }
+    }
+
     protected override IEnumerator BasicAttack()
     {
         yield return base.BasicAttack();

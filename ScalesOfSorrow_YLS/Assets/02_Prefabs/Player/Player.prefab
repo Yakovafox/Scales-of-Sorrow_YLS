@@ -10125,8 +10125,8 @@ MonoBehaviour:
   shieldDuration: 3
   shieldCooldown: 5
   shieldDistance: 2
-  upgradeShield: 1
-  upgradeFiredUp: 1
+  upgradeShield: 0
+  upgradeFiredUp: 0
   upgradeDash: 0
   movementClip:
     sound: {fileID: 0}

@@ -3325,6 +3325,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -3395,21 +3410,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp (7)
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17541,6 +17541,11 @@ PrefabInstance:
       objectReference: {fileID: 1833701135}
     - target: {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a,
         type: 3}
+      propertyPath: currentState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+        type: 3}
       propertyPath: Toggle_Sight_Debug
       value: 1
       objectReference: {fileID: 0}
@@ -17646,7 +17651,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 1649452171316668222, guid: 4688c53db7cb1b54ebe290e75276ed0a, type: 3}
+    - {fileID: 0}
     - {fileID: 3168301297087758734, guid: 4688c53db7cb1b54ebe290e75276ed0a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -18501,6 +18506,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -18571,21 +18591,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp Prefab
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26429,6 +26434,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 643391287}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: player2Joined
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: EnemyStateMachine, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072029921204838226, guid: 3d0d1f13966fa5d43ad40bf580df1d9a,
+        type: 3}
+      propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -181,4 +181,10 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("Animation Curve for the Dragons Defeat.")]
     public AnimationCurve defeat_AnimCurve;
 
+    [Header("Unlockable Ability")]
+    [Tooltip("Sprite that shows up when new ability has been unlocked.")]
+    public Sprite UnlockableSprite;
+    [Tooltip("Prompt for new ability and how to activate it.")]
+    public Sprite ButtonPrompt;
+
 }
