@@ -18,6 +18,9 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private TextAsset startDialogue;
     [SerializeField] private TextAsset endDialogue;
+
+    PlayerControls playerControls;
+
     private Story currentStory;
     public bool dialogueIsPlaying { get; private set; }
 
@@ -34,6 +37,9 @@ public class DialogueManager : MonoBehaviour
     public delegate void DragonBehaviour();
     public static event DragonBehaviour OnDragonBehaviour;
 
+    public delegate void PlayerAttacking();
+    public static event PlayerAttacking OnPlayerAttacking;
+
     private void Awake()
     {
         if (instance != null)
@@ -42,6 +48,8 @@ public class DialogueManager : MonoBehaviour
             Debug.LogWarning("Found more than one Dialogue Manager in the scene");
         }
         else { instance = this; }
+
+        playerControls = new PlayerControls();
 
     }
 
@@ -55,7 +63,9 @@ public class DialogueManager : MonoBehaviour
     {
         if (!dialogueIsPlaying) { return; }
 
-        if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonDown(0)) { ContinueStory(); }
+        bool isButtonDown = playerControls.Player.DialogueSkip.ReadValue<float>() > 0.1f;
+
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonDown(0) || isButtonDown) { ContinueStory(); }
 
     }
 
@@ -83,7 +93,11 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
 
         if (isEnd) { gameMenus.showGameOverScreen(); }
-        else {  OnDragonBehaviour(); }
+        else 
+        {
+            OnDragonBehaviour();
+            OnPlayerAttacking();
+        }
     }
 
     private void ContinueStory()
