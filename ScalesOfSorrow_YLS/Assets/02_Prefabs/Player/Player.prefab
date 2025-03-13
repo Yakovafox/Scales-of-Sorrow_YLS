@@ -19873,6 +19873,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 0
   playerDeath: {fileID: 0}
+  player1Animator: {fileID: 0}
+  player2Animator: {fileID: 9100000, guid: de5c8f4832f37b94d9ea70d54894fef5, type: 2}
   health: 100
   dmg_flashTime: 0.5
   dmg_AnimCurve:
