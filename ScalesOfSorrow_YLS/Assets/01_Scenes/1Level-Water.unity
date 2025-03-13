@@ -27924,7 +27924,8 @@ MonoBehaviour:
     type: 3}
   playerProfilePicture: {fileID: -1082413546, guid: 268c2f90c4cf77c42bc4512a8a84d1b2,
     type: 3}
-  dialogue: {fileID: 4900000, guid: 914ab6acb1185514589612b2eeb85428, type: 3}
+  startDialogue: {fileID: 4900000, guid: 0fb55b79cffffc646a0d6bf3f0ee3cff, type: 3}
+  endDialogue: {fileID: 4900000, guid: 91150d7a14184e44c884a9abe9846865, type: 3}
   gameMenus: {fileID: 765524463}
 --- !u!4 &1688571157
 Transform:
