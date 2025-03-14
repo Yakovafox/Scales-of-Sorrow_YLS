@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036709faa20fee34a8b05fd705e33f8a, type: 3}
+  m_Name: ScDragon_FireDragon
+  m_EditorClassIdentifier: 
+  ID: 1
+  dragonName: SlipNSlide
+  Dragon_Reference: {fileID: 4855515745136342476, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  Target: []
+  walkSpeed: 2
+  canFly: 1
+  flySpeed: 4
+  flying: 0
+  moveRadius: 15
+  timeToWait: 0.5
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  canSee: 1
+  sightDistance: 10
+  sightAngle: 160
+  MaxHealth: 50
+  Stages: 1
+  dmg_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -15.412027
+      outSlope: -15.412027
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0449
+      value: 0.308
+      inSlope: -7.4988885
+      outSlope: -7.4988885
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23811218
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: -1.5017065
+      outSlope: -1.5017065
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  flightTime: 5
+  flightCooldownTime: 10
+  stunTime: 5
+  chanceToFly: 33.33
+  pushBackDistance: 5
+  pushBackAmount: 5
+  shadow_DefaultSize: 2.5
+  shadow_MinSize: 1
+  attackCooldown: 0.1
+  meleeAttackDistance: 3
+  meleeDamage: 10
+  meleeCooldown: 3
+  meleeChargeUpTime: 0.2
+  rangedAttackDistance: 5
+  rangedDamage: 10
+  rangedProjectile: {fileID: 5755901808654403707, guid: af0b10495618f8947824889118227e6b,
+    type: 3}
+  rangedChargeUpTime: 0.1
+  ammoProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
+    type: 3}
+  ammoProjectileSpawnChance: 33.33
+  specialAttackChance: 15
+  SpecialDamage: 10
+  ability_Timer: 10
+  ability_cooldownTime: 15
+  Shield: {fileID: 0}
+  dashCooldownTime: 2.25
+  Trap: {fileID: 0}
+  fireup_DamageMultiplier: 1.5
+  fireup_ChargeTime: 3
+  FireUp_Colour: {r: 0.6981132, g: 0.1040583, b: 0.1040583, a: 1}
+  FireUp_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1.5125914
+      outSlope: -1.5125914
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.20984216
+    - serializedVersion: 3
+      time: 0.15099771
+      value: 0.0033324806
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.06078849
+    - serializedVersion: 3
+      time: 0.29672772
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.45
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6
+      value: 1
+      inSlope: 0.25832406
+      outSlope: 0.25832406
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7510741
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9
+      value: 1
+      inSlope: 0.019382501
+      outSlope: 0.019382501
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.15187897
+      outSlope: -0.15187897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13713153
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  defeat_flashTime: 3
+  defeat_Colour: {r: 0.8867924, g: 0.25665465, b: 0.1966002, a: 1}
+  defeat_AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.5206705
+      outSlope: -0.5206705
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06433469
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.5644684
+      outSlope: 0.5644684
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.070291996
+      outWeight: 0.33333334
+    m_PreInfinity: 1
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  UnlockableSprite: {fileID: 21300000, guid: 78574d7badc6f2745af510a1fcffa888, type: 3}
+  cButtonPrompt: {fileID: 21300000, guid: 5925a3ec8d0ee3e44b752f1b6b9b9b58, type: 3}
+  kButtonPrompt: {fileID: 21300000, guid: 51906772f3ff8ea498754f621fb83436, type: 3}

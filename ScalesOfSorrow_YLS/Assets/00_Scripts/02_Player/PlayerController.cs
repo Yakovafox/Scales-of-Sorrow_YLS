@@ -146,7 +146,8 @@ public class PlayerController : MonoBehaviour
     [Header("-----Effects-----")]
     [SerializeField] ParticleSystem dashLeft;
     [SerializeField] ParticleSystem dashRight;
-    [SerializeField] ParticleSystem attackEffect;
+    [SerializeField] ParticleSystem L_attackEffect;
+    [SerializeField] ParticleSystem R_attackEffect;
     [SerializeField] ParticleSystem attackHit;
 
     [Header("-----GhostMode-----")]
@@ -254,8 +255,8 @@ public class PlayerController : MonoBehaviour
         if (movementInput != Vector2.zero) { previousInput = new Vector3(movementInput.x, 0, movementInput.y); }
         pRB.velocity = (axis.normalized * (pSpeed * Time.deltaTime));
 
-        if(axis.x > 0) { transform.localScale = new Vector3(.25f, .25f, .25f); }
-        else if (axis.x < 0) { transform.localScale = new Vector3(-.25f, .25f, .25f); }
+        if(axis.x > 0) { transform.localScale = new Vector3(-.25f, .25f, .25f); }
+        else if (axis.x < 0) { transform.localScale = new Vector3(.25f, .25f, .25f); }
 
         if (axis.x != 0 | axis.z != 0) {animationController.SetBool("isRunning", true); }
         else { animationController.SetBool("isRunning", false); }
@@ -289,8 +290,8 @@ public class PlayerController : MonoBehaviour
 
         animationController.SetTrigger("hasDashed");
 
-        if (previousInput.x > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
-        if (previousInput.x < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
+        if (previousInput.x > 0 || previousInput.y > 0 && (!dashLeft.isPlaying)) { dashLeft.Play(); }
+        if (previousInput.x < 0 || previousInput.y < 0 && (!dashRight.isPlaying)) { dashRight.Play(); }
 
         pRB.velocity = (previousInput) * dashSpeed;
 
@@ -330,7 +331,8 @@ public class PlayerController : MonoBehaviour
 
         animationController.SetTrigger("hasAttacked");
 
-        if (!attackEffect.isPlaying) { attackEffect.Play(); }
+        if (previousInput.x < 0 || previousInput.y < 0 && (!L_attackEffect.isPlaying)) { L_attackEffect.Play(); }
+        if (previousInput.x > 0 || previousInput.y > 0 && (!R_attackEffect.isPlaying)) { R_attackEffect.Play(); }
 
 
         Vector3 direction = previousInput;

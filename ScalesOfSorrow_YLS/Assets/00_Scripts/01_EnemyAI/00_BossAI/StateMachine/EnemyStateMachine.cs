@@ -72,6 +72,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private GameObject GO_shadowCaster;
     private SpriteRenderer spriteRenderer;
+    private float defaultXScale;
     private Material SR_MAT;
     private Collider hitCollider;
 
@@ -83,6 +84,7 @@ public class EnemyStateMachine : MonoBehaviour
     [Header("------------- Particle Systems --------------")]
 
     [SerializeField] private ParticleSystem FlightEffect;
+    [SerializeField] private ParticleSystem breathEffect;
 
     [Header("------------- UI --------------")]
 
@@ -161,7 +163,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool movingRight = false;
 
-    
 
     #endregion
     
@@ -202,6 +203,8 @@ public class EnemyStateMachine : MonoBehaviour
         SR_MAT = spriteRenderer.material;
         InstantiatePosition = sightPosition.transform.Find("InstantiatePoint").gameObject;
         audioSource = GetComponent<AudioSource>();
+
+        defaultXScale = spriteRenderer.transform.localScale.x;
 
         myData_SO.Target = null;
         
@@ -246,10 +249,12 @@ public class EnemyStateMachine : MonoBehaviour
         switch (currentState)
         {
             case EnemyStates.Stopped:
+                animationController.SetBool("isWalking", false);
                 agent.isStopped = true;
                 break;
 
             case EnemyStates.Idle:
+                animationController.SetBool("isWalking", false);
                 if (stunned)
                 {
                     if (TimeOut(myData_SO.stunTime))
@@ -272,6 +277,7 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Moving:
+                animationController.SetBool("isWalking", true);
                 if (!intialiseMovement) // Initialise Movement is only called the first time that the enemy enters the moving state.
                 {
                     intialiseMovement = true;
@@ -322,6 +328,7 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Chase:
+                animationController.SetBool("isWalking", true);
                 MoveToChase();
 
                 
@@ -353,7 +360,8 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 break;
 
-            case EnemyStates.Attack: // Need a do once check in here to stop the code from being executed multiple times over.
+            case EnemyStates.Attack:
+                animationController.SetBool("isWalking", true); // Need a do once check in here to stop the code from being executed multiple times over.
                 if (!doOnce)
                 {
                     ChangeState(EnemyStates.Chase);
@@ -397,6 +405,7 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.ThreatenedAttack: //Used by special ability attacking.
+                animationController.SetBool("isWalking", true);
 
                 if (!doOnce)
                 {
@@ -434,6 +443,8 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
             
             case EnemyStates.Special:
+                animationController.SetBool("isWalking", true);
+
                 ability_Timer += Time.deltaTime;
                 specialActive = true;
                 
@@ -616,6 +627,8 @@ public class EnemyStateMachine : MonoBehaviour
             //OnDragonDefeated();
             ChangeState(EnemyStates.Stopped);
             StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, myData_SO.defeat_Colour, myData_SO.defeat_AnimCurve));
+            spriteRenderer.flipX = false;
+            breathEffect.Play();
             //Play Breath particle effect here?
             return;
             //DefeatOfDragon
@@ -744,14 +757,15 @@ public class EnemyStateMachine : MonoBehaviour
     }
     void UpdateSprite()
     {
-        float xScale = 1;
+        float xScale = defaultXScale;
+        //float defaultXScale = spriteRenderer.transform.localScale.x;
         //^ used as a default for flipping the sprite from left to right.
 
-        if (movingRight)
+        if (!movingRight)
         {
-            xScale = -1;
+            xScale = -1 * defaultXScale;
         }
-        transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+        spriteRenderer.transform.localScale = new Vector3(xScale, spriteRenderer.transform.localScale.y, spriteRenderer.transform.localScale.z);
     }
 
     bool randomShouldFly()

@@ -4916,7 +4916,7 @@ GameObject:
   - component: {fileID: 5332447736452897975}
   - component: {fileID: 1472903153118172743}
   m_Layer: 0
-  m_Name: Attack Left Right
+  m_Name: Attack Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20023,13 +20023,15 @@ MonoBehaviour:
     mute: 0
     mixer: {fileID: 0}
     source: {fileID: 0}
+  management_GameMenus: {fileID: 0}
   tempHealth: {fileID: 3469851368366389311, guid: d454edd58c4b6ae49a4c9815de1848d1,
     type: 3}
   P2Image: {fileID: 56904270, guid: e06dbf30745787241a8af6ce4798eecb, type: 3}
   animationController: {fileID: 8152626532650697248}
   dashLeft: {fileID: 621178157422664777}
   dashRight: {fileID: 7666198717647291779}
-  attackEffect: {fileID: 7741684857696844677}
+  L_attackEffect: {fileID: 4851036857764709244}
+  R_attackEffect: {fileID: 5332447736452897975}
   attackHit: {fileID: 4415367140425175599}
   isGhost: 0
   canBlock: 1

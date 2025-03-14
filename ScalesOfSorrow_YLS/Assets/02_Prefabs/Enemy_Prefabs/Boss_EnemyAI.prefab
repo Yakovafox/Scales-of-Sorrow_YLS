@@ -256,6 +256,7 @@ Transform:
   - {fileID: 7565896494875678054}
   - {fileID: 852092598489918212}
   - {fileID: 2607462485636347863}
+  - {fileID: 6858000852685030915}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &1191741686526306807
@@ -300,6 +301,7 @@ MonoBehaviour:
   debugSphere: {fileID: 0}
   PlayerRef: []
   FlightEffect: {fileID: 2012116550185859650}
+  breathEffect: {fileID: 7385480578430336438}
 --- !u!136 &6016520400823766842
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -453,6 +455,91 @@ Transform:
   - {fileID: 6605791018841319043}
   m_Father: {fileID: 1767742895847378880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &498791961459210551
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1767742895847378880}
+    m_Modifications:
+    - target: {fileID: 2091048193310667846, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_Name
+      value: Dragon Bref Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.616
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.703
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958747320556602497, guid: 0957e5963cb8d804fb88e0e491ca30da,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0957e5963cb8d804fb88e0e491ca30da, type: 3}
+--- !u!4 &6858000852685030915 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6467331611599224628, guid: 0957e5963cb8d804fb88e0e491ca30da,
+    type: 3}
+  m_PrefabInstance: {fileID: 498791961459210551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7385480578430336438 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6958747320556602497, guid: 0957e5963cb8d804fb88e0e491ca30da,
+    type: 3}
+  m_PrefabInstance: {fileID: 498791961459210551}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7211907503724034229
 PrefabInstance:
   m_ObjectHideFlags: 0
