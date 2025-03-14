@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour
     private AudioSource player_audioSource;
 
     [Header("----- UI -----")]
+    [SerializeField] private Management_GameMenus management_GameMenus;
     private GameObject canvas_Gameplay;
     [SerializeField] private GameObject tempHealth;
     private GameObject individualUI;
@@ -154,8 +155,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float ghostCooldown;
     [SerializeField] private LayerMask excludeAttack;
     [SerializeField] private LayerMask includeAttack;
-
-
+    
     public delegate void delegate_playerDefeated();
     public static event delegate_playerDefeated OnPlayerDefeated;
 
@@ -186,6 +186,7 @@ public class PlayerController : MonoBehaviour
         attackCharges = maxCharges;
 
         canvas_Gameplay = GameObject.FindGameObjectWithTag("Gameplay_Canvas");
+        management_GameMenus = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Management_GameMenus>();
         individualUI = Instantiate(tempHealth, canvas_Gameplay.transform);
         temp = individualUI.transform.GetChild(1).gameObject;
 
@@ -533,6 +534,8 @@ public class PlayerController : MonoBehaviour
     {
         if (context.started)
         {
+            print("has paussssssssssssssssssed");
+            management_GameMenus.pauseGame();
             //Pause Functionality
         }
     }

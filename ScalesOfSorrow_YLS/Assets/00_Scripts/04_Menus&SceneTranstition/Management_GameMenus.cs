@@ -23,7 +23,8 @@ public class Management_GameMenus : MonoBehaviour
 
     [SerializeField] private GameObject firstGameOverOBJ;
     [SerializeField] private GameObject firstGameWonOBJ;
-    
+    [SerializeField] private GameObject firstPauseOBJ;
+    [SerializeField] private GameObject firstSettingsOBJ;
     
     void Awake()
     {
@@ -116,6 +117,39 @@ public class Management_GameMenus : MonoBehaviour
         Debug.Log("Clicked On");
 
         EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void pauseGame()
+    {
+        bool paused = canvasHolder.transform.GetChild(5).gameObject.activeInHierarchy;
+        canvasHolder.transform.GetChild(5).gameObject.SetActive(!paused);
+        
+        enableMouseFeatures();
+        EventSystem.current.SetSelectedGameObject(firstPauseOBJ);
+
+        switch (paused)
+        {
+            case true:
+                Time.timeScale = 1;
+                break;
+            case false:
+                Time.timeScale = 0;
+                break;
+        }
+    }
+
+    public void settingsButton()
+    {
+        canvasHolder.transform.GetChild(5).gameObject.SetActive(false);
+        canvasHolder.transform.GetChild(6).gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSettingsOBJ);
+    }
+
+    public void backButton()
+    {
+        canvasHolder.transform.GetChild(6).gameObject.SetActive(false);
+        canvasHolder.transform.GetChild(5).gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstPauseOBJ);
     }
 
     public void ExitGame()
