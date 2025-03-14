@@ -63,7 +63,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (!dialogueIsPlaying) { return; }
 
-        bool isButtonDown = playerControls.Player.DialogueSkip.ReadValue<float>() > 0.1f;
+        bool isButtonDown = playerControls.Player.DialogueSkip.ReadValue<float>() !=0;
 
         if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonDown(0) || isButtonDown) { ContinueStory(); }
 
