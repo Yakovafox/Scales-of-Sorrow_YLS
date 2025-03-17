@@ -170,4 +170,23 @@ public class EnemyData_ScriptableObj : ScriptableObject
     [Tooltip("Animation Curve for the fireup charge.")]
     public AnimationCurve FireUp_AnimCurve;
 
+
+    //----------------------------------------------------------------------------------
+
+    [Header("Defeat Attributes")]
+    [Tooltip("Time that the dragon flashes for on defeat.")]
+    public float defeat_flashTime = 5f;
+    [Tooltip("Colour for the Defeat flash.")]
+    public Color defeat_Colour = Color.white;
+    [Tooltip("Animation Curve for the Dragons Defeat.")]
+    public AnimationCurve defeat_AnimCurve;
+
+    [Header("Unlockable Ability")]
+    [Tooltip("Sprite that shows up when new ability has been unlocked.")]
+    public Sprite UnlockableSprite;
+    [Tooltip("Controller prompt for new ability and how to activate it.")]
+    public Sprite cButtonPrompt;
+    [Tooltip("Keyboard prompt for new ability and how to activate it.")]
+    public Sprite kButtonPrompt;
+
 }

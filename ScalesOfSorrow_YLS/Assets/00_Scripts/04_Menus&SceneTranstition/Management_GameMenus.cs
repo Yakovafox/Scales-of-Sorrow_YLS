@@ -17,6 +17,8 @@ public class Management_GameMenus : MonoBehaviour
 
     private GameObject canvas_GameUI;
 
+    [SerializeField] private GameObject canvas_Dialogue;
+
     private Slider loadingBar;
 
     [SerializeField] private GameObject firstGameOverOBJ;
@@ -91,6 +93,12 @@ public class Management_GameMenus : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstGameOverOBJ);
     }
 
+    public void showDialogue()
+    {
+        canvas_Dialogue.SetActive(true);
+        FindFirstObjectByType<DialogueManager>().EnterDialogueMode(false);
+    }
+
     public void showGameWonScreen()
     {
         Time.timeScale = 0;
@@ -108,7 +116,6 @@ public class Management_GameMenus : MonoBehaviour
         Debug.Log("Clicked On");
 
         EventSystem.current.SetSelectedGameObject(null);
-
     }
 
     public void ExitGame()

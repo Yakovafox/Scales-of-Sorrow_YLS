@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using Unity.Jobs;
 using Random = UnityEngine.Random;
 using WaitForSeconds = UnityEngine.WaitForSeconds;
@@ -11,6 +12,7 @@ using WaitForSeconds = UnityEngine.WaitForSeconds;
 
 public enum EnemyStates
 {
+    Stopped,
     Idle,
     Moving,
     Fly,
@@ -26,7 +28,7 @@ public class EnemyStateMachine : MonoBehaviour
 
 
     [Tooltip("Starting state for the AI")]
-    [SerializeField] private EnemyStates currentState = EnemyStates.Idle;
+    [SerializeField] private EnemyStates currentState = EnemyStates.Stopped;
 
 
 
@@ -78,9 +80,20 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected AudioSource audioSource;
 
+    [Header("------------- Particle Systems --------------")]
+
     [SerializeField] private ParticleSystem FlightEffect;
 
+    [Header("------------- UI --------------")]
+
     private UI_Management GameUIManager;
+
+    private GameObject NewAbilityParent;
+
+    private Image P1UnlockImage;
+    private Image P2UnlockImage;
+    private Image cButtonPrompt;
+    private Image kButtonPrompt;
 
 
 
@@ -160,9 +173,17 @@ public class EnemyStateMachine : MonoBehaviour
     public delegate void delegate_dragonDefeated();
     public static event delegate_dragonDefeated OnDragonDefeated;
 
-    
+
     #endregion
 
+    private void OnEnable()
+    {
+        DialogueManager.OnDragonBehaviour += StartStopAI;
+    }
+    private void OnDisable()
+    {
+        DialogueManager.OnDragonBehaviour -= StartStopAI;
+    }
 
     public virtual void Awake()
     {
@@ -191,7 +212,24 @@ public class EnemyStateMachine : MonoBehaviour
         stagesLeft = myData_SO.Stages;
 
         GameUIManager = GameObject.FindGameObjectWithTag("Gameplay_Canvas").GetComponent<UI_Management>();
-        GameUIManager.Acc_maxDamage = myData_SO.MaxHealth;
+        GameUIManager.Acc_maxDamage = myData_SO.MaxHealth * myData_SO.Stages;
+        if (myData_SO.Stages == 1)
+        {
+            GameUIManager.Acc_maxDamage = myData_SO.MaxHealth * (myData_SO.Stages + 1);
+        }
+
+        NewAbilityParent = GameObject.FindGameObjectWithTag("Gameplay_Canvas").transform.GetChild(1).gameObject;
+
+        P1UnlockImage = NewAbilityParent.transform.GetChild(1).GetComponent<Image>();
+        P1UnlockImage.sprite = myData_SO.UnlockableSprite;
+        P2UnlockImage = NewAbilityParent.transform.GetChild(2).GetComponent<Image>();
+        P2UnlockImage.sprite = myData_SO.UnlockableSprite;
+        cButtonPrompt = NewAbilityParent.transform.GetChild(3).GetComponent<Image>();
+        cButtonPrompt.sprite = myData_SO.cButtonPrompt;
+        kButtonPrompt = NewAbilityParent.transform.GetChild(4).GetComponent<Image>();
+        kButtonPrompt.sprite = myData_SO.kButtonPrompt;
+
+        NewAbilityParent.SetActive(false);
     }
 
 
@@ -207,6 +245,10 @@ public class EnemyStateMachine : MonoBehaviour
 
         switch (currentState)
         {
+            case EnemyStates.Stopped:
+                agent.isStopped = true;
+                break;
+
             case EnemyStates.Idle:
                 if (stunned)
                 {
@@ -262,7 +304,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 else if (flyTimeOut() && !flyingToRandomPoint)
                 {
-                    RandomisedMovePoint();
+                    //RandomisedMovePoint();
                     flyingToRandomPoint = true;
                 }
                 else if (flyTimeOut() && flyingToRandomPoint)
@@ -403,7 +445,6 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 if (abilityTimeOut())
                 {
-                    print("ability timed out!");
                     exitSpecialAbility();
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
@@ -472,8 +513,12 @@ public class EnemyStateMachine : MonoBehaviour
         }
         //Code to adjust Health here or attack damage etc.
 
-        currentHealth = currentHealth * 2;
-        GameUIManager.resetEnemyHealthBar(currentHealth);
+/*        if(PlayerRef.Count == 2)
+        {
+            currentHealth = currentHealth * 2;
+            GameUIManager.Acc_maxDamage = (myData_SO.MaxHealth * 2) * (stagesLeft + 1);
+            GameUIManager.resetEnemyHealthBar(currentHealth, stagesLeft);
+        }*/
     }
     
     public void player2Left()
@@ -481,8 +526,9 @@ public class EnemyStateMachine : MonoBehaviour
         if (PlayerRef.Count <= 1) { return; }
         PlayerRef.RemoveAt(1);
         //Code to adjust Health here or attack damage etc.
-        currentHealth = currentHealth / 2;
-        GameUIManager.resetEnemyHealthBar(currentHealth);
+/*        currentHealth = currentHealth / 2;
+        GameUIManager.Acc_maxDamage = myData_SO.MaxHealth * stagesLeft;
+        GameUIManager.resetEnemyHealthBar(currentHealth, stagesLeft);*/
     }
 
     bool doesP2Exist()
@@ -526,14 +572,15 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (specialActive && dirOverlapsWithShield(playerID)) { return; }
 
-        StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
-
         if (NHS_HealthCheckup(incomingDamage) > 0)
         {
+            StartCoroutine(SpriteFlasher(dmg_flashTime, dmg_flashColour, myData_SO.dmg_AnimCurve));
             currentHealth -= incomingDamage;
             GameUIManager.updateEnemyHealthBar(incomingDamage);
             return;
         }
+        currentHealth -= incomingDamage;
+        GameUIManager.updateEnemyHealthBar(incomingDamage);
         healthReachedZero();
     }
 
@@ -566,13 +613,44 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
-            OnDragonDefeated();
+            //OnDragonDefeated();
+            ChangeState(EnemyStates.Stopped);
+            StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, myData_SO.defeat_Colour, myData_SO.defeat_AnimCurve));
+            //Play Breath particle effect here?
             return;
             //DefeatOfDragon
         }
+        if(stagesLeft - 1 <= myData_SO.Stages / 2)
+        {
+            givePlayerSpecialAbility();
+            StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, Color.white, myData_SO.defeat_AnimCurve));
+            Debug.Log("Triggered abilty");
+        }
         stagesLeft -= 1;
+        //if (doesP2Exist()) { currentHealth = myData_SO.MaxHealth * 2; return; }
         currentHealth = myData_SO.MaxHealth;
-        GameUIManager.resetEnemyHealthBar(0);
+        //GameUIManager.resetEnemyHealthBar(0);
+    }
+
+    protected virtual void givePlayerSpecialAbility()
+    {
+        //if(myData_SO.UnlockableSprite.IsUnityNull() || myData_SO.ButtonPrompt.IsUnityNull()) { return; }
+        StartCoroutine(enableDisableAbilityUnlock());
+
+        for(int i = 0; i < PlayerRef.Count; i++)
+        {
+            PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeShield = true;
+            PlayerRef[i].GetComponent<PlayerController>().Acc_upgradeFiredUp = true;
+            PlayerRef[i].GetComponent<PlayerController>().upgrade();
+        }
+    }
+
+    protected virtual IEnumerator enableDisableAbilityUnlock()
+    {
+        print("TriggeredCoroutine");
+        NewAbilityParent.SetActive(true);
+        yield return new WaitForSeconds(7.75f);
+        NewAbilityParent.SetActive(false);
     }
 
     protected IEnumerator SpriteFlasher(float flashTime, Color flashColour, AnimationCurve AnimCurve)
@@ -595,6 +673,33 @@ public class EnemyStateMachine : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    private void StartStopAI()
+    {
+        switch (currentState)
+        {
+            case EnemyStates.Stopped:
+                StartUpAI();
+                animationController.SetBool("isSpecial", false);
+                break;
+            case EnemyStates.Idle:
+                StopAI();
+                animationController.SetBool("isSpecial", false);
+                break;
+            default:
+                return;
+        }
+    }
+
+    private void StopAI()
+    {
+        ChangeState(EnemyStates.Stopped);
+    }
+
+    private void StartUpAI()
+    {
+        ChangeState(EnemyStates.Idle);
     }
 
     #endregion

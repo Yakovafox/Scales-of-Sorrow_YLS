@@ -80,6 +80,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DialogueSkip"",
+                    ""type"": ""Value"",
+                    ""id"": ""85faff44-bd4b-4259-b8d9-e59efc642717"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -185,7 +194,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bdee588b-d6e6-4f53-9be4-e10c5b72ef62"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -218,7 +227,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2d2edb1f-d3d6-4287-a72f-7b5ca50dfdcf"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -240,7 +249,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f3e9b049-259c-47d1-8b1b-98beacb0e6d2"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -267,6 +276,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""MenuOpenClose"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ec2f1f0-4879-47f7-a087-ab1ef045da44"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DialogueSkip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4a37483d-fcd5-4bd9-a3ad-3f351fdaaa34"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""DialogueSkip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -858,6 +889,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Shield = m_Player.FindAction("Shield", throwIfNotFound: true);
         m_Player_FiredUp = m_Player.FindAction("Fired Up", throwIfNotFound: true);
         m_Player_MenuOpenClose = m_Player.FindAction("MenuOpenClose", throwIfNotFound: true);
+        m_Player_DialogueSkip = m_Player.FindAction("DialogueSkip", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -938,6 +970,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shield;
     private readonly InputAction m_Player_FiredUp;
     private readonly InputAction m_Player_MenuOpenClose;
+    private readonly InputAction m_Player_DialogueSkip;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -948,6 +981,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Shield => m_Wrapper.m_Player_Shield;
         public InputAction @FiredUp => m_Wrapper.m_Player_FiredUp;
         public InputAction @MenuOpenClose => m_Wrapper.m_Player_MenuOpenClose;
+        public InputAction @DialogueSkip => m_Wrapper.m_Player_DialogueSkip;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -975,6 +1009,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MenuOpenClose.started += instance.OnMenuOpenClose;
             @MenuOpenClose.performed += instance.OnMenuOpenClose;
             @MenuOpenClose.canceled += instance.OnMenuOpenClose;
+            @DialogueSkip.started += instance.OnDialogueSkip;
+            @DialogueSkip.performed += instance.OnDialogueSkip;
+            @DialogueSkip.canceled += instance.OnDialogueSkip;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -997,6 +1034,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MenuOpenClose.started -= instance.OnMenuOpenClose;
             @MenuOpenClose.performed -= instance.OnMenuOpenClose;
             @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
+            @DialogueSkip.started -= instance.OnDialogueSkip;
+            @DialogueSkip.performed -= instance.OnDialogueSkip;
+            @DialogueSkip.canceled -= instance.OnDialogueSkip;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1166,6 +1206,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnShield(InputAction.CallbackContext context);
         void OnFiredUp(InputAction.CallbackContext context);
         void OnMenuOpenClose(InputAction.CallbackContext context);
+        void OnDialogueSkip(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
