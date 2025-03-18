@@ -20,7 +20,7 @@ public class StartMenu : MonoBehaviour
     [SerializeField] private GameObject creditsFirstSelect;
     [SerializeField] private GameObject controlsFirstSelect;
 
-    private Slider loadingBar;
+    private Image loadingBar;
 
     private void Start()
     {
@@ -30,7 +30,7 @@ public class StartMenu : MonoBehaviour
         controlSchemeCanvas.SetActive(false);
         loadingCanvas.SetActive(false);
 
-        loadingBar = loadingCanvas.GetComponentInChildren<Slider>();
+        loadingBar = loadingCanvas.GetComponentInChildren<Image>();
 
     }
 
@@ -87,7 +87,7 @@ public class StartMenu : MonoBehaviour
         while (!loadAsyncOperation.isDone)
         {
             float loadProgress = Mathf.Clamp01(loadAsyncOperation.progress / 0.9f);
-            loadingBar.value = loadProgress;
+            loadingBar.fillAmount = loadProgress;
 
             yield return null;
         }

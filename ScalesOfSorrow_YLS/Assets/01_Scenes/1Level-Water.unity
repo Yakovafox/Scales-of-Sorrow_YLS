@@ -3331,21 +3331,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -3416,6 +3401,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp (7)
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16827,7 +16827,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9215387811533024201, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6632455270947558970, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
+    - {fileID: 2787220873927317294, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5105822176034476057, guid: 331cf63effe045b468422cc9e8f11bcb,
@@ -19181,21 +19183,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1912429221}
     m_Modifications:
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
-    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
-        type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     - target: {fileID: 4191860843036768185, guid: 80ee0aa2fa1ee4a4489843b3b48ddac6,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -19266,6 +19253,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kelp Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f588c789d123f22499933887f664c8ab, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 42f86342bc6650341b1b477c8efcde32,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481ce312319141748ad184f28abe9b0f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
