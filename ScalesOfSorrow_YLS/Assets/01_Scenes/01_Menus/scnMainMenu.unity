@@ -12422,6 +12422,11 @@ PrefabInstance:
     - target: {fileID: 5667018287953095122, guid: 87e55e008327593448deb0b3982fd4a3,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6246466348694328093, guid: 87e55e008327593448deb0b3982fd4a3,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6988279735768257616, guid: 87e55e008327593448deb0b3982fd4a3,
@@ -12478,6 +12483,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7425387657878879025, guid: 87e55e008327593448deb0b3982fd4a3,
+        type: 3}
+      propertyPath: replayDuration
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

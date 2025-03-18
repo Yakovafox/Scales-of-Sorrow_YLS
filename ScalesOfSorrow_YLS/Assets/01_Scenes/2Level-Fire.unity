@@ -2479,6 +2479,12 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1046417259891209387, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6ec00abec08fcc34fbc4911cfc63def1,
+        type: 3}
     - target: {fileID: 1333068874342895745, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2708,6 +2714,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Infreno, The Fire Dragon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684702608218696691, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_text
+      value: Inferno
       objectReference: {fileID: 0}
     - target: {fileID: 8685744881290948059, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
@@ -14056,12 +14067,12 @@ MonoBehaviour:
   dialogueText: {fileID: 68264242}
   nameText: {fileID: 1000739987}
   profilePicture: {fileID: 1868956624}
-  dragonProfilePicture: {fileID: -2067412490, guid: 57a2d47cb257f2a4796881acc11fbeeb,
+  dragonProfilePicture: {fileID: 21300000, guid: 6ec00abec08fcc34fbc4911cfc63def1,
     type: 3}
   playerProfilePicture: {fileID: -1082413546, guid: 268c2f90c4cf77c42bc4512a8a84d1b2,
     type: 3}
-  startDialogue: {fileID: 4900000, guid: 0fb55b79cffffc646a0d6bf3f0ee3cff, type: 3}
-  endDialogue: {fileID: 4900000, guid: 91150d7a14184e44c884a9abe9846865, type: 3}
+  startDialogue: {fileID: 4900000, guid: cc83db40e7985864881aadf6ee720b90, type: 3}
+  endDialogue: {fileID: 4900000, guid: 471de04b952d00e41bab8fc9837e6b87, type: 3}
   gameMenus: {fileID: 781654838}
 --- !u!4 &352315376
 Transform:
