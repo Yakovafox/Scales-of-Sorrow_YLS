@@ -29,7 +29,7 @@ MonoBehaviour:
   canSee: 1
   sightDistance: 10
   sightAngle: 160
-  MaxHealth: 50
+  MaxHealth: 60
   Stages: 1
   dmg_AnimCurve:
     serializedVersion: 2
@@ -64,8 +64,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  flightTime: 5
-  flightCooldownTime: 10
+  flightTime: 2.5
+  flightCooldownTime: 20
   stunTime: 5
   chanceToFly: 33.33
   pushBackDistance: 5
@@ -73,8 +73,8 @@ MonoBehaviour:
   shadow_DefaultSize: 2.5
   shadow_MinSize: 1
   attackCooldown: 0.1
-  meleeAttackDistance: 3
-  meleeDamage: 10
+  meleeAttackDistance: 2
+  meleeDamage: 5
   meleeCooldown: 3
   meleeChargeUpTime: 0.2
   rangedAttackDistance: 5
@@ -84,7 +84,7 @@ MonoBehaviour:
   rangedChargeUpTime: 0.1
   ammoProjectile: {fileID: 5755901808654403707, guid: a850de1ab789e84498fe5b05849a4f56,
     type: 3}
-  ammoProjectileSpawnChance: 33.33
+  ammoProjectileSpawnChance: 40
   specialAttackChance: 15
   SpecialDamage: 10
   ability_Timer: 10

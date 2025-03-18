@@ -29,7 +29,7 @@ MonoBehaviour:
   canSee: 1
   sightDistance: 10
   sightAngle: 160
-  MaxHealth: 50
+  MaxHealth: 60
   Stages: 1
   dmg_AnimCurve:
     serializedVersion: 2
@@ -65,7 +65,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   flightTime: 5
-  flightCooldownTime: 10
+  flightCooldownTime: 12
   stunTime: 5
   chanceToFly: 33.33
   pushBackDistance: 5
@@ -73,8 +73,8 @@ MonoBehaviour:
   shadow_DefaultSize: 2.5
   shadow_MinSize: 1
   attackCooldown: 0.1
-  meleeAttackDistance: 3
-  meleeDamage: 10
+  meleeAttackDistance: 2
+  meleeDamage: 5
   meleeCooldown: 3
   meleeChargeUpTime: 0.2
   rangedAttackDistance: 5
