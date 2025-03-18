@@ -19,12 +19,15 @@ public class Management_GameMenus : MonoBehaviour
 
     [SerializeField] private GameObject canvas_Dialogue;
 
-    private Slider loadingBar;
+    private bool loading = false;
+    private Image loadingBar;
 
     [SerializeField] private GameObject firstGameOverOBJ;
     [SerializeField] private GameObject firstGameWonOBJ;
     [SerializeField] private GameObject firstPauseOBJ;
     [SerializeField] private GameObject firstSettingsOBJ;
+
+    private DialogueManager dialogueManager;
     
     void Awake()
     {
@@ -41,13 +44,22 @@ public class Management_GameMenus : MonoBehaviour
         }
         
         loadingScreen = canvasHolder.transform.Find("Canvas_LoadingScreen").gameObject;
-        loadingBar = loadingScreen.transform.GetComponentInChildren<Slider>();
-            
+        loadingBar = loadingScreen.transform.GetChild(3).GetChild(0).GetComponent<Image>();
+        loading = false;
+
+        dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
     }
     
-    private void LoadLevel(int sceneIndex)
+    public void LoadLevel(int sceneIndex)
     {
-        StartCoroutine(LoadAsyncScene(sceneIndex));
+        loading = true;
+
+        if(sceneIndex > SceneManager.sceneCount +1)
+        {
+            StartCoroutine(LoadAsyncScene(0));
+        }
+        else { StartCoroutine(LoadAsyncScene(sceneIndex)); }
+
         for (int i = 0; i < Menus.Length; i++)
         {
             if(Menus[i] == loadingScreen) { continue; }
@@ -66,7 +78,7 @@ public class Management_GameMenus : MonoBehaviour
         while (!loadAsyncOperation.isDone)
         {
             float loadProgress = Mathf.Clamp01(loadAsyncOperation.progress / 0.9f);
-            loadingBar.value = loadProgress;
+            loadingBar.fillAmount = loadProgress;
             
             yield return null;
         }
@@ -121,6 +133,7 @@ public class Management_GameMenus : MonoBehaviour
 
     public void pauseGame()
     {
+        if (dialogueManager.dialogueIsPlaying || loading) { return; }
         bool paused = canvasHolder.transform.GetChild(5).gameObject.activeInHierarchy;
         canvasHolder.transform.GetChild(5).gameObject.SetActive(!paused);
         

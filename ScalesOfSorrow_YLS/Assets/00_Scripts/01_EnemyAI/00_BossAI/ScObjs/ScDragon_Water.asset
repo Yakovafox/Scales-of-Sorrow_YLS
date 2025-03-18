@@ -89,7 +89,7 @@ MonoBehaviour:
   SpecialDamage: 0
   ability_Timer: 10
   ability_cooldownTime: 15
-  Shield: {fileID: 0}
+  Shield: {fileID: 6119186117212267296, guid: a8c18dbba155d234da6d2c11a3fdaacf, type: 3}
   dashCooldownTime: 2.25
   Trap: {fileID: 0}
   fireup_DamageMultiplier: 1.5

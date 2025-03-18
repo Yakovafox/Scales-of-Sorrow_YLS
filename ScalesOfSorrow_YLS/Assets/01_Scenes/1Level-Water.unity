@@ -9371,6 +9371,7 @@ MonoBehaviour:
   debugSphere: {fileID: 1833701135}
   PlayerRef: []
   FlightEffect: {fileID: 1983834303}
+  breathEffect: {fileID: 1382690922}
 --- !u!1001 &658439299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16319,7 +16320,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9215387811533024201, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6632455270947558970, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
+    - {fileID: 2787220873927317294, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5105822176034476057, guid: 331cf63effe045b468422cc9e8f11bcb,
@@ -19321,6 +19324,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aa219aff7f3c6fa4b9e61ae1b675932f,
     type: 3}
   m_PrefabInstance: {fileID: 1861204637}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1382690922 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7385480578430336438, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1268346332}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1384744792
 PrefabInstance:

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UI_Management : MonoBehaviour
 {
+
     private Slider EnemyHealthBar;
 
     private float maxDamage;

@@ -624,10 +624,10 @@ public class EnemyStateMachine : MonoBehaviour
         //Double check that health is below zero.
         if(stagesLeft <= 0)
         {
-            //OnDragonDefeated();
+            OnDragonDefeated();
             ChangeState(EnemyStates.Stopped);
             StartCoroutine(SpriteFlasher(myData_SO.defeat_flashTime, myData_SO.defeat_Colour, myData_SO.defeat_AnimCurve));
-            spriteRenderer.flipX = false;
+            spriteRenderer.transform.localScale = new Vector3(5, 5, 5);
             breathEffect.Play();
             //Play Breath particle effect here?
             return;

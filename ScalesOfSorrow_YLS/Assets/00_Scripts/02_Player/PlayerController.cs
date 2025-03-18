@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Controls amount of attack charges")]
     [SerializeField] private int maxCharges;
                      private int attackCharges;
-                     private bool canAttack = false;
+                     private bool canAttack = true;
 
     [Header("------- Fired Up -------")]
     [Tooltip("Controls the extra damage for the fired up ability")]
@@ -184,7 +184,6 @@ public class PlayerController : MonoBehaviour
         playerDeath = FindAnyObjectByType<PlayerDeath>();
         playerDeath.AddChild(gameObject);
 
-        attackCharges = maxCharges;
 
         canvas_Gameplay = GameObject.FindGameObjectWithTag("Gameplay_Canvas");
         management_GameMenus = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Management_GameMenus>();
@@ -197,6 +196,13 @@ public class PlayerController : MonoBehaviour
         if (playerID + 1 == 2)
         {
             playerImage.sprite = P2Image;
+        }
+
+
+        attackCharges = maxCharges;
+        if (canvas_Gameplay.transform.parent.GetChild(3).gameObject.activeInHierarchy)
+        {
+            canAttack = false;
         }
 
         HealthBar = individualUI.transform.GetChild(2).GetComponent<UnityEngine.UI.Slider>();
@@ -536,9 +542,11 @@ public class PlayerController : MonoBehaviour
     {
         if (context.started)
         {
-            print("has paussssssssssssssssssed");
-            management_GameMenus.pauseGame();
-            //Pause Functionality
+            if (!management_GameMenus.IsUnityNull()) //Check to make sure that the menu script reference isnt null.
+            {
+                management_GameMenus.pauseGame();
+                //Pause Functionality
+            }
         }
     }
 

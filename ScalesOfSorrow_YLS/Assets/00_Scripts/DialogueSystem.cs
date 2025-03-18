@@ -40,6 +40,10 @@ public class DialogueManager : MonoBehaviour
     public delegate void PlayerAttacking();
     public static event PlayerAttacking OnPlayerAttacking;
 
+    public delegate void endedDialogue();
+    public static event endedDialogue OnEndedDialogue;
+
+
     private void Awake()
     {
         if (instance != null)
@@ -98,6 +102,7 @@ public class DialogueManager : MonoBehaviour
             OnDragonBehaviour();
             OnPlayerAttacking();
         }
+        OnEndedDialogue();
     }
 
     private void ContinueStory()

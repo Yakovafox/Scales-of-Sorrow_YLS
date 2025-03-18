@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01_Scenes/1Level-Water.unity
     guid: c5ccb59a72b439442a644cf41366e112
+  - enabled: 1
+    path: Assets/01_Scenes/2Level-Fire.unity
+    guid: 1e3de43395a327d49828786980e30b82
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
