@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Physics = RotaryHeart.Lib.PhysicsExtension.Physics;
@@ -126,6 +127,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("----- UI -----")]
     [SerializeField] private Management_GameMenus management_GameMenus;
+    private DialogueManager dialogueManager;
     private GameObject canvas_Gameplay;
     [SerializeField] private GameObject tempHealth;
     private GameObject individualUI;
@@ -189,6 +191,8 @@ public class PlayerController : MonoBehaviour
         management_GameMenus = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Management_GameMenus>();
         individualUI = Instantiate(tempHealth, canvas_Gameplay.transform);
         temp = individualUI.transform.GetChild(1).gameObject;
+        
+        dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
 
         IDUI = individualUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         IDUI.text = "P" + (playerID + 1);
@@ -209,6 +213,15 @@ public class PlayerController : MonoBehaviour
         HealthBar.value = ValueConverter0to1(health, 0, 100);
         AmmoUI = individualUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         AmmoUI.text = attackCharges.ToString();
+
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            default:
+                break;
+            case 2:
+                upgradeShield = true;
+                break;
+        }
 
         ShieldUI = individualUI.transform.GetChild(4).GetComponent<UnityEngine.UI.Slider>();
         if (!upgradeShield) { ShieldUI.gameObject.SetActive(false); }
@@ -519,6 +532,19 @@ public class PlayerController : MonoBehaviour
 
     #endregion ------------------------    Ghost Mode    ------------------------
 
+    public void skipDialogue(InputAction.CallbackContext context)
+    {
+        if (dialogueManager.IsUnityNull() || !dialogueManager.dialogueIsPlaying)
+        {
+            return;
+        }
+        if (context.started)
+        {
+            print("EXECUTED");
+            dialogueManager.ContinueStory();
+        }
+    }
+    
     private float ValueConverter0to1(float value, float minValue, float maxValue)
     {
         Debug.Log(value);
@@ -536,6 +562,11 @@ public class PlayerController : MonoBehaviour
         if (upgradeShield) { ShieldUI.gameObject.SetActive(true); }
         if (upgradeFiredUp) { FiredUpUI.gameObject.SetActive(true); }
         if (upgradeDash) { return; }
+    }
+
+    private void toggleDash()
+    {
+        canDash = !canDash;
     }
 
     public void OnPause(InputAction.CallbackContext context)

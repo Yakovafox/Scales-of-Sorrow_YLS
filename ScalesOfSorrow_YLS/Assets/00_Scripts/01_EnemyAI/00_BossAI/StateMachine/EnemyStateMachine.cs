@@ -246,6 +246,14 @@ public class EnemyStateMachine : MonoBehaviour
         abilityCooldown_Timer += Time.deltaTime;
         debug_Timer += Time.deltaTime;
 
+        if (specialActive)
+        {
+            if (currentState != EnemyStates.Special || currentState != EnemyStates.ThreatenedAttack)
+            {
+                ChangeState(EnemyStates.Special);
+            }
+        }
+
         switch (currentState)
         {
             case EnemyStates.Stopped:
@@ -405,7 +413,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.ThreatenedAttack: //Used by special ability attacking.
-                animationController.SetBool("isWalking", true);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", true);
+                }
 
                 if (!doOnce)
                 {
@@ -443,7 +454,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
             
             case EnemyStates.Special:
-                animationController.SetBool("isWalking", true);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", true);
+                }
 
                 ability_Timer += Time.deltaTime;
                 specialActive = true;
@@ -456,6 +470,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 if (abilityTimeOut())
                 {
+                    print("should have exited special!");
                     exitSpecialAbility();
                     //Reset timer when leaving this state.
                     ChangeState(EnemyStates.Idle);
@@ -1069,10 +1084,6 @@ public class EnemyStateMachine : MonoBehaviour
         if (firedUp)
         { damageToDeal = damageToDeal * myData_SO.fireup_DamageMultiplier; }
         //Cause Player Damage here or effect that can cause damage.
-        if (specialActive)
-        {
-            ChangeState(EnemyStates.Special); yield return null;
-        }
 
         Collider[] tempHitArray = Physics.OverlapSphere(transform.position, myData_SO.meleeAttackDistance);
         for(int i = 0; i < tempHitArray.Length; i++)
@@ -1083,6 +1094,11 @@ public class EnemyStateMachine : MonoBehaviour
             }
         }
         meleeAttack_Timer = 0;
+        
+        if (specialActive)
+        {
+            ChangeState(EnemyStates.Special); yield return null;
+        }
         ChangeState(EnemyStates.Idle);
     }
 

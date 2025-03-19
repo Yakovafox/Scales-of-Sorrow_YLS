@@ -20209,7 +20209,19 @@ MonoBehaviour:
     m_ActionId: 104d76bf-2a2d-4101-b84f-fbd89a1cdd49
     m_ActionName: 'Player/MenuOpenClose[/Keyboard/escape]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3482386218576071935}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: skipDialogue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 85faff44-bd4b-4259-b8d9-e59efc642717
     m_ActionName: 'Player/DialogueSkip[/Mouse/leftButton,/XInputControllerWindows/buttonSouth]'
   m_NeverAutoSwitchControlSchemes: 1

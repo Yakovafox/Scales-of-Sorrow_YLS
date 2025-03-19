@@ -9371,7 +9371,7 @@ MonoBehaviour:
   debugSphere: {fileID: 1833701135}
   PlayerRef: []
   FlightEffect: {fileID: 1983834303}
-  breathEffect: {fileID: 0}
+  breathEffect: {fileID: 885178464}
 --- !u!1001 &658439299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12712,6 +12712,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3ab1c29c59f6093448b7e89a6432c269,
     type: 3}
   m_PrefabInstance: {fileID: 617296261}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &885178464 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7385480578430336438, guid: 4688c53db7cb1b54ebe290e75276ed0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1268346332}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &891512593
 PrefabInstance:
@@ -16096,6 +16102,21 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 16.5
       objectReference: {fileID: 0}
+    - target: {fileID: 547181974772231658, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 547181974772231658, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 547181974772231658, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 89.1
+      objectReference: {fileID: 0}
     - target: {fileID: 662470251636538200, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_fontAsset
@@ -16669,6 +16690,11 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8177719603677525795, guid: 331cf63effe045b468422cc9e8f11bcb,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 95
+      objectReference: {fileID: 0}
     - target: {fileID: 8466248483124697677, guid: 331cf63effe045b468422cc9e8f11bcb,
         type: 3}
       propertyPath: m_text
@@ -16830,6 +16856,8 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 6632455270947558970, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
     - {fileID: 2787220873927317294, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
+    - {fileID: 8337080279156758369, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
+    - {fileID: 8929477293348830897, guid: 331cf63effe045b468422cc9e8f11bcb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5105822176034476057, guid: 331cf63effe045b468422cc9e8f11bcb,

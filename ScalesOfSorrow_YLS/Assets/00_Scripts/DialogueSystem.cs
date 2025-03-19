@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Ink.Runtime;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
 
-    [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
+    [Header("Dialogue UI")] [SerializeField]
+    private GameObject dialoguePanel;
+
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private Image profilePicture;
@@ -23,6 +25,7 @@ public class DialogueManager : MonoBehaviour
 
     private Story currentStory;
     public bool dialogueIsPlaying { get; private set; }
+    public bool canSkip { get; private set; }
 
     private static DialogueManager instance;
     [SerializeField] private Management_GameMenus gameMenus;
@@ -32,15 +35,22 @@ public class DialogueManager : MonoBehaviour
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
-    
+
 
     public delegate void DragonBehaviour();
+
     public static event DragonBehaviour OnDragonBehaviour;
 
     public delegate void PlayerAttacking();
+
     public static event PlayerAttacking OnPlayerAttacking;
+    
+    public delegate void PlayerDashing();
+
+    public static event PlayerDashing OnPlayerDashing;
 
     public delegate void endedDialogue();
+
     public static event endedDialogue OnEndedDialogue;
 
 
@@ -51,7 +61,10 @@ public class DialogueManager : MonoBehaviour
             Destroy(gameObject);
             Debug.LogWarning("Found more than one Dialogue Manager in the scene");
         }
-        else { instance = this; }
+        else
+        {
+            instance = this;
+        }
 
         playerControls = new PlayerControls();
 
@@ -65,15 +78,15 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (!dialogueIsPlaying) { return; }
+        if (!dialogueIsPlaying)
+        {
+            return;
+        }
 
         bool isButtonDown = playerControls.Player.DialogueSkip.ReadValue<float>() > 0.1f;
 
-        if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonDown(0) || isButtonDown) { ContinueStory(); }
-
     }
-
-
+    
     public void EnterDialogueMode(bool start)
     {
         if (start) { currentStory = new Story(startDialogue.text); }
@@ -85,7 +98,25 @@ public class DialogueManager : MonoBehaviour
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
+        OnPlayerDashing?.Invoke();
+        
         ContinueStory();
+    }
+
+    public void skipStory()
+    {
+        if (canSkip)
+        {
+            StartCoroutine(canSkipDelay());
+            ContinueStory();
+        }
+    }
+
+    private IEnumerator canSkipDelay()
+    {
+        canSkip = false;
+        yield return new WaitForSeconds(3f);
+        canSkip = true;
     }
 
     private IEnumerator ExitDialogueMode()
@@ -101,11 +132,12 @@ public class DialogueManager : MonoBehaviour
         {
             OnDragonBehaviour();
             OnPlayerAttacking();
+            OnPlayerDashing();
         }
         OnEndedDialogue();
     }
 
-    private void ContinueStory()
+    public void ContinueStory()
     {
         if (currentStory.canContinue)
         {

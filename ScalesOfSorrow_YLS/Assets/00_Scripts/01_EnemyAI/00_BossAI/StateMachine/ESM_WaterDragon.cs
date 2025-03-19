@@ -57,7 +57,7 @@ public class ESM_WaterDragon : EnemyStateMachine
 
     protected override IEnumerator specialFunctionality()
     {
-        yield return base.specialFunctionality();
+        yield return null;
     }
 
 }
