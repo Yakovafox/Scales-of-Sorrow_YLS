@@ -358,6 +358,7 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit[] hits = Physics.SphereCastAll(pTransform.position, attackSize, direction, attackRange, attackMask/*, PreviewCondition.Both, 1f, Color.green, Color.red*/);
         //play particle effect
+        Luke_SoundManager.PlaySound(SoundType.PlayerAttack, 1, player_audioSource);
         //SoundEffect
         float totalDamage = attackDamage;
 
@@ -371,7 +372,6 @@ public class PlayerController : MonoBehaviour
 
             if (hits[i].transform.CompareTag("Enemy"))
             {
-                Debug.Log("hit enemy pew pew");
                 hits[i].transform.gameObject.GetComponentInParent<EnemyStateMachine>().ReceiveDamage(totalDamage, playerID);
                 if (!attackHit.isPlaying) { attackHit.Play(); }
             }

@@ -28,8 +28,8 @@ MonoBehaviour:
     m_Bits: 8
   canSee: 1
   sightDistance: 10
-  sightAngle: 160
-  MaxHealth: 60
+  sightAngle: 200
+  MaxHealth: 110
   Stages: 1
   dmg_AnimCurve:
     serializedVersion: 2

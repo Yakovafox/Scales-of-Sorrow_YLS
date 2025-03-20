@@ -132,7 +132,6 @@ public class DialogueManager : MonoBehaviour
         {
             OnDragonBehaviour();
             OnPlayerAttacking();
-            OnPlayerDashing();
         }
         OnEndedDialogue();
     }

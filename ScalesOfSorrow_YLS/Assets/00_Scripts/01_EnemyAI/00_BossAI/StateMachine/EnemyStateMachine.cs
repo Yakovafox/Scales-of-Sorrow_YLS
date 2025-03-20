@@ -248,6 +248,16 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (specialActive)
         {
+            if (currentState == EnemyStates.Stopped)
+            {
+                animationController.SetBool("isSpecial", false);
+
+                if (!shieldRef.IsUnityNull())
+                {
+                    Destroy(shieldRef);
+                }
+                firedUp = false;
+            }
             if (currentState != EnemyStates.Special || currentState != EnemyStates.ThreatenedAttack)
             {
                 ChangeState(EnemyStates.Special);
@@ -257,12 +267,18 @@ public class EnemyStateMachine : MonoBehaviour
         switch (currentState)
         {
             case EnemyStates.Stopped:
-                animationController.SetBool("isWalking", false);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", false);
+                }
                 agent.isStopped = true;
                 break;
 
             case EnemyStates.Idle:
-                animationController.SetBool("isWalking", false);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", false);
+                }
                 if (stunned)
                 {
                     if (TimeOut(myData_SO.stunTime))
@@ -285,7 +301,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Moving:
-                animationController.SetBool("isWalking", true);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", true);
+                }
                 if (!intialiseMovement) // Initialise Movement is only called the first time that the enemy enters the moving state.
                 {
                     intialiseMovement = true;
@@ -336,7 +355,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Chase:
-                animationController.SetBool("isWalking", true);
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", true);
+                }
                 MoveToChase();
 
                 
@@ -369,7 +391,10 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
 
             case EnemyStates.Attack:
-                animationController.SetBool("isWalking", true); // Need a do once check in here to stop the code from being executed multiple times over.
+                if (!animationController.GetBool("isWalking").IsUnityNull())
+                {
+                    animationController.SetBool("isWalking", true);
+                } // Need a do once check in here to stop the code from being executed multiple times over.
                 if (!doOnce)
                 {
                     ChangeState(EnemyStates.Chase);
