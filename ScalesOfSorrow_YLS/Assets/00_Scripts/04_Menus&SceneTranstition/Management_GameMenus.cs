@@ -167,7 +167,10 @@ public class Management_GameMenus : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+
+        canvasHolder.transform.Find("Canvas_GameSuccess").gameObject.SetActive(false);
+        canvasHolder.transform.Find("Canvas_GameOver").gameObject.SetActive(true);
+        StartCoroutine(LoadAsyncScene(0));
     }
     #endregion
 }

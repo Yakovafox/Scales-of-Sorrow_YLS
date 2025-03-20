@@ -80,19 +80,18 @@ public class StartMenu : MonoBehaviour
 
     IEnumerator LoadAsyncScene(int sceneIndex)
     {
-        AsyncOperation loadAsyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
-
         loadingCanvas.SetActive(true);
 
+        yield return new WaitForSeconds(3f); 
+
+        AsyncOperation loadAsyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
         while (!loadAsyncOperation.isDone)
         {
             float loadProgress = Mathf.Clamp01(loadAsyncOperation.progress / 0.9f);
             loadingBar.fillAmount = loadProgress;
-
-            yield return null;
         }
+       
     }
-
     public void Quit()
     {
         Application.Quit();

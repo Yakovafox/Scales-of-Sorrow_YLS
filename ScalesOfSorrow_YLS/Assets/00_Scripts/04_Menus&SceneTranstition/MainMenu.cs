@@ -47,7 +47,8 @@ public class MainMenu : MonoBehaviour
             animationBar["anime-loading"].normalizedTime = progressBar.value ;
         }
 
-        yield return null;
+
+        yield return new WaitForSeconds(100f);
     }
 
     public void SettingsButton()

@@ -69,7 +69,7 @@ MonoBehaviour:
   stunTime: 5
   chanceToFly: 33.33
   pushBackDistance: 5
-  pushBackAmount: 5
+  pushBackAmount: 3
   shadow_DefaultSize: 2.5
   shadow_MinSize: 1
   attackCooldown: 0.1

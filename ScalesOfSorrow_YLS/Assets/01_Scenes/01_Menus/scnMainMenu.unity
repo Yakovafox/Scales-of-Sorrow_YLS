@@ -10552,6 +10552,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 88.4
       objectReference: {fileID: 0}
+    - target: {fileID: 8095116908927176989, guid: c52dbe9c605d379468182b1ed8ff36ab,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8373227179810078200, guid: c52dbe9c605d379468182b1ed8ff36ab,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -21558,8 +21563,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'GOAL: Calm the Dragon down!'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 72f2138340d109a4bb2c1b7d46fd84fa, type: 2}
+  m_sharedMaterial: {fileID: 7328125535966443675, guid: 72f2138340d109a4bb2c1b7d46fd84fa,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
