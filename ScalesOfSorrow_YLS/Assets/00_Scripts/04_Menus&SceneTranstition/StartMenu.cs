@@ -89,6 +89,8 @@ public class StartMenu : MonoBehaviour
         {
             float loadProgress = Mathf.Clamp01(loadAsyncOperation.progress / 0.9f);
             loadingBar.fillAmount = loadProgress;
+
+            yield return null;
         }
        
     }

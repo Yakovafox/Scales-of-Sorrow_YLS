@@ -29,7 +29,7 @@ MonoBehaviour:
   canSee: 1
   sightDistance: 10
   sightAngle: 160
-  MaxHealth: 120
+  MaxHealth: 80
   Stages: 1
   dmg_AnimCurve:
     serializedVersion: 2
