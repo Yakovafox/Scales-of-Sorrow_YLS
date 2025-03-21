@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ESM_WaterDragon : EnemyStateMachine
 {
+    private float defaultStopDistance;
 
     protected override void givePlayerSpecialAbility()
     {
@@ -30,6 +31,8 @@ public class ESM_WaterDragon : EnemyStateMachine
     protected override void initialiseSpecialAbility()
     {
         animationController.SetBool("isSpecial", true);
+        defaultStopDistance = agent.stoppingDistance;
+        agent.stoppingDistance = 3f;
         if (!audioSource.isPlaying)
         {
             Luke_SoundManager.PlaySound(SoundType.WaterDragonSpecial, 1, audioSource);
@@ -48,7 +51,7 @@ public class ESM_WaterDragon : EnemyStateMachine
     protected override void exitSpecialAbility()
     {
         animationController.SetBool("isSpecial", false);
-
+        agent.stoppingDistance = defaultStopDistance;
         if (!shieldRef.IsUnityNull())
         {
             Destroy(shieldRef);

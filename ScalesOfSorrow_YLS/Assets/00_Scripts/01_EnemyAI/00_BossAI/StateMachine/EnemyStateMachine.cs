@@ -60,7 +60,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     public List<GameObject> PlayerRef;
 
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
     private float defaultAgentRadius;
     private Vector3 investigationArea;
 
@@ -1163,6 +1163,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     protected virtual IEnumerator spawnAmmo()
     {
+        animationController.SetTrigger("hasRanged");
         yield return new WaitForSeconds(myData_SO.rangedChargeUpTime);
         GameObject projectileInstance;
         if (!audioSource.isPlaying)
